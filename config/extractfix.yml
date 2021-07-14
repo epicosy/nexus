@@ -1,0 +1,8 @@
+extractfix:
+  program: "ExtractFix.py"
+  path: "/ExtractFix/build"
+  args:
+    --foo: "foo"
+  sanity_check: true
+  fault_localization: true
+  container: unruffled_meitner

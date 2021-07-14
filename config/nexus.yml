@@ -1,0 +1,74 @@
+### Nexus Configuration Settings
+---
+
+nexus:
+### Where external (third-party) plugins are loaded from
+  plugin_dir: /var/lib/nexus/plugins/
+
+### Where all plugin configurations are loaded from
+  plugin_config_dir: /etc/nexus/plugins.d/
+  ### Toggle application level debug (does not toggle framework debugging)
+  debug: true
+
+### Where external templates are loaded from
+# template_dir: /var/lib/nexus/templates/
+
+### The log handler label
+  log_handler: colorlog
+
+### The output handler label
+  output_handler: jinja2
+
+### Local paths
+  working_dir: /tmp
+
+### Timeouts
+  tool_timeout: 3600
+  command_timeout: 30
+
+### Threading
+  local_threads: 1
+
+### Database configs
+  dialect: 'postgresql'
+  username: 'nexus'
+  password: 'nexus123'
+  host: 'localhost'
+  port: '5432'
+  database: 'nexus'
+
+
+log.colorlog:
+
+### Where the log file lives (no log file by default)
+  file: '/tmp/nexus.log'
+
+### The level for which to log.  One of: info, warning, error, fatal, debug
+  level: info
+
+### Whether or not to log to console
+  to_console: true
+
+### Whether or not to rotate the log file when it reaches `max_bytes`
+  rotate: true
+
+### Max size in bytes that a log file can grow until it is rotated.
+  max_bytes: 512000
+
+### The maximun number of log files to maintain when rotating
+  max_files: 4
+
+plugin.benchmarks.cgcrepair:
+  enabled: true
+
+plugin.tools.genprog:
+  enabled: true
+
+plugin.tools.extractfix:
+  enabled: true
+
+plugin.tasks.genprog_cgcrepair:
+  enabled: true
+
+plugin.tasks.extractfix_cgcrepair:
+  enabled: true
