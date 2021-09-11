@@ -1,0 +1,7 @@
+genprog:
+  type: tool
+  image: fe4b8d78d08d
+  container:
+    api:
+      port: 8080
+    setup: []

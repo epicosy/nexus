@@ -2,26 +2,20 @@ from abc import abstractmethod
 from pathlib import Path
 
 from cement import Interface
+from docker.models.containers import Container
 
 from nexus.core.data.store import Program
 
 
 class BenchmarkInterface(Interface):
     class Meta:
-        interface = 'benchmarks'
+        interface = 'benchmark'
 
     @abstractmethod
     def get(self, vid: str, **kwargs) -> Program:
         """
             Returns a local instance of the vulnerability, that is, the working directory with the source code,
             includes, libs, scripts, etc...
-        """
-        pass
-
-    @abstractmethod
-    def get_config(self, key: str):
-        """
-            Gets the value of a key from the configuration file associated to the benchmark plugin
         """
         pass
 
@@ -36,7 +30,7 @@ class BenchmarkInterface(Interface):
         pass
 
     @abstractmethod
-    def load(self):
+    def load(self, container: Container):
         """
             Loads all vulnerabilities from the associated benchmark plugin
         """

@@ -65,7 +65,7 @@ class CommandHandler(CommandInterface, Handler):
                 self._exec(proc, cmd_data)
 
             cmd_data.end = datetime.now()
-            cmd_data.duration = (cmd_data.start - cmd_data.end).total_seconds()
+            cmd_data.duration = (cmd_data.end - cmd_data.start).total_seconds()
 
             if raise_err and cmd_data.error:
                 raise CommandError(cmd_data.error)

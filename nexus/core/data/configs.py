@@ -1,18 +1,14 @@
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from docker.models.containers import Container
-
 from nexus.core.utils.misc import args_to_str
 
 
 @dataclass
 class Plugin:
-    type: str
     name: str
     loaded: bool
     enabled: bool
-    container: Container = None
 
 
 @dataclass
@@ -27,7 +23,7 @@ class Configs:
 class ToolConfigs(Configs):
     program: str
     path: str
-    container: str
+    docker: dict
     args: dict = field(default_factory=lambda: {})
     sanity_check: bool = False
     fault_localization: bool = False

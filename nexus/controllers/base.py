@@ -1,9 +1,10 @@
+from tabulate import tabulate
+
 from cement import Controller, ex
 from cement.utils.version import get_version_banner
 
 from ..core.data.store import Task
 from ..core.exc import NexusError, CommandError
-from ..core.handlers.benchmark import BenchmarkHandler
 from ..core.version import get_version
 
 VERSION_BANNER = """
@@ -37,25 +38,43 @@ class Base(Controller):
         help='Repairs bugs in the program',
         arguments=[
             (["-V", "--vulns"], {'help': "The target vulnerabilities' id", 'nargs': '+'}),
-            (["-wd", "--working_dir"], {'help': "Sets the working directory (default: /tmp)", 'type': str}),
             (['-t', '--threads'], {'help': 'Number of threads for running in parallel multiple tasks.', 'type': int}),
-            (['-T', '--timeout'], {'help': 'Timeout in seconds for each running task.', 'type': int}),
+            (['-T', '--timeout'], {'help': 'Timeout in seconds for each running task.', 'type': int, 'default': 3600}),
+            (["-N", "--name"], {'help': "The name of the target Nexus", 'type': str, 'required': True})
         ],
     )
     def repair(self):
         try:
-            # TODO: define how to choose the tool, benchmark, and task
-            benchmark_manager = self.app.handler.get('manager', 'benchmark', setup=True)
-            benchmark_handler = benchmark_manager.get(self.app.plugin.get_benchmark('cgcrepair'))
-            benchmark_handler.check_programs(self.app.pargs.vulns)
-            tasks = [Task(vuln=vuln) for vuln in self.app.pargs.vulns]
-            tool = self.app.plugin.get_tool('extractfix')
-            tool_handler = self.app.plugin.get_handler(tool)
-            task_handler = self.app.plugin.get_handler(self.app.plugin.get_task('extractfix_cgcrepair'))
+            if not self.app.plugin.has(self.app.pargs.name):
+                self.app.log.error(f"Nexus {self.app.pargs.name} not found. Make sure the nexus's plugin is registered.")
+                exit(1)
+
+            nexus_handler = self.app.handler.get('nexus', self.app.pargs.name, setup=True)
+            nexus_manager = self.app.handler.get('managers', 'nexus', setup=True)
+            context = nexus_manager.get_context(nexus_handler)
+            orbis_handler = self.app.handler.get('handlers', 'orbis', setup=True)
+
+            if self.app.pargs.vulns:
+                vulns = [orbis_handler.get_vuln(context.benchmark, vuln) for vuln in self.app.pargs.vulns]
+            else:
+                vulns = orbis_handler.get_vulns(context.benchmark)
+
+            tasks = [Task(program=orbis_handler.get_program(context.benchmark, vuln.pid)) for vuln in vulns]
+
             runner_handler = self.app.handler.get('runner', 'runner', setup=True)
-            runner = runner_handler(tasks, benchmark=benchmark_handler, tool=tool_handler, task=task_handler)
-            # TODO: do something with the runner data
+            runner_data = runner_handler(tasks, context=context, nexus_handler=nexus_handler)
 
         except (CommandError, NexusError) as err:
             self.app.log.error(str(err))
 
+    @ex(
+        help='Lists installed nexuses'
+    )
+    def list(self):
+        table = []
+
+        for name, plugin in sorted(self.app.plugin.nexuses.items()):
+            nexus_handler = self.app.handler.get('nexus', name, setup=True)
+            table.append([name, plugin.enabled, plugin.loaded, nexus_handler.benchmark, nexus_handler.tool])
+
+        print(tabulate(table, headers=['Nexus', 'Enabled', 'Loaded', 'Benchmark', 'Tool']))

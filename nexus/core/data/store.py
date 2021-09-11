@@ -3,7 +3,7 @@ from pathlib import Path
 from datetime import datetime
 from typing import List, AnyStr
 
-from nexus.core.data.program import Tests
+from nexus.core.data.program import Manifest
 from nexus.core.data.results import CommandData
 
 
@@ -33,18 +33,27 @@ class Store:
 @dataclass
 class Vulnerability:
     id: str
+    pid: str
     cwe: str
     program: str
-    exploit: str
+    related: List[str] = None
     cve: str = '-'
 
 
 @dataclass
+class Tests:
+    pos: List[str]
+    neg: List[str]
+
+
+@dataclass
 class Program(Store):
-    working_dir: Path
+    id: str
+    tests: Tests
     name: str
+    manifest: Manifest
     vuln: Vulnerability
-    root: Path
+    root: Path = None
     source: Path = None
     lib: Path = None
     include: Path = None
@@ -83,13 +92,12 @@ class Patch:
 
 @dataclass
 class Task(Store):
-    vuln: str
+    program: Program
     status: str = None
     start_date: datetime = None
     end_date: datetime = None
     fix: Patch = None
     patches: List[Patch] = field(default_factory=lambda: [])
-    tests: Tests = None
     err: AnyStr = None
     cmds: List[CommandData] = field(default_factory=lambda: [])
 
@@ -145,7 +153,7 @@ class Task(Store):
         patches = f"\tGenerated {len(self.patches)} patches\n" if self.patches else ""
         stats = f"Status:\n\t\t{self.status}\n\t\tStart: {self.start_date}\n\t\tEnd: {self.end_date}\n"
 
-        return f"{self.vuln} repair task:\n\t{stats}" + patches + fix
+        return f"{self.program.vuln.id} repair task:\n\t{stats}" + patches + fix
 
 
 @dataclass

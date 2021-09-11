@@ -37,11 +37,33 @@ nexus:
   port: '5432'
   database: 'nexus'
 
+### Docker
+  docker:
+    volume: nexus
+    volume_bind: '/home/epicosy/nexus_data'
+
+### APIs
+  apis:
+    orbis:
+      setup:
+        - "cd /tmp; git clone https://github.com/epicosy/orbis 2>&1"
+        - "cd /tmp/orbis; ./install.sh"
+        - "/etc/init.d/postgresql start"
+        - "nohup orbis api -p 8080 2>&1 &"
+
+    synapser:
+      setup:
+        - "cd /tmp; git clone https://github.com/epicosy/synapser 2>&1"
+        - "cd /tmp/synapser; ./install_py38.sh 2>&1; ./install.sh 2>&1"
+        - "nohup synapser api -p 8080 2>&1 &"
 
 log.colorlog:
 
 ### Where the log file lives (no log file by default)
   file: '/tmp/nexus.log'
+
+### Whether or not to log the database queries
+  database: false
 
 ### The level for which to log.  One of: info, warning, error, fatal, debug
   level: info
@@ -58,17 +80,5 @@ log.colorlog:
 ### The maximun number of log files to maintain when rotating
   max_files: 4
 
-plugin.benchmarks.cgcrepair:
-  enabled: true
-
-plugin.tools.genprog:
-  enabled: true
-
-plugin.tools.extractfix:
-  enabled: true
-
-plugin.tasks.genprog_cgcrepair:
-  enabled: true
-
-plugin.tasks.extractfix_cgcrepair:
+plugin.nexus.genprog_cgcrepair:
   enabled: true

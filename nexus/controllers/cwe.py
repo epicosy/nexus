@@ -18,9 +18,10 @@ class CWE(Controller):
         benchmark_manager = self.app.handler.get('manager', 'benchmark', setup=True)
         table = []
 
-        for bench in benchmark_manager.all():
-            for vuln in bench.all():
-                table.append([vuln.id, vuln.cwe, vuln.cve, vuln.program, bench.plugin.name])
+        for bench, handler, container in benchmark_manager.all():
+            handler.load(container)
+            for vuln in handler.all():
+                table.append([vuln.id, vuln.cwe, vuln.cve, vuln.program, bench.name])
 
         sorted(table, key=lambda x: x[1])
         print(tabulate(table, headers=['Id', 'CWE', 'CVE', 'Program', 'Benchmark']))

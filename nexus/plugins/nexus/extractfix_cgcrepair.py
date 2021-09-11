@@ -1,13 +1,9 @@
 import re
-from pathlib import Path
 
+from nexus.core.data.context import Context
 from nexus.core.data.store import Task
-from nexus.core.data.store import Program
 from nexus.core.exc import CommandError, NexusError
 from nexus.core.handlers.nexus import NexusHandler
-from nexus.core.handlers.task import TaskHandler
-from nexus.core.handlers.benchmark import BenchmarkHandler
-from nexus.core.handlers.tool import ToolHandler
 
 
 def c_to_cpp(c_file: str):
@@ -16,14 +12,14 @@ def c_to_cpp(c_file: str):
     return re.sub(r'.c$', '.i', c_file)
 
 
-class ExtractFixCGCRepairTask(TaskHandler):
+class ExtractFixCGCRepairTask(NexusHandler):
     class Meta:
         label = 'extractfix_cgcrepair'
 
-    def run(self, task: Task, tool: ToolHandler, benchmark: BenchmarkHandler):
-        nexus = benchmark.get_nexus()
-        program = benchmark.get(task.vuln)
+    def __init__(self, **kw):
+        super().__init__(tool='extractfix', benchmark='cgcrepair', **kw)
 
+    def run(self, task: Task, context: Context):
         try:
             tool_container = tool.get_container()
             manifest = nexus.get_manifest(program)

@@ -1,6 +1,6 @@
 from cement import Interface
 
 
-class ManagerInterface(Interface):
+class ManagersInterface(Interface):
     class Meta:
-        interface = "manager"
+        interface = "managers"

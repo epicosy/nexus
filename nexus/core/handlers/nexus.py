@@ -1,35 +1,53 @@
 from abc import ABC
-from pathlib import Path
+from typing import List
 
-from docker.models.containers import Container
+from cement import Handler
 
-from nexus.core.data.store import Program
-from nexus.core.handlers.docker import DockerHandler
-from nexus.core.data.results import CommandData
+from nexus.core.data.configs import Plugin
 from nexus.core.interfaces.nexus import NexusInterface
 
 
-class NexusHandler(NexusInterface, DockerHandler, ABC):
+class NexusHandler(NexusInterface, Handler, ABC):
     class Meta:
         label = 'nexus'
 
+    def __init__(self, tool: str, benchmark: str, **kw):
+        super(NexusHandler, self).__init__(**kw)
+        self.plugin = None
+        self._tool = tool
+        self._benchmark = benchmark
 
-class LocalNexus(NexusHandler, ABC):
-    class Meta:
-        label = 'local_nexus'
+    # def get(self, tbp_id: int) -> NexusData:
+    #    return self.app.db.query(NexusData, tbp_id)
+    '''
+    def all(self) -> List[NexusData]:
+        return self.app.db.query(NexusData)
 
-    def __call__(self, container: Container, cmd_str, args: str = "", call: bool = True, **kwargs) -> CommandData:
-        cmd_data = CommandData(f"{cmd_str} {args}" if args else cmd_str)
+    def get(self) -> NexusData:
+        return self.app.db.filter(NexusData, {NexusData.name: lambda tbp_name: tbp_name == self.Meta.label}).first()
 
-        if call:
-            return self.command(container=container, cmd_data=cmd_data, **kwargs)
+    def add(self, tool_id: int, benchmark_id: int, status: str = "created") -> int:
+        return self.app.db.add(NexusData(tid=tool_id, bid=benchmark_id, name=self.Meta.label, status=status))
+    '''
+    def set(self, plugin: Plugin):
+        self.plugin = plugin
 
-        return cmd_data
+    def get_config(self, key: str):
+        return self.app.config.get(self.Meta.label, key)
 
+    def get_configs(self):
+        return self.app.config.get_section_dict(self.Meta.label).copy()
 
-class RemoteNexus(NexusHandler, ABC):
-    class Meta:
-        label = 'remote_nexus'
+    @property
+    def tool(self):
+        return self._tool
 
-    def __call__(self, *args, **kwargs):
-        return super(RemoteNexus, self).__call__(*args, **kwargs)
+    @property
+    def benchmark(self):
+        return self._benchmark
+
+    def tool_configs(self):
+        return self.app.get_section(self.tool)
+
+    def benchmark_configs(self):
+        return self.app.get_section(self.benchmark)

@@ -1,9 +1,10 @@
 from cement import App, TestApp
 from cement.core.exc import CaughtSignal
 
-from nexus.controllers.benchmarks import Benchmarks
+from nexus.controllers.benchmark import Benchmark
 from nexus.controllers.cwe import CWE
-from nexus.controllers.tools import Tools
+from nexus.controllers.database import Database
+from nexus.controllers.tool import Tool
 from .core.exc import NexusError
 from .controllers.base import Base
 
@@ -11,18 +12,20 @@ from .controllers.base import Base
 from nexus.core.handlers.base import CoreHandler
 from nexus.core.handlers.plugin import PluginLoader
 from nexus.core.handlers.runner import RunnerHandler
-from nexus.core.handlers.docker import DockerHandler
+from nexus.core.handlers.container import ContainerHandler
 from nexus.core.handlers.command import CommandHandler
-from nexus.core.handlers.manager import ToolManager, BenchmarkManager
+from nexus.core.handlers.manager import NexusManager, ContainerManager
+from nexus.core.handlers.synapser import SynapserHandler
+from nexus.core.handlers.orbis import OrbisHandler
 
 # Interfaces
-from nexus.core.interfaces.task import TaskInterface
 from nexus.core.interfaces.base import CoreInterface
 from nexus.core.interfaces.tool import ToolInterface
 from nexus.core.interfaces.nexus import NexusInterface
 from nexus.core.interfaces.runner import RunnerInterface
-from nexus.core.interfaces.manager import ManagerInterface
+from nexus.core.interfaces.manager import ManagersInterface
 from nexus.core.interfaces.command import CommandInterface
+from nexus.core.interfaces.database import DatabaseInterface
 from nexus.core.interfaces.handlers import HandlersInterface
 from nexus.core.interfaces.benchmark import BenchmarkInterface
 
@@ -39,6 +42,7 @@ class Nexus(App):
         # load additional framework extensions
         extensions = [
             'nexus.core.hooks.docker',
+            'nexus.core.hooks.database',
             'yaml',
             'colorlog',
             'jinja2',
@@ -60,14 +64,14 @@ class Nexus(App):
 
         # register interfaces
         interfaces = [
-            NexusInterface, CoreInterface, ToolInterface, BenchmarkInterface, TaskInterface, RunnerInterface,
-            CommandInterface, HandlersInterface, ManagerInterface
+            NexusInterface, CoreInterface, ToolInterface, BenchmarkInterface, RunnerInterface,
+            CommandInterface, HandlersInterface, ManagersInterface, DatabaseInterface
         ]
 
         # register handlers
         handlers = [
-            Base, Tools, Benchmarks, CWE, RunnerHandler, CoreHandler, CommandHandler, PluginLoader, DockerHandler,
-            ToolManager, BenchmarkManager
+            Base, Tool, Benchmark, CWE, Database, RunnerHandler, CoreHandler, CommandHandler, PluginLoader,
+            ContainerHandler, ContainerManager, ContainerHandler, NexusManager, SynapserHandler, OrbisHandler
         ]
 
     def get_config(self, key: str):
@@ -76,6 +80,9 @@ class Nexus(App):
                 return self.config.get(self.Meta.label, key)
 
         return None
+
+    def get_section(self, name: str):
+        return self.config.get_section_dict(name).copy()
 
 
 class NexusTest(TestApp, Nexus):
