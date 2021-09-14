@@ -12,7 +12,12 @@ from nexus.core.interfaces.handlers import HandlersInterface
 def debug_method(method):
     @wraps(method)
     def _impl(self, *method_args, **method_kwargs):
-        self.app.log.debug(f"URL: {method_kwargs['endpoint_url']}; JSON: {method_kwargs['json']}", self.Meta.label)
+        debug_str = f"URL: {method_kwargs['endpoint_url']};"
+
+        if 'json' in method_kwargs and method_kwargs['json']:
+            debug_str += f" JSON: {method_kwargs['json']}"
+
+        self.app.log.debug(debug_str, self.Meta.label)
         return method(self, *method_args, **method_kwargs)
     return _impl
 

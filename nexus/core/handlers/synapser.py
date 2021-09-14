@@ -19,7 +19,7 @@ class SynapserHandler(APIHandler, ContainerHandler):
 
     def repair(self, instance: Instance, signals: dict, args: dict, working_dir: Path):
         return self.post(endpoint_url=self.endpoints['repair'].format(ip=instance.ip, port=instance.port),
-                         json={'signals': signals, 'timeout': self.get_timeout(), working_dir: str(working_dir),
+                         json={'signals': signals, 'timeout': self.get_timeout(), 'working_dir': str(working_dir),
                                'args': args})
 
     def get_timeout(self):

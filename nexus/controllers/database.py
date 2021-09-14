@@ -30,7 +30,7 @@ class Database(Controller):
             if self.app.pargs.containers:
                 for instance in container_manager.all():
                     try:
-                        container_manager.remove(instance.id)
+                        container_manager.remove(instance)
                     except APIError as ae:
                         self.app.log.error(str(ae))
 

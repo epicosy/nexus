@@ -25,7 +25,7 @@ class GenprogCGCRepairTask(NexusHandler):
             iid, working_dir = context.orbis.checkout(context.benchmark,
                                                       args={'pid': task.program.id,
                                                             'root_dir': f"/{context.benchmark.volume}"})
-            _, build_path = context.orbis.compile(context.benchmark, args={'id': iid, 'args': {'--save_temps': ''}})
+            _, build_path = context.orbis.compile(context.benchmark, args={'iid': iid, 'args': {'--save_temps': ''}})
             #task.program.manifest.add_parent(build_path)
             container_manager = self.app.handler.get('managers', 'container', setup=True)
             tool_container = container_manager.get(context.tool.id)
