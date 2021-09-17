@@ -1,3 +1,6 @@
+import asyncio
+import websockets
+
 from tabulate import tabulate
 from cement import Controller, ex
 
@@ -56,3 +59,32 @@ class Tool(Controller):
     def delete(self):
         container_manager = self.app.handler.get('managers', 'container', setup=True)
         container_manager.delete(self.Meta.label, remove=self.app.pargs.remove)
+
+    @ex(
+        help='Stream repair instance\'s execution output',
+        arguments=[
+            (['--id'], {'help': 'The repair instance id.', 'type': int, 'required': True}),
+            (['--name'], {'help': 'The name of the repair tool.', 'type': str, 'required': True})
+        ]
+    )
+    def stream(self):
+        container_manager = self.app.handler.get('managers', 'container', setup=True)
+        tool = container_manager.find('tool', self.app.pargs.name)
+
+        synapser = self.app.handler.get('handlers', 'synapser', setup=True)
+        response = synapser.stream(tool, rid=self.app.pargs.id)
+        response_json = response.json()
+
+        if 'socket' in response_json:
+            ws_url = f"ws://{tool.ip}:{response_json['socket']}"
+
+            async def read():
+                async with websockets.connect(ws_url) as websocket:
+                    try:
+                        while True:
+                            msg = await websocket.recv()
+                            self.app.log.info(msg, ws_url)
+                    except KeyboardInterrupt:
+                        pass
+
+            asyncio.run(read())

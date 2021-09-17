@@ -14,13 +14,17 @@ class SynapserHandler(APIHandler, ContainerHandler):
     def __init__(self, **kw):
         super(SynapserHandler, self).__init__(**kw)
         self.endpoints = {'repair': f"{self.url_format}/repair",
-                          'patches': f"{self.url_format}/patches"
+                          'patches': f"{self.url_format}/patches",
+                          'stream': f"{self.url_format}/stream" + "/{rid}"
                           }
 
-    def repair(self, instance: Instance, signals: dict, args: dict, working_dir: Path):
+    def repair(self, instance: Instance, signals: dict, args: dict, working_dir: Path, target: Path):
         return self.post(endpoint_url=self.endpoints['repair'].format(ip=instance.ip, port=instance.port),
                          json={'signals': signals, 'timeout': self.get_timeout(), 'working_dir': str(working_dir),
-                               'args': args})
+                               'target': str(target), 'args': args})
+
+    def stream(self, instance: Instance, rid: int):
+        return self.get(endpoint_url=self.endpoints['stream'].format(ip=instance.ip, port=instance.port, rid=rid))
 
     def get_timeout(self):
         if self.app.pargs.timeout:

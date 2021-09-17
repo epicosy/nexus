@@ -1,8 +1,7 @@
-from typing import Tuple, List
+from typing import List
 
 from cement import Handler
 from docker.errors import NotFound, APIError
-from docker.models.containers import Container
 
 from nexus.core.data.context import Context
 from nexus.core.database import Instance

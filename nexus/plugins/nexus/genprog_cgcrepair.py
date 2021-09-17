@@ -71,10 +71,11 @@ class GenprogCGCRepairTask(NexusHandler):
             }
 
             response = context.synapser.repair(signals=signals, args=args, working_dir=working_dir,
-                                               instance=context.tool).json()
+                                               target=task.program.manifest.files[0],
+                                               instance=context.tool)
+            response_json = response.json()
 
-            task.patches = context.synapser.get_patches(context.tool)
-            task.fix = context.synapser.get_patches(context.tool, fixes=True)
+            self.app.log.info("RID: " + str(response_json['rid']))
         except (CommandError, NexusError) as err:
             task.error(str(err))
             self.app.log.error(str(err))
