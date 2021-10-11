@@ -9,7 +9,7 @@ from nexus.core.data.results import CommandData
 
 @dataclass
 class Store:
-    assets = {}
+    assets: dict = field(default_factory=lambda: {})
 
     def __getitem__(self, key: str):
         return self.assets[key]
@@ -31,28 +31,46 @@ class Store:
 
 
 @dataclass
+class Command:
+    iid: int
+    action: str
+    args = Store()
+    placeholders = Store()
+
+    def add_arg(self, name: str, value: str = ''):
+        self.args[name] = value
+
+    def add_placeholder(self, name: str, value: str):
+        self.placeholders[name] = value
+
+    def to_dict(self):
+        return {'data': {'iid': self.iid, 'args': self.args}, 'placeholders': self.placeholders}
+
+
+@dataclass
+class Signal:
+    arg: str
+    command: Command
+
+
+@dataclass
 class Vulnerability:
     id: str
     pid: str
     cwe: str
     program: str
+    povs: List[str]
     related: List[str] = None
     cve: str = '-'
 
 
 @dataclass
-class Tests:
-    pos: List[str]
-    neg: List[str]
-
-
-@dataclass
-class Program(Store):
+class Program:
     id: str
-    tests: Tests
+    vulns: List[str]
+    tests: List[str]
     name: str
-    manifest: Manifest
-    vuln: Vulnerability
+    manifest: List[str]
     root: Path = None
     source: Path = None
     lib: Path = None
@@ -66,6 +84,9 @@ class Program(Store):
 
     def has_include(self):
         return self.include and self.include.exists()
+
+    def get_manifest(self) -> Manifest:
+        return Manifest([Path(file) for file in self.manifest])
 
 
 @dataclass
@@ -91,13 +112,21 @@ class Patch:
 
 
 @dataclass
-class Task(Store):
+class ProgramInstance:
+    iid: int
+    working_dir: Path
+    build_dir: Path = None
+
+    def to_dict(self):
+        return {'iid': self.iid, 'working_dir': self.working_dir, 'build_dir': self.build_dir}
+
+
+@dataclass
+class Task:
     program: Program
     status: str = None
     start_date: datetime = None
     end_date: datetime = None
-    fix: Patch = None
-    patches: List[Patch] = field(default_factory=lambda: [])
     err: AnyStr = None
     cmds: List[CommandData] = field(default_factory=lambda: [])
 
@@ -108,12 +137,6 @@ class Task(Store):
         if self.start_date and self.end_date:
             return (self.end_date - self.start_date).total_seconds()
         return 0
-
-    def has_patches(self):
-        return self.patches not in (None, [])
-
-    def has_fix(self):
-        return self.fix not in (None, [])
 
     def has_started(self):
         return self.status == "Started"
@@ -133,11 +156,7 @@ class Task(Store):
     def done(self):
         errors = [c.args + "\n" + str(c.error) for c in self.cmds if c and c.error]
 
-        if self.has_fix():
-            self.status = "Repaired"
-        elif self.has_patches():
-            self.status = "Patched"
-        elif errors:
+        if errors:
             self.error('\n'.join(errors))
         elif [c for c in self.cmds if c.timeout]:
             self.status = "Timeout"
@@ -149,11 +168,9 @@ class Task(Store):
         self.end_date = datetime.now()
 
     def __str__(self):
-        fix = f"\tFix:\n{self.fix}\n" if self.fix else ""
-        patches = f"\tGenerated {len(self.patches)} patches\n" if self.patches else ""
         stats = f"Status:\n\t\t{self.status}\n\t\tStart: {self.start_date}\n\t\tEnd: {self.end_date}\n"
 
-        return f"{self.program.vuln.id} repair task:\n\t{stats}" + patches + fix
+        return f"{self.program.id} repair task:\n\t{stats}"
 
 
 @dataclass

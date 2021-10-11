@@ -2,7 +2,7 @@ from cement import Interface
 from abc import abstractmethod
 
 from nexus.core.data.context import Context
-from nexus.core.data.store import Task
+from nexus.core.data.store import Program, Vulnerability
 
 
 class NexusInterface(Interface):
@@ -14,5 +14,5 @@ class NexusInterface(Interface):
         pass
 
     @abstractmethod
-    def run(self, task_data: Task, context: Context):
+    def run(self, program: Program, vulnerability: Vulnerability, context: Context):
         pass

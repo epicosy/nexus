@@ -4,6 +4,8 @@ from typing import List
 from cement import Handler
 
 from nexus.core.data.configs import Plugin
+from nexus.core.handlers.orbis import OrbisHandler
+from nexus.core.handlers.synapser import SynapserHandler
 from nexus.core.interfaces.nexus import NexusInterface
 
 
@@ -41,6 +43,14 @@ class NexusHandler(NexusInterface, Handler, ABC):
     @property
     def tool(self):
         return self._tool
+
+    @property
+    def synapser(self) -> SynapserHandler:
+        return self.app.handler.get('handlers', 'synapser', setup=True)
+
+    @property
+    def orbis(self) -> OrbisHandler:
+        return self.app.handler.get('handlers', 'orbis', setup=True)
 
     @property
     def benchmark(self):

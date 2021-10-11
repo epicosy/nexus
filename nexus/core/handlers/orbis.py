@@ -3,13 +3,11 @@ import requests
 from binascii import b2a_hex
 from os import urandom
 from pathlib import Path
-from typing import Tuple, Dict, Any
+from typing import Dict, Any
 
-from nexus.core.data.program import Manifest
 from nexus.core.data.results import CommandData
-from nexus.core.data.store import Vulnerability, Program, Tests
+from nexus.core.data.store import Vulnerability, Program, ProgramInstance
 from nexus.core.database import Instance
-from nexus.core.exc import NexusError
 from nexus.core.handlers.api import APIHandler
 
 
@@ -41,28 +39,11 @@ class OrbisHandler(APIHandler):
 
         return Path(working_dir)
 
-    def get_manifest(self, instance: Instance, pid: str) -> Dict[str, Any]:
-        response = requests.get(f"{instance.endpoint}/manifest/{pid}")
-
-        if response.status_code != 200:
-            raise NexusError('Get manifest failed')
-
-        return response.json()['manifest']
-
     def get_program(self, instance: Instance, pid: str, args: dict = None) -> Program:
         response = self.get(endpoint_url=self.endpoints['program'].format(ip=instance.ip, port=instance.port, pid=pid),
                             json=args)
-        response_json = response.json()
-        response_json['vuln']['pid'] = pid
-        tests = Tests(**response_json['tests'])
-        manifest = Manifest(response_json['manifest'])
-        response_json['vuln']['program'] = response_json['name']
-        vuln = Vulnerability(**response_json['vuln'])
-        del response_json['vuln']
-        del response_json['tests']
-        del response_json['manifest']
 
-        return Program(**response_json, manifest=manifest, vuln=vuln, tests=tests)
+        return Program(**response.json())
 
     def get_programs(self, instance: Instance, **kwargs):
         return self.get(endpoint_url=self.endpoints['programs'].format(ip=instance.ip, port=instance.port),
@@ -77,26 +58,37 @@ class OrbisHandler(APIHandler):
         response = self.get(endpoint_url=self.endpoints['vulns'].format(ip=instance.ip, port=instance.port), json=args)
         return [Vulnerability(**vuln) for vuln in response.json().values()]
 
-    def checkout(self, instance: Instance, args: dict) -> Tuple[int, Path]:
-        response = self.post(endpoint_url=self.endpoints['checkout'].format(ip=instance.ip, port=instance.port),
-                             json=args).json()
+    def checkout(self, instance: Instance, program: Program, args: dict = None) -> ProgramInstance:
+        json_data = {'pid': program.id, 'root_dir': f"/{instance.volume}"}
 
-        return response['iid'], Path(response['working_dir'])
+        if args:
+            json_data['args'] = args
+
+        response = self.post(endpoint_url=self.endpoints['checkout'].format(ip=instance.ip, port=instance.port),
+                             json=json_data).json()
+
+        return ProgramInstance(iid=response['iid'], working_dir=Path(response['working_dir']))
 
     def make(self, instance: Instance, args: dict) -> CommandData:
         return self.post(endpoint_url=self.endpoints['make'].format(ip=instance.ip, port=instance.port),
                          json=args).json()
 
-    def url(self, endpoint: str, instance: Instance) -> Dict[str, Any]:
-        return self.endpoints[endpoint].format(ip=instance.ip, port=instance.port)
+    def url(self, action: str, instance: Instance) -> Dict[str, Any]:
+        return self.endpoints[action].format(ip=instance.ip, port=instance.port)
 
-    def compile(self, instance: Instance, args: dict) -> Tuple[int, Path]:
+    def compile(self, instance: Instance, program_instance: ProgramInstance, args: dict) -> ProgramInstance:
+        json_data = {'iid': program_instance.iid}
+
+        if args:
+            json_data['args'] = args
+
         response = self.post(endpoint_url=self.endpoints['compile'].format(ip=instance.ip, port=instance.port),
-                             json=args).json()
+                             json=json_data).json()
+        program_instance.build_dir = Path(response['build'])
 
-        return response['iid'], Path(response['build'])
+        return program_instance
 
-    def test(self, instance: Instance, iid: str, args: dict) -> CommandData:
+    def test(self, instance: Instance, program_instance: ProgramInstance, args: dict) -> CommandData:
         return self.post(endpoint_url=self.endpoints['test'].format(ip=instance.ip, port=instance.port),
                          json=args).json()
 

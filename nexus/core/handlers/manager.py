@@ -3,7 +3,7 @@ from typing import List
 from cement import Handler
 from docker.errors import NotFound, APIError
 
-from nexus.core.data.context import Context
+from nexus.core.data.context import Context, Wrapper
 from nexus.core.database import Instance
 from nexus.core.exc import NexusError
 from nexus.core.handlers.api import APIHandler
@@ -143,28 +143,27 @@ class NexusManager(ManagersInterface, Handler):
     class Meta:
         label = 'nexus'
 
-    def get_context(self, nexus_handler: NexusHandler) -> Context:
+    def get_wrapper(self, name: str, kind: str) -> Wrapper:
         container_manager = self.app.handler.get('managers', 'container', setup=True)
-        benchmark = container_manager.find('benchmark', nexus_handler.benchmark)
+        instance = container_manager.find(kind, name)
 
-        if not benchmark:
-            raise NexusError(f"Benchmark {nexus_handler.benchmark} not created.")
+        if not instance:
+            raise NexusError(f"{kind} {name} not created.")
 
-        if benchmark.status != 'setup':
-            raise NexusError(f"Benchmark {nexus_handler.benchmark} not setup.")
+        if instance.status != 'setup':
+            raise NexusError(f"{kind} {name} not setup.")
 
-        tool = container_manager.find('tool', nexus_handler.tool)
+        container = container_manager.get(instance.id)
 
-        if not tool:
-            raise NexusError(f"Tool {nexus_handler.tool} not created.")
+        if not container:
+            raise NexusError(f"{kind} {name}'s container ({instance.id}) not found.")
 
-        if tool.status != 'setup':
-            raise NexusError(f"Tool {nexus_handler.tool} not setup.")
+        container_manager.start(instance.id)
 
-        container_manager.start(benchmark.id)
-        container_manager.start(tool.id)
-        context = Context(tool=tool, benchmark=benchmark,
-                          synapser=self.app.handler.get('handlers', 'synapser', setup=True),
-                          orbis=self.app.handler.get('handlers', 'orbis', setup=True), working_dir=f"/{tool.volume}")
+        return Wrapper(instance=instance, container=container)
 
-        return context
+    def get_context(self, nexus_handler: NexusHandler) -> Context:
+        benchmark = self.get_wrapper(nexus_handler.benchmark, 'benchmark')
+        tool = self.get_wrapper(nexus_handler.tool, 'tool')
+
+        return Context(tool=tool, benchmark=benchmark)

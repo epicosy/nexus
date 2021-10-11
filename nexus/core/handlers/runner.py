@@ -7,6 +7,7 @@ from cement.core.log import LogHandler
 
 from nexus.core.data.context import Context
 from nexus.core.data.store import Runner, Task
+from nexus.core.exc import CommandError, NexusError
 from nexus.core.handlers.nexus import NexusHandler
 from nexus.core.interfaces.runner import RunnerInterface
 
@@ -27,12 +28,12 @@ class TaskWorker(Thread):
             task.start()
 
             try:
-                self.logger.info((f"Running {self.context.tool.name} on {self.context.benchmark.name}'s "
+                self.logger.info((f"Running {self.context.tool.instance.name} on {self.context.benchmark.instance.name}'s "
                                   f"{task.program.vuln.id}."))
                 self.nexus_handler.run(task, context=self.context)
-            except Exception as e:
-                task.error(str(e))
-                raise e.with_traceback(e.__traceback__)
+            except (CommandError, NexusError) as err:
+                task.error(str(err))
+                self.logger.error(str(err))
             finally:
                 if callback is not None:
                     callback(task)

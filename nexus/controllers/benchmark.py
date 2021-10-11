@@ -15,15 +15,14 @@ class Benchmark(Controller):
         help='Lists registered benchmarks'
     )
     def list(self):
-        benchmark_manager = self.app.handler.get('manager', 'benchmark', setup=True)
+        container_manager = self.app.handler.get('managers', 'container', setup=True)
+        benchmarks = container_manager.find_all('benchmark')
         table = []
 
-        for benchmark, _ in benchmark_manager.all():
-            container = benchmark.container.short_id if benchmark.container else None
-            status = benchmark.container.status if container else '-'
-            table.append([benchmark.name, benchmark.enabled, benchmark.loaded, container if container else '-', status])
+        for benchmark in benchmarks:
+            table.append([benchmark.name, benchmark.id, benchmark.status, benchmark.ip, benchmark.port])
 
-        print(tabulate(table, headers=['Benchmark', 'Enabled', 'Loaded', 'Container', 'Status']))
+        print(tabulate(table, headers=['Name', 'Container', 'Status', 'Ip', 'Port']))
     
     @ex(
         help='List the benchmark\'s programs',

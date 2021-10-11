@@ -1,7 +1,8 @@
 from pathlib import Path
 from typing import Union, List
 
-from nexus.core.data.store import Patch
+from nexus.core.data.program import Manifest
+from nexus.core.data.store import Patch, Signal, ProgramInstance
 from nexus.core.database import Instance
 from nexus.core.handlers.api import APIHandler
 from nexus.core.handlers.container import ContainerHandler
@@ -18,10 +19,12 @@ class SynapserHandler(APIHandler, ContainerHandler):
                           'stream': f"{self.url_format}/stream" + "/{rid}"
                           }
 
-    def repair(self, instance: Instance, signals: dict, args: dict, working_dir: Path, target: Path):
+    def repair(self, instance: Instance, signals: List[Signal], program_instance: ProgramInstance, manifest: Manifest,
+               args: dict):
         return self.post(endpoint_url=self.endpoints['repair'].format(ip=instance.ip, port=instance.port),
-                         json={'signals': signals, 'timeout': self.get_timeout(), 'working_dir': str(working_dir),
-                               'target': str(target), 'args': args})
+                         json={'signals': {signal.arg: signal.command.to_dict() for signal in signals}, 'args': args,
+                               'manifest': manifest, 'program_instance': program_instance.to_dict(),
+                               'timeout': self.get_timeout()})
 
     def stream(self, instance: Instance, rid: int):
         return self.get(endpoint_url=self.endpoints['stream'].format(ip=instance.ip, port=instance.port, rid=rid))

@@ -1,8 +1,8 @@
 import re
 
 from nexus.core.data.context import Context
-from nexus.core.data.store import Task
-from nexus.core.exc import CommandError, NexusError
+from nexus.core.data.program import Manifest
+from nexus.core.data.store import Program, Signal, Command, Vulnerability
 from nexus.core.handlers.nexus import NexusHandler
 
 
@@ -19,66 +19,36 @@ class GenprogCGCRepairTask(NexusHandler):
     def __init__(self, **kw):
         super().__init__(tool='genprog', benchmark='cgcrepair', **kw)
 
-    def run(self, task: Task, context: Context):
-        try:
-            task.program.manifest.transform(c_to_cpp)
-            iid, working_dir = context.orbis.checkout(context.benchmark,
-                                                      args={'pid': task.program.id,
-                                                            'root_dir': f"/{context.benchmark.volume}"})
-            _, build_path = context.orbis.compile(context.benchmark, args={'iid': iid, 'args': {'--save_temps': ''}})
-            #task.program.manifest.add_parent(build_path)
-            container_manager = self.app.handler.get('managers', 'container', setup=True)
-            tool_container = container_manager.get(context.tool.id)
-            manifest_file = context.synapser.write(container=tool_container, name="manifest.txt", path=working_dir,
-                                                   data=task.program.manifest.format(delimiter='\n'))
+    def run(self, program: Program, vulnerability: Vulnerability, context: Context):
+        manifest = program.get_manifest()
+        manifest.transform(c_to_cpp)
+        program_instance = self.orbis.checkout(context.benchmark.instance, program=program)
+        self.orbis.compile(context.benchmark.instance, program_instance=program_instance, args={'--save_temps': ''})
 
-            signals = {
-                '--test-command': {
-                    'url': context.orbis.url(endpoint='test', instance=context.benchmark),
-                    'data': {
-                        'iid': iid,
-                        'args': {
-                             '--exit_fail': '',
-                             '--neg_pov': ''
-                        }
-                    },
-                    'placeholders': {
-                        '--tests': '__TEST_NAME__'
-                    }
-                },
-                '--compiler-command': {
-                    'url': context.orbis.url(endpoint='compile', instance=context.benchmark),
-                    'data': {
-                        'iid': iid,
-                        'args': {
-                             '--cpp_files': '',
-                             '--exit_err': '',
-                             '--inst_files': task.program.manifest.format(delimiter=' '),
-                        }
-                    },
-                    'placeholders': {
-                        '--fix_files': '__SOURCE_NAME__'
-                    }
-                }
-            }
+        test_command = Command(iid=program_instance.iid, action='test')
+        test_command.add_arg('--exit_fail')
+        test_command.add_arg('--neg_pov')
+        test_command.add_placeholder(name='--tests', value='__TEST_NAME__')
+        test_signal = Signal(arg='--test-command', command=test_command)
 
-            args = {
-                '--program': str(manifest_file),
-                '--prefix': str(build_path),
-                '--rep': "cilpatch" if len(task.program.manifest) > 1 else "c",
-                '--pos-tests': len(task.program.tests.pos),
-                '--neg-tests': len(task.program.tests.neg)
-            }
+        compile_command = Command(iid=program_instance.iid, action='test')
+        compile_command.add_arg('--cpp_files')
+        compile_command.add_arg('--exit_err')
+        compile_command.add_arg(name='--inst_files', value=manifest.format(delimiter=' '))
+        compile_command.add_placeholder(name='--fix_files', value='__SOURCE_NAME__')
+        compile_signal = Signal(arg='--compiler-command', command=compile_command)
 
-            response = context.synapser.repair(signals=signals, args=args, working_dir=working_dir,
-                                               target=task.program.manifest.files[0],
-                                               instance=context.tool)
-            response_json = response.json()
+        args = {
+            '--pos-tests': len(program.tests),
+            '--neg-tests': len(vulnerability.povs)
+        }
 
-            self.app.log.info("RID: " + str(response_json['rid']))
-        except (CommandError, NexusError) as err:
-            task.error(str(err))
-            self.app.log.error(str(err))
+        # TODO: Pass general object
+        response = self.synapser.repair(signals=[test_signal, compile_signal], args=args,
+                                        program_instance=program_instance, manifest=manifest,
+                                        instance=context.tool.instance)
+        response_json = response.json()
+        self.app.log.info("RID: " + str(response_json['rid']))
 
 
 def load(app):

@@ -15,15 +15,14 @@ class Tool(Controller):
         help='Lists registered tools'
     )
     def list(self):
-        tool_manager = self.app.handler.get('manager', self.Meta.label, setup=True)
+        container_manager = self.app.handler.get('managers', 'container', setup=True)
+        tools = container_manager.find_all('tool')
         table = []
 
-        for tool, _ in tool_manager.all():
-            container = tool.container.short_id if tool.container else None
-            status = tool.container.status if container else '-'
-            table.append([tool.name, tool.enabled, tool.loaded, container if container else '-', status])
+        for tool, _ in tools:
+            table.append([tool.name, tool.id, tool.status, tool.ip, tool.port])
 
-        print(tabulate(table, headers=['Tool', 'Enabled', 'Loaded', 'Container', 'Status']))
+        print(tabulate(table, headers=['Name', 'Container', 'Status', 'Ip', 'Port']))
 
     @ex(
         help='Setups the tool\'s container.',
