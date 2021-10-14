@@ -29,8 +29,8 @@ class TaskWorker(Thread):
 
             try:
                 self.logger.info((f"Running {self.context.tool.instance.name} on {self.context.benchmark.instance.name}'s "
-                                  f"{task.program.vuln.id}."))
-                self.nexus_handler.run(task, context=self.context)
+                                  f"{task.vulnerability.id}."))
+                self.nexus_handler.run(task.program, context=self.context, vulnerability=task.vulnerability)
             except (CommandError, NexusError) as err:
                 task.error(str(err))
                 self.logger.error(str(err))

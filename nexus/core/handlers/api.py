@@ -1,10 +1,13 @@
 import json
+from abc import abstractmethod
+
 import requests
 
 from requests import Response
 from functools import wraps
 from cement import Handler
 
+from nexus.core.database import Instance
 from nexus.core.exc import NexusError
 from nexus.core.interfaces.handlers import HandlersInterface
 
@@ -30,8 +33,15 @@ class APIHandler(HandlersInterface, Handler):
         super().__init__(**kw)
         self.url_format = "http://{ip}:{port}"
 
+    def serve_cmd(self):
+        return self.app.get_config('apis')[self.Meta.label]['serve']
+
     def setup_cmds(self):
         return self.app.get_config('apis')[self.Meta.label]['setup']
+
+    @abstractmethod
+    def is_running(self, instance: Instance) -> bool:
+        pass
 
     @debug_method
     def post(self, endpoint_url: str, json: dict = None) -> Response:

@@ -73,6 +73,27 @@ class Benchmark(Controller):
         container_manager.create(self.app.pargs.name, kind=self.Meta.label)
 
     @ex(
+        help='Launches orbis server on setup benchmark container',
+        arguments=[
+            (["-N", "--name"], {'help': "The name of the target tool", 'type': str, 'required': True})
+        ]
+    )
+    def serve(self):
+        container_manager = self.app.handler.get('managers', 'container', setup=True)
+        orbis_handler = self.app.handler.get('handlers', 'orbis', setup=True)
+        container_manager.serve(self.app.pargs.name, kind=self.Meta.label, api_handler=orbis_handler)
+
+    @ex(
+        help='Refreshes the IP of the benchmark\'s container in the database.',
+        arguments=[
+            (["-N", "--name"], {'help': "The name of the target benchmark", 'type': str, 'required': True})
+        ]
+    )
+    def refresh(self):
+        container_manager = self.app.handler.get('managers', 'container', setup=True)
+        container_manager.refresh(self.app.pargs.name, kind=self.Meta.label)
+
+    @ex(
         help='Deletes the benchmarks records',
         arguments=[
             (['-rm', '--remove'], {'help': 'Removes the associated containers', 'action': 'store_true', 'required': False})

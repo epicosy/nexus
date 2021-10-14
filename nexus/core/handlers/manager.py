@@ -96,7 +96,7 @@ class ContainerManager(ManagersInterface, Handler):
             container_handler = self.app.handler.get('handlers', 'container', setup=True)
             configs = self.app.get_section(name)
 
-            if container_handler.setup(container.id, cmds=configs['container']['setup'], api_handler=api_handler):
+            if container_handler.setup(container.id, cmds=api_handler.setup_cmds() + configs['container']['setup']):
                 self.update(container_data, attr='status', value='setup')
                 self.update(container_data, attr='ip', value=self.get_ip(container_data.id))
 
@@ -129,6 +129,14 @@ class ContainerManager(ManagersInterface, Handler):
             self.app.log.error(str(e))
             exit(1)
 
+    def refresh(self, name: str, kind: str):
+        container_data = self.find(kind, name)
+        ip = self.get_ip(container_id=container_data.id)
+
+        if ip != container_data.ip:
+            self.app.log.info(f"Updating {container_data.name}'s ip from {container_data.ip} to {ip}")
+            self.update(container_data, 'ip', ip)
+
     def start(self, container_id: str):
         container = self.get(container_id)
 
@@ -137,6 +145,26 @@ class ContainerManager(ManagersInterface, Handler):
         if container and container.status != 'running':
             self.app.log.info(f"Starting {container.name} benchmark container.")
             container.start()
+
+    def serve(self, name: str, kind: str, api_handler: APIHandler):
+        container_data = self.find(kind, name)
+
+        if not container_data:
+            self.app.log.warning(f"{kind} {name} does not exist")
+            return
+
+        if api_handler.is_running(container_data):
+            self.app.log.warning(f"{kind} {name} server is running")
+            return
+
+        container = self.get(container_data.id)
+
+        if container.status != 'running':
+            self.app.log.info(f"Running up {container_data.name} {kind} container.")
+            container.start()
+
+        container_handler = self.app.handler.get('handlers', 'container', setup=True)
+        container_handler.setup(container.id, cmds=api_handler.serve_cmd())
 
 
 class NexusManager(ManagersInterface, Handler):

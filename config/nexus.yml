@@ -48,6 +48,7 @@ nexus:
       setup:
         - "cd /tmp; git clone https://github.com/epicosy/orbis 2>&1"
         - "cd /tmp/orbis; ./install.sh"
+      serve:
         - "/etc/init.d/postgresql start"
         - "nohup orbis api -p 8080 2>&1 &"
 
@@ -55,6 +56,8 @@ nexus:
       setup:
         - "cd /tmp; git clone https://github.com/epicosy/synapser 2>&1"
         - "cd /tmp/synapser; ./install_py38.sh 2>&1; ./install.sh 2>&1"
+      serve:
+        - "/etc/init.d/postgresql start"
         - "nohup synapser api -p 8080 2>&1 &"
 
 log.colorlog:

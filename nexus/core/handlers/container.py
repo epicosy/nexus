@@ -19,9 +19,7 @@ class ContainerHandler(HandlersInterface, Handler):
     class Meta:
         label = 'container'
 
-    def setup(self, container_id: str, cmds: List[str], api_handler: APIHandler) -> bool:
-        cmds = api_handler.setup_cmds() + cmds
-
+    def setup(self, container_id: str, cmds: List[str]) -> bool:
         for cmd in cmds:
             cmd_data = self.__call__(container_id, cmd_str=cmd, raise_err=True)
 

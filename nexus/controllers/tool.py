@@ -49,6 +49,27 @@ class Tool(Controller):
         container_manager.create(self.app.pargs.name, kind=self.Meta.label)
 
     @ex(
+        help='Launches synapser server on setup tool container',
+        arguments=[
+            (["-N", "--name"], {'help': "The name of the target tool", 'type': str, 'required': True})
+        ]
+    )
+    def serve(self):
+        container_manager = self.app.handler.get('managers', 'container', setup=True)
+        synapser_handler = self.app.handler.get('handlers', 'synapser', setup=True)
+        container_manager.serve(self.app.pargs.name, kind=self.Meta.label, api_handler=synapser_handler)
+
+    @ex(
+        help='Refreshes the IP of the tool\'s container in the database.',
+        arguments=[
+            (["-N", "--name"], {'help': "The name of the target tool", 'type': str, 'required': True})
+        ]
+    )
+    def refresh(self):
+        container_manager = self.app.handler.get('managers', 'container', setup=True)
+        container_manager.refresh(self.app.pargs.name, kind=self.Meta.label)
+
+    @ex(
         help='Deletes the benchmarks records',
         arguments=[
             (['-rm', '--remove'],
@@ -74,7 +95,7 @@ class Tool(Controller):
         response = synapser.stream(tool, rid=self.app.pargs.id)
         response_json = response.json()
 
-        if 'socket' in response_json:
+        if 'socket' in response_json and response_json['socket']:
             ws_url = f"ws://{tool.ip}:{response_json['socket']}"
 
             async def read():

@@ -24,3 +24,6 @@ class Manifest:
 
     def extensions(self) -> List[AnyStr]:
         return [file.suffix for file in self.files]
+
+    def to_str(self) -> List[str]:
+        return [str(file) for file in self.files]

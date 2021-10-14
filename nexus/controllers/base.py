@@ -55,11 +55,11 @@ class Base(Controller):
             orbis_handler = self.app.handler.get('handlers', 'orbis', setup=True)
 
             if self.app.pargs.vulns:
-                vulns = [orbis_handler.get_vuln(context.benchmark, vuln) for vuln in self.app.pargs.vulns]
+                vulns = [orbis_handler.get_vuln(context.benchmark.instance, vuln) for vuln in self.app.pargs.vulns]
             else:
-                vulns = orbis_handler.get_vulns(context.benchmark)
+                vulns = orbis_handler.get_vulns(context.benchmark.instance)
 
-            tasks = [Task(program=orbis_handler.get_program(context.benchmark, vuln.pid)) for vuln in vulns]
+            tasks = [Task(program=orbis_handler.get_program(context.benchmark.instance, vuln.pid), vulnerability=vuln) for vuln in vulns]
 
             runner_handler = self.app.handler.get('runner', 'runner', setup=True)
             runner_data = runner_handler(tasks, context=context, nexus_handler=nexus_handler)

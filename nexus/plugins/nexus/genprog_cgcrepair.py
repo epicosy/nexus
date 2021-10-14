@@ -25,13 +25,15 @@ class GenprogCGCRepairTask(NexusHandler):
         program_instance = self.orbis.checkout(context.benchmark.instance, program=program)
         self.orbis.compile(context.benchmark.instance, program_instance=program_instance, args={'--save_temps': ''})
 
-        test_command = Command(iid=program_instance.iid, action='test')
+        test_command = Command(iid=program_instance.iid,
+                               url=self.orbis.url(action='test', instance=context.benchmark.instance))
         test_command.add_arg('--exit_fail')
         test_command.add_arg('--neg_pov')
         test_command.add_placeholder(name='--tests', value='__TEST_NAME__')
         test_signal = Signal(arg='--test-command', command=test_command)
 
-        compile_command = Command(iid=program_instance.iid, action='test')
+        compile_command = Command(iid=program_instance.iid,
+                                  url=self.orbis.url(action='compile', instance=context.benchmark.instance))
         compile_command.add_arg('--cpp_files')
         compile_command.add_arg('--exit_err')
         compile_command.add_arg(name='--inst_files', value=manifest.format(delimiter=' '))
@@ -40,10 +42,9 @@ class GenprogCGCRepairTask(NexusHandler):
 
         args = {
             '--pos-tests': len(program.tests),
-            '--neg-tests': len(vulnerability.povs)
+            '--neg-tests': len(vulnerability.test)
         }
 
-        # TODO: Pass general object
         response = self.synapser.repair(signals=[test_signal, compile_signal], args=args,
                                         program_instance=program_instance, manifest=manifest,
                                         instance=context.tool.instance)

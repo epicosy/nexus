@@ -33,9 +33,9 @@ class Store:
 @dataclass
 class Command:
     iid: int
-    action: str
-    args = Store()
-    placeholders = Store()
+    url: str
+    args: dict = field(default_factory=lambda: {})
+    placeholders: dict = field(default_factory=lambda: {})
 
     def add_arg(self, name: str, value: str = ''):
         self.args[name] = value
@@ -44,7 +44,10 @@ class Command:
         self.placeholders[name] = value
 
     def to_dict(self):
-        return {'data': {'iid': self.iid, 'args': self.args}, 'placeholders': self.placeholders}
+        return {'data': {'iid': self.iid, 'args': self.args}, 'placeholders': self.placeholders, 'url': self.url}
+
+    def to_json(self):
+        return {'data': {'iid': self.iid, 'args': self.args}, 'placeholders': self.placeholders, 'url': self.url}
 
 
 @dataclass
@@ -58,8 +61,7 @@ class Vulnerability:
     id: str
     pid: str
     cwe: str
-    program: str
-    povs: List[str]
+    test: str
     related: List[str] = None
     cve: str = '-'
 
@@ -120,10 +122,14 @@ class ProgramInstance:
     def to_dict(self):
         return {'iid': self.iid, 'working_dir': self.working_dir, 'build_dir': self.build_dir}
 
+    def to_json(self):
+        return {'iid': self.iid, 'working_dir': str(self.working_dir), 'build_dir': str(self.build_dir) if self.build_dir else None}
+
 
 @dataclass
 class Task:
     program: Program
+    vulnerability: Vulnerability
     status: str = None
     start_date: datetime = None
     end_date: datetime = None

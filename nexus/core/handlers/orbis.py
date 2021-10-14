@@ -3,11 +3,11 @@ import requests
 from binascii import b2a_hex
 from os import urandom
 from pathlib import Path
-from typing import Dict, Any
 
 from nexus.core.data.results import CommandData
 from nexus.core.data.store import Vulnerability, Program, ProgramInstance
 from nexus.core.database import Instance
+from nexus.core.exc import NexusError
 from nexus.core.handlers.api import APIHandler
 
 
@@ -18,6 +18,7 @@ class OrbisHandler(APIHandler):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.endpoints = {
+            'index': self.url_format,
             'compile': f"{self.url_format}/compile",
             'checkout': f"{self.url_format}/checkout",
             'make': f"{self.url_format}/make",
@@ -27,6 +28,13 @@ class OrbisHandler(APIHandler):
             'vuln': f"{self.url_format}/vuln" + "/{vid}",
             'vulns': f"{self.url_format}/vulns",
         }
+
+    def is_running(self, instance: Instance) -> bool:
+        try:
+            return self.get(endpoint_url=self.endpoints['index'].format(ip=instance.ip, port=instance.port)).ok
+        except (requests.exceptions.ConnectionError, NexusError) as ce:
+            self.app.log.warning(str(ce))
+            return False
 
     # TODO: connect to a volume
     def get_working_dir(self, program_name: str, randomize: bool = False) -> Path:
@@ -52,7 +60,11 @@ class OrbisHandler(APIHandler):
     def get_vuln(self, instance: Instance, vid: str, args: dict = None) -> Vulnerability:
         response = self.get(endpoint_url=self.endpoints['vuln'].format(ip=instance.ip, port=instance.port, vid=vid),
                             json=args)
-        return Vulnerability(**response.json())
+        response_json = response.json()
+        response_json['pid'] = response_json['cid']
+        print(response_json)
+        del response_json['cid']
+        return Vulnerability(**response_json)
 
     def get_vulns(self, instance: Instance, args: dict = None):
         response = self.get(endpoint_url=self.endpoints['vulns'].format(ip=instance.ip, port=instance.port), json=args)
@@ -73,7 +85,7 @@ class OrbisHandler(APIHandler):
         return self.post(endpoint_url=self.endpoints['make'].format(ip=instance.ip, port=instance.port),
                          json=args).json()
 
-    def url(self, action: str, instance: Instance) -> Dict[str, Any]:
+    def url(self, action: str, instance: Instance) -> str:
         return self.endpoints[action].format(ip=instance.ip, port=instance.port)
 
     def compile(self, instance: Instance, program_instance: ProgramInstance, args: dict) -> ProgramInstance:
