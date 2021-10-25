@@ -38,7 +38,7 @@ class ContainerManager(ManagersInterface, Handler):
     def remove(self, instance: Instance):
         container = self.get(instance.id)
 
-        if container.status == "running":
+        if container and container.status == "running":
             self.app.log.warning(f"Stopping running container {container.name}")
             container.stop()
 

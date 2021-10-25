@@ -40,8 +40,12 @@ class Command:
     def add_arg(self, name: str, value: str = ''):
         self.args[name] = value
 
+        return self
+
     def add_placeholder(self, name: str, value: str):
         self.placeholders[name] = value
+
+        return self
 
     def to_dict(self):
         return {'data': {'iid': self.iid, 'args': self.args}, 'placeholders': self.placeholders, 'url': self.url}

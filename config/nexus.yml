@@ -54,6 +54,7 @@ nexus:
 
     synapser:
       setup:
+        - "apt-get install -y git curl 2>&1"
         - "cd /tmp; git clone https://github.com/epicosy/synapser 2>&1"
         - "cd /tmp/synapser; ./install_py38.sh 2>&1; ./install.sh 2>&1"
       serve:
@@ -84,4 +85,7 @@ log.colorlog:
   max_files: 4
 
 plugin.nexus.genprog_cgcrepair:
+  enabled: false
+
+plugin.nexus.mutapr_cgcrepair:
   enabled: true

@@ -3,14 +3,12 @@ from pathlib import Path
 from typing import List
 
 from cement import Handler
-from docker.errors import NotFound
 from docker.errors import APIError
 from docker.models.containers import Container
 from docker.models.volumes import Volume
 
 from nexus.core.data.results import CommandData
 from nexus.core.exc import NexusError, CommandError
-from nexus.core.handlers.api import APIHandler
 from nexus.core.interfaces.handlers import HandlersInterface
 from nexus.core.utils.misc import str_to_tarfile
 

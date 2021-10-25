@@ -19,6 +19,7 @@ class SynapserHandler(APIHandler, ContainerHandler):
         self.endpoints = {'index': self.url_format,
                           'repair': f"{self.url_format}/repair",
                           'patches': f"{self.url_format}/patches",
+                          'coverage': f"{self.url_format}/coverage",
                           'stream': f"{self.url_format}/stream" + "/{rid}"
                           }
 
@@ -33,6 +34,13 @@ class SynapserHandler(APIHandler, ContainerHandler):
                args: dict):
         return self.post(endpoint_url=self.endpoints['repair'].format(ip=instance.ip, port=instance.port),
                          json={'signals': {signal.arg: signal.command.to_json() for signal in signals}, 'args': args,
+                               'manifest': manifest.to_str(), 'working_dir': str(program_instance.working_dir),
+                               'build_dir':  str(program_instance.build_dir) if program_instance.build_dir else None,
+                               'timeout': self.get_timeout(), })
+
+    def coverage(self, instance: Instance, signals: List[Signal], program_instance: ProgramInstance, manifest: Manifest):
+        return self.post(endpoint_url=self.endpoints['coverage'].format(ip=instance.ip, port=instance.port),
+                         json={'signals': {signal.arg: signal.command.to_json() for signal in signals},
                                'manifest': manifest.to_str(), 'working_dir': str(program_instance.working_dir),
                                'build_dir':  str(program_instance.build_dir) if program_instance.build_dir else None,
                                'timeout': self.get_timeout(), })

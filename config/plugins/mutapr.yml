@@ -1,6 +1,6 @@
-cgcrepair:
-  type: benchmark
-  image: 5ee0e7887a39
+mutapr:
+  type: tool
+  image: d31a89c0e810
   container:
     api:
       port: 8080
