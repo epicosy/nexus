@@ -1,0 +1,10 @@
+cgc:
+  type: benchmark
+  image:
+    tag: cgc
+    repo: epicosy/cgc
+  container:
+    name: cgc
+    api:
+      port: 8080
+    setup: []

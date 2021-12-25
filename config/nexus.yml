@@ -48,6 +48,7 @@ nexus:
       setup:
         - "cd /tmp; git clone https://github.com/epicosy/orbis 2>&1"
         - "cd /tmp/orbis; ./install.sh"
+        - "orbis init 2>&1"
       serve:
         - "/etc/init.d/postgresql start"
         - "nohup orbis api -p 8080 2>&1 &"

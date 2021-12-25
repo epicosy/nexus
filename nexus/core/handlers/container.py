@@ -1,8 +1,11 @@
+import ast
 from datetime import datetime
 from pathlib import Path
-from typing import List
+from typing import List, Union
+from io import BytesIO
 
 from cement import Handler
+
 from docker.errors import APIError
 from docker.models.containers import Container
 from docker.models.volumes import Volume
@@ -17,9 +20,11 @@ class ContainerHandler(HandlersInterface, Handler):
     class Meta:
         label = 'container'
 
-    def setup(self, container_id: str, cmds: List[str]) -> bool:
+    def setup(self, container: Container, cmds: List[str], env: dict = None) -> bool:
+        #env_file = self.write(container=container, data="export DEBIAN_FRONTEND=noninteractive", path=Path('/tmp'),
+        #                      name='env')
         for cmd in cmds:
-            cmd_data = self.__call__(container_id, cmd_str=cmd, raise_err=True)
+            cmd_data = self.__call__(container.id, cmd_str=cmd, raise_err=True, env=env)
 
             if cmd_data.error or cmd_data.return_code != 0:
                 self.app.log.error(cmd_data.error)
@@ -28,6 +33,15 @@ class ContainerHandler(HandlersInterface, Handler):
             self.app.log.info(cmd_data.output)
 
         return True
+    
+    def build(self, path: Path, tag: str):
+        for line in self.app.docker.api.build(path=str(path), rm=True, tag=tag):
+            decoded = ast.literal_eval(line.decode('utf-8'))
+            
+            if 'stream' in decoded:
+                self.app.log.info(decoded['stream'])
+            else:
+                self.app.log.info(decoded)
 
     def create(self, image: str, container_configs: dict, name: str, volume: Volume) -> str:
         binds = {volume.name: {'bind': f"/{volume.name}", 'mode': 'rw'}}
@@ -44,8 +58,8 @@ class ContainerHandler(HandlersInterface, Handler):
         return output['Id']
 
     def __call__(self, container_id: str, cmd_str: str, args: str = "", call: bool = True, cmd_cwd: str = None,
-                 msg: str = None, env: Path = None, timeout: int = None, raise_err: bool = False,
-                 exit_err: bool = False, **kwargs) -> CommandData:
+                 msg: str = None, env: dict = None, timeout: int = None, raise_err: bool = False,
+                 exit_err: bool = False, user: str = "root", **kwargs) -> CommandData:
 
         cmd_data = CommandData(f"{cmd_str} {args}" if args else cmd_str)
 
@@ -56,8 +70,10 @@ class ContainerHandler(HandlersInterface, Handler):
 
         if not call:
             return cmd_data
+        
+        # TODO: change this to use the environment parameter from exec_create
 
-        cmd = f"'source {env} &&" if env else "'"
+        cmd = "'"
         if cmd_cwd:
             cmd = f"{cmd} && cd {cmd_cwd}"
 
@@ -69,7 +85,8 @@ class ContainerHandler(HandlersInterface, Handler):
         cmd = f"{cmd} {cmd_data.args}'"
 
         try:
-            response = self.app.docker.api.exec_create(container_id, cmd, tty=False, stdout=True, stderr=True)
+            response = self.app.docker.api.exec_create(container_id, cmd, user=user, tty=False, stdout=True,
+                                                       stderr=True, environment=env)
         except APIError:
             raise NexusError(f"failed to create exec object for command: {cmd}")
 

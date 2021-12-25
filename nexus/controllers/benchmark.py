@@ -60,7 +60,7 @@ class Benchmark(Controller):
         container_manager = self.app.handler.get('managers', 'container', setup=True)
         orbis_handler = self.app.handler.get('handlers', 'orbis', setup=True)
         container_manager.setup(self.app.pargs.name, kind=self.Meta.label, api_handler=orbis_handler,
-                                force=self.app.pargs.force)
+                                force=self.app.pargs.force, env={'ORBIS_PLUGIN_PATH': f'/{self.app.pargs.name}'})
 
     @ex(
         help='Creates the Nexus',

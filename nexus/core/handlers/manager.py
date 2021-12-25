@@ -1,7 +1,8 @@
-from typing import List
+from typing import List, Union
 
 from cement import Handler
 from docker.errors import NotFound, APIError
+from docker.models.images import Image
 
 from nexus.core.data.context import Context, Wrapper
 from nexus.core.database import Instance
@@ -9,6 +10,7 @@ from nexus.core.exc import NexusError
 from nexus.core.handlers.api import APIHandler
 from nexus.core.handlers.nexus import NexusHandler
 from nexus.core.interfaces.manager import ManagersInterface
+from nexus.core.utils.misc import get_repo
 
 
 class ContainerManager(ManagersInterface, Handler):
@@ -41,8 +43,11 @@ class ContainerManager(ManagersInterface, Handler):
         if container and container.status == "running":
             self.app.log.warning(f"Stopping running container {container.name}")
             container.stop()
-
-        container.remove(v=instance.volume)
+        
+        if instance.volume:
+            if container:
+                container.remove(v=instance.volume)
+        
         self.app.log.warning(f"Removed container with id {container.id}.")
 
     def delete(self, kind: str, remove: bool = False) -> List[Instance]:
@@ -75,7 +80,7 @@ class ContainerManager(ManagersInterface, Handler):
     def volume(self):
         return self.app.docker.volumes.get(self.app.get_config('docker')['volume'])
 
-    def setup(self, name: str, kind: str, api_handler: APIHandler, force: bool = False):
+    def setup(self, name: str, kind: str, api_handler: APIHandler, force: bool = False, env: dict = None):
         container_data = self.find(kind, name)
 
         if not container_data:
@@ -96,7 +101,7 @@ class ContainerManager(ManagersInterface, Handler):
             container_handler = self.app.handler.get('handlers', 'container', setup=True)
             configs = self.app.get_section(name)
 
-            if container_handler.setup(container.id, cmds=api_handler.setup_cmds() + configs['container']['setup']):
+            if container_handler.setup(container, cmds=api_handler.setup_cmds() + configs['container']['setup'], env=env):
                 self.update(container_data, attr='status', value='setup')
                 self.update(container_data, attr='ip', value=self.get_ip(container_data.id))
 
@@ -117,17 +122,33 @@ class ContainerManager(ManagersInterface, Handler):
             self.app.log.warning(f"{kind} {name} exists")
             return
 
+        container_handler = self.app.handler.get('handlers', 'container', setup=True)
+
+        image = self.get_image(configs['image']['tag'])
+
+        if not image:
+            repo = get_repo(path=self.app.get_config('docker')['volume_bind'], repo_path=configs['image']['repo'],
+                            logger=self.app.log)
+            container_handler.build(path=repo.working_dir, tag=configs['image']['tag'])
+
         try:
-            container_handler = self.app.handler.get('handlers', 'container', setup=True)
-            container_id = container_handler.create(image=configs['image'], name=name, volume=self.volume(),
+            container_id = container_handler.create(image=configs['image']['tag'], name=name, volume=self.volume(),
                                                     container_configs=configs['container'])
-            container_data_id = self.register(image=configs['image'], container_id=container_id, name=name, kind=kind,
-                                              ip="", port=configs['container']['api']['port'],
+            container_data_id = self.register(image=configs['image']['tag'], container_id=container_id, name=name,
+                                              kind=kind, ip="", port=configs['container']['api']['port'],
                                               volume=self.app.get_config('docker')['volume'])
             self.app.log.info(f"Registered container {container_data_id} for {kind} {self.app.pargs.name}.")
         except (NexusError, APIError) as e:
             self.app.log.error(str(e))
             exit(1)
+
+    def get_image(self, tag: str) -> Union[Image, None]:
+        try:
+            return self.app.docker.images.get(tag)
+        except NotFound as nf:
+            self.app.log.error(str(nf))
+
+            return None
 
     def refresh(self, name: str, kind: str):
         container_data = self.find(kind, name)
@@ -164,7 +185,7 @@ class ContainerManager(ManagersInterface, Handler):
             container.start()
 
         container_handler = self.app.handler.get('handlers', 'container', setup=True)
-        container_handler.setup(container.id, cmds=api_handler.serve_cmd())
+        container_handler.setup(container, cmds=api_handler.serve_cmd())
 
 
 class NexusManager(ManagersInterface, Handler):

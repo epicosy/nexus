@@ -1,10 +1,23 @@
 import tarfile
 import io
 
+from git import Repo, RemoteProgress
 from binascii import b2a_hex
 from os import urandom
 from pathlib import Path
 from typing import List, Dict
+from tqdm import tqdm
+
+
+class CloneProgress(RemoteProgress):
+    def __init__(self):
+        super().__init__()
+        self.pbar = tqdm()
+
+    def update(self, op_code, cur_count, max_count=None, message=''):
+        self.pbar.total = max_count
+        self.pbar.n = cur_count
+        self.pbar.refresh()
 
 
 def write_bash(cmd: str, name: str, path: Path, mode: oct = 0o777) -> Path:
@@ -41,3 +54,20 @@ def str_to_tarfile(data: str, tar_info_name: str) -> Path:
         tar.addfile(info, io.BytesIO(data.encode('utf8')))
 
     return dest_path
+
+
+def get_repo(path: str, repo_path: str, logger) -> Repo:
+    project_path = Path(path, repo_path.split('/')[-1])
+
+    if project_path.exists():
+        logger.info(f"Repo {repo_path} found locally.")
+        repo = Repo(project_path)
+
+        if repo.bare:
+            logger.warning(f"Bare repo {repo_path}")
+    else:
+        logger.info(f"Cloning {repo_path} to {project_path}")
+        repo = Repo.clone_from(url=f"https://github.com/{repo_path}", to_path=project_path, progress=CloneProgress())
+        logger.info(f"Cloned {repo_path}")
+    
+    return repo
