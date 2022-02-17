@@ -45,10 +45,11 @@ class ContainerHandler(HandlersInterface, Handler):
 
     def create(self, image: str, container_configs: dict, name: str, volume: Volume) -> str:
         binds = {volume.name: {'bind': f"/{volume.name}", 'mode': 'rw'}}
-        host_config = self.app.docker.api.create_host_config(binds=binds)
+        bind_port = container_configs['api']['port']
+        host_config = self.app.docker.api.create_host_config(binds=binds, port_bindings={bind_port: bind_port})
         output = self.app.docker.api.create_container(image, name=name, volumes=[f"/{volume.name}"],
                                                       host_config=host_config, tty=True, detach=True,
-                                                      ports=[container_configs['api']['port']])
+                                                      ports=[bind_port])
 
         self.app.log.info(f"Created container for {name} with id {output['Id'][:10]}")
 
