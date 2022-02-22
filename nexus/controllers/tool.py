@@ -39,7 +39,7 @@ class Tool(Controller):
                                 api_handler=synapser_handler)
 
     @ex(
-        help='Creates the Nexus',
+        help='Creates the tool',
         arguments=[
             (["-N", "--name"], {'help': "The name of the target tool", 'type': str, 'required': True})
         ]

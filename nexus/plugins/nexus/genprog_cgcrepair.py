@@ -17,34 +17,36 @@ class GenprogCGCRepairTask(NexusHandler):
         label = 'genprog_cgcrepair'
 
     def __init__(self, **kw):
-        super().__init__(tool='genprog', benchmark='cgcrepair', **kw)
+        super().__init__(tool='genprog', benchmark='cgc', **kw)
 
     def run(self, program: Program, vulnerability: Vulnerability, context: Context):
-        manifest = program.get_manifest()
+        manifest = vulnerability.get_manifest()
         manifest.transform(c_to_cpp)
-        program_instance = self.orbis.checkout(context.benchmark.instance, program=program)
-        self.orbis.compile(context.benchmark.instance, program_instance=program_instance, args={'--save_temps': ''})
+        program_instance = self.orbis.checkout(context.benchmark.instance, vuln=vulnerability)
+        self.orbis.build(context.benchmark.instance, program_instance=program_instance, args={'save_temps': True})
 
         test_command = Command(iid=program_instance.iid,
                                url=self.orbis.url(action='test', instance=context.benchmark.instance))
-        test_command.add_arg('--exit_fail')
-        test_command.add_arg('--neg_pov')
-        test_command.add_placeholder(name='--tests', value='__TEST_NAME__')
+        test_command.add_arg('exit_fail')
+        test_command.add_arg('neg_pov')
+        test_command.add_arg('replace_neg_fmt', ('n', 'pov'))
+        test_command.add_arg('replace_pos_fmt', ('p', 't'))
+        test_command.add_placeholder(name='tests', value='__TEST_NAME__')
         test_signal = Signal(arg='--test-command', command=test_command)
 
-        compile_command = Command(iid=program_instance.iid,
-                                  url=self.orbis.url(action='compile', instance=context.benchmark.instance))
-        compile_command.add_arg('--cpp_files')
-        compile_command.add_arg('--exit_err')
-        compile_command.add_arg(name='--inst_files', value=manifest.format(delimiter=' '))
-        compile_command.add_placeholder(name='--fix_files', value='__SOURCE_NAME__')
-        compile_signal = Signal(arg='--compiler-command', command=compile_command)
+        build_command = Command(iid=program_instance.iid,
+                                  url=self.orbis.url(action='build', instance=context.benchmark.instance))
+        build_command.add_arg('cpp_files')
+        build_command.add_arg('exit_err')
+        build_command.add_arg('save_temps')
+        build_command.add_arg(name='inst_files', value=manifest.format(delimiter=' '))
+        build_command.add_placeholder(name='fix_files', value='__SOURCE_NAME__')
+        compile_signal = Signal(arg='--compiler-command', command=build_command)
 
         args = {
-            '--pos-tests': len(program.tests),
-            '--neg-tests': len(vulnerability.test)
+            '--pos-tests': len(program.oracle['cases']),
+            '--neg-tests': len(vulnerability.oracle['cases'])
         }
-
         response = self.synapser.repair(signals=[test_signal, compile_signal], args=args,
                                         program_instance=program_instance, manifest=manifest,
                                         instance=context.tool.instance)

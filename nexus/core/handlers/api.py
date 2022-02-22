@@ -44,12 +44,13 @@ class APIHandler(HandlersInterface, Handler):
         pass
 
     @debug_method
-    def post(self, endpoint_url: str, json: dict = None) -> Response:
-        return self.check_response(requests.post(url=endpoint_url, json=json))
+    def post(self, endpoint_url: str, json_data: dict = None) -> Response:
+        self.app.log.debug(json_data)
+        return self.check_response(requests.post(url=endpoint_url, json=json_data))
 
     @debug_method
-    def get(self, endpoint_url: str, json: dict = None) -> Response:
-        return self.check_response(requests.get(url=endpoint_url, json=json))
+    def get(self, endpoint_url: str, json_data: dict = None) -> Response:
+        return self.check_response(requests.get(url=endpoint_url, json=json_data))
 
     @staticmethod
     def check_response(response: Response):
