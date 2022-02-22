@@ -61,9 +61,6 @@ class OrbisHandler(APIHandler):
         response = self.get(endpoint_url=self.endpoints['vuln'].format(ip=instance.ip, port=instance.port, vid=vid),
                             json=args)
         response_json = response.json()
-        response_json['pid'] = response_json['cid']
-        print(response_json)
-        del response_json['cid']
         return Vulnerability(**response_json)
 
     def get_vulns(self, instance: Instance, args: dict = None):

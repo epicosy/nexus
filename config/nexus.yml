@@ -40,7 +40,7 @@ nexus:
 ### Docker
   docker:
     volume: nexus
-    volume_bind: '/home/epicosy/nexus_data'
+    volume_bind: '/Users/cuong/PycharmProjects/APRPlatform/nexus/nexus_data'
 
 ### APIs
   apis:
@@ -89,4 +89,7 @@ plugin.nexus.genprog_cgcrepair:
   enabled: false
 
 plugin.nexus.mutapr_cgcrepair:
+  enabled: false
+
+plugin.nexus.arja_vul4j:
   enabled: true

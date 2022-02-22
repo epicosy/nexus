@@ -19,7 +19,7 @@ class Tool(Controller):
         tools = container_manager.find_all('tool')
         table = []
 
-        for tool, _ in tools:
+        for tool in tools:
             table.append([tool.name, tool.id, tool.status, tool.ip, tool.port])
 
         print(tabulate(table, headers=['Name', 'Container', 'Status', 'Ip', 'Port']))
