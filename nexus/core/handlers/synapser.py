@@ -30,12 +30,12 @@ class SynapserHandler(APIHandler, ContainerHandler):
             self.app.log.warning(str(ce))
             return False
 
-    def repair(self, instance: Instance, signals: List[Signal], program_instance: ProgramInstance, manifest: Manifest,
+    def repair(self, instance: Instance, signals: List[Signal], program_instance: ProgramInstance, manifest: dict,
                args: dict):
         return self.post(endpoint_url=self.endpoints['repair'].format(ip=instance.ip, port=instance.port),
                          json_data={'signals': {signal.arg: signal.command.to_json() for signal in signals},
                                     'args': args,
-                                    'manifest': manifest.to_str(), 'working_dir': str(program_instance.working_dir),
+                                    'manifest': manifest, 'working_dir': str(program_instance.working_dir),
                                     'build_dir': str(
                                         program_instance.build_dir) if program_instance.build_dir else None,
                                     'timeout': self.get_timeout(), })

@@ -1,4 +1,6 @@
 import asyncio
+import configparser
+
 import websockets
 
 from tabulate import tabulate
@@ -16,10 +18,10 @@ class Tool(Controller):
     )
     def list(self):
         container_manager = self.app.handler.get('managers', 'container', setup=True)
-        tools = container_manager.find_all('tool')
+        tools = container_manager.find_all('tool').all()
         table = []
 
-        for tool, _ in tools:
+        for tool in tools:
             table.append([tool.name, tool.id, tool.status, tool.ip, tool.port])
 
         print(tabulate(table, headers=['Name', 'Container', 'Status', 'Ip', 'Port']))
@@ -46,7 +48,10 @@ class Tool(Controller):
     )
     def create(self):
         container_manager = self.app.handler.get('managers', 'container', setup=True)
-        container_manager.create(self.app.pargs.name, kind=self.Meta.label)
+        try:
+            container_manager.create(self.app.pargs.name, kind=self.Meta.label)
+        except configparser.NoSectionError:
+            self.app.log.error(f"No config file found for {self.app.pargs.name}")
 
     @ex(
         help='Launches synapser server on setup tool container',

@@ -1,0 +1,10 @@
+cquencer:
+  type: tool
+  image:
+    tag: cquencer
+    repo: epicosy/CquenceR
+  container:
+    name: cquencer
+    api:
+      port: 8080
+    setup: []

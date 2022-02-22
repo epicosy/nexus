@@ -85,8 +85,11 @@ log.colorlog:
 ### The maximun number of log files to maintain when rotating
   max_files: 4
 
+plugin.nexus.cquencer_cgc:
+  enabled: true
+
 plugin.nexus.genprog_cgcrepair:
   enabled: false
 
 plugin.nexus.mutapr_cgcrepair:
-  enabled: true
+  enabled: false

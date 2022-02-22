@@ -6,6 +6,7 @@ from typing import List, AnyStr, Callable
 @dataclass
 class Manifest:
     files: List[Path]
+    locs: dict
 
     def __len__(self):
         return len(self.files)
@@ -15,6 +16,7 @@ class Manifest:
             func: callable with str input and str output
         """
         self.files = [Path(func(str(file))) for file in self.files]
+        self.locs = {func(str(file)): locs for file, locs in self.locs.items()}
 
     def add_parent(self, path: Path):
         self.files = [path / file for file in self.files]
