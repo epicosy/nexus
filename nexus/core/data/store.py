@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from pathlib import Path
 from datetime import datetime
-from typing import List, AnyStr
+from typing import List, AnyStr, Any
 
 from nexus.core.data.program import Manifest
 from nexus.core.data.results import CommandData
@@ -37,7 +37,7 @@ class Command:
     args: dict = field(default_factory=lambda: {})
     placeholders: dict = field(default_factory=lambda: {})
 
-    def add_arg(self, name: str, value: str = ''):
+    def add_arg(self, name: str, value: Any = True):
         self.args[name] = value
 
         return self
@@ -65,16 +65,22 @@ class Vulnerability:
     id: str
     pid: str
     cwe: str
-    test: str
     related: List[str] = None
     cve: str = '-'
+    build: dict = field(default_factory=lambda: {})
+    oracle: dict = field(default_factory=lambda: {})
+    args: dict = field(default_factory=lambda: {})
+    locs: dict = field(default_factory=lambda: {})
+    generic: list = field(default_factory=lambda: [])
+
+    def get_manifest(self) -> Manifest:
+        return Manifest([Path(file) for file in self.locs.keys()])
 
 
 @dataclass
 class Program:
     id: str
-    vulns: List[str]
-    tests: List[str]
+    oracle: dict
     name: str
     manifest: List[str]
     root: Path = None
@@ -90,9 +96,6 @@ class Program:
 
     def has_include(self):
         return self.include and self.include.exists()
-
-    def get_manifest(self) -> Manifest:
-        return Manifest([Path(file) for file in self.manifest])
 
 
 @dataclass
