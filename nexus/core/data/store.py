@@ -74,7 +74,7 @@ class Vulnerability:
     generic: list = field(default_factory=lambda: [])
 
     def get_manifest(self) -> Manifest:
-        return Manifest([Path(file) for file in self.locs.keys()])
+        return Manifest([Path(file) for file in self.locs.keys()], locs=self.locs)
 
 
 @dataclass
