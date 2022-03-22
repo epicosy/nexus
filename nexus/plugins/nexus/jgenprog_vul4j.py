@@ -6,16 +6,16 @@ from nexus.core.data.store import Program, Signal, Command, Vulnerability
 from nexus.core.handlers.nexus import NexusHandler
 
 
-class ArjaVul4jRepairTask(NexusHandler):
+class JGenProgVul4jRepairTask(NexusHandler):
     class Meta:
-        label = 'arja_vul4j'
+        label = 'jgenprog_vul4j'
 
     def __init__(self, **kw):
-        super().__init__(tool='arja', benchmark='vul4j', **kw)
+        super().__init__(tool='jgenprog', benchmark='vul4j', **kw)
 
     def run(self, program: Program, vulnerability: Vulnerability, context: Context):
-        program_instance = self.orbis.checkout(context.benchmark.instance, program=program)
-        self.orbis.compile(context.benchmark.instance, program_instance=program_instance, args={})
+        program_instance = self.orbis.checkout(context.benchmark.instance, vuln=vulnerability)
+        self.orbis.build(context.benchmark.instance, program_instance=program_instance, args={})
 
         args = {
             'src': '',
@@ -36,4 +36,4 @@ class ArjaVul4jRepairTask(NexusHandler):
 
 
 def load(app):
-    app.handler.register(ArjaVul4jRepairTask)
+    app.handler.register(JGenProgVul4jRepairTask)

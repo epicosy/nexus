@@ -94,5 +94,5 @@ plugin.nexus.genprog_cgcrepair:
 plugin.nexus.mutapr_cgcrepair:
   enabled: false
 
-plugin.nexus.arja_vul4j:
+plugin.nexus.jgenprog_vul4j:
   enabled: true

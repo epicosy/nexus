@@ -1,9 +1,9 @@
-arja:
+jgenprog:
   type: tool
   image:
     tag: 86376e8c9f8c
   container:
-    name: arja
+    name: jgenprog
     api:
       port: 8081
     setup: []
