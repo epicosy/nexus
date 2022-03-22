@@ -82,20 +82,11 @@ class Program:
     id: str
     oracle: dict
     name: str
+    build: dict
     manifest: List[str]
-    root: Path = None
-    source: Path = None
-    lib: Path = None
-    include: Path = None
-
-    def has_source(self):
-        return self.source and self.source.exists()
-
-    def has_lib(self):
-        return self.lib and self.lib.exists()
-
-    def has_include(self):
-        return self.include and self.include.exists()
+    modules: dict
+    packages: dict
+    patches: dict
 
 
 @dataclass
