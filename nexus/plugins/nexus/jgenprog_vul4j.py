@@ -19,17 +19,16 @@ class JGenProgVul4jRepairTask(NexusHandler):
 
         args = {
             'src': '',
+            'test': '',
             'src_class': '',
             'test_class': '',
             'classpath': '',
-            'perfect_fl_dir': '',
-            'test_cmd': ''
         }
 
-        manifest = Manifest([Path("empty")])
+        manifest = Manifest([Path("empty")], {})
 
         response = self.synapser.repair(signals=[], args=args,
-                                        program_instance=program_instance, manifest=manifest,
+                                        program_instance=program_instance, manifest=manifest.locs,
                                         instance=context.tool.instance)
         response_json = response.json()
         self.app.log.info("RID: " + str(response_json['rid']))
