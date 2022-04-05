@@ -6,7 +6,7 @@ from nexus.core.data.store import Program, Signal, Command, Vulnerability
 from nexus.core.handlers.nexus import NexusHandler
 
 
-class JGenProgVul4jRepairTask(NexusHandler):
+class JGenProgVul4JRepairTask(NexusHandler):
     class Meta:
         label = 'jgenprog_vul4j'
 
@@ -23,6 +23,7 @@ class JGenProgVul4jRepairTask(NexusHandler):
             'src_class': '',
             'test_class': '',
             'classpath': '',
+            'jvm_version': '',
         }
 
         manifest = Manifest([Path("empty")], {})
@@ -35,4 +36,4 @@ class JGenProgVul4jRepairTask(NexusHandler):
 
 
 def load(app):
-    app.handler.register(JGenProgVul4jRepairTask)
+    app.handler.register(JGenProgVul4JRepairTask)

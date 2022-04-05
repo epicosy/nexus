@@ -1,9 +1,9 @@
-jgenprog:
+jkali:
   type: tool
   image:
     tag: 86376e8c9f8c
   container:
-    name: jgenprog
+    name: jkali
     api:
       port: 8080
     setup: []
