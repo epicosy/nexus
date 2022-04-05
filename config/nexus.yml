@@ -40,14 +40,14 @@ nexus:
 ### Docker
   docker:
     volume: nexus
-    volume_bind: '/Users/cuong/PycharmProjects/APRPlatform/nexus/nexus_data'
+    volume_bind: '/root/aprplatform/nexus_data'
 
 ### APIs
   apis:
     orbis:
       setup:
         - "cd /tmp; git clone https://github.com/epicosy/orbis 2>&1"
-        - "cd /tmp/orbis; git checkout vul4j-integration; ./install.sh"
+        - "cd /tmp/orbis; ./install.sh"
         - "orbis init 2>&1"
       serve:
         - "/etc/init.d/postgresql start"
