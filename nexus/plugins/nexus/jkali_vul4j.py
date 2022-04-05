@@ -1,12 +1,38 @@
-from nexus.plugins.nexus.jgenprog_vul4j import JGenProgVul4JRepairTask
+from pathlib import Path
+
+from nexus.core.data.context import Context
+from nexus.core.data.program import Manifest
+from nexus.core.data.store import Program, Vulnerability
+from nexus.core.handlers.nexus import NexusHandler
 
 
-class JKaliVul4JRepairTask(JGenProgVul4JRepairTask):
+class JKaliVul4JRepairTask(NexusHandler):
     class Meta:
         label = 'jkali_vul4j'
 
     def __init__(self, **kw):
         super().__init__(tool='jkali', benchmark='vul4j', **kw)
+
+    def run(self, program: Program, vulnerability: Vulnerability, context: Context):
+        program_instance = self.orbis.checkout(context.benchmark.instance, vuln=vulnerability)
+        self.orbis.build(context.benchmark.instance, program_instance=program_instance, args={})
+
+        args = {
+            'src': '',
+            'test': '',
+            'src_class': '',
+            'test_class': '',
+            'classpath': '',
+            'jvm_version': '',
+        }
+
+        manifest = Manifest([Path("empty")], {})
+
+        response = self.synapser.repair(signals=[], args=args,
+                                        program_instance=program_instance, manifest=manifest.locs,
+                                        instance=context.tool.instance)
+        response_json = response.json()
+        self.app.log.info("RID: " + str(response_json['rid']))
 
 
 def load(app):

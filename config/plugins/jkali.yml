@@ -1,7 +1,7 @@
 jkali:
   type: tool
   image:
-    tag: 86376e8c9f8c
+    tag: "63d002e3f03a"
   container:
     name: jkali
     api:
