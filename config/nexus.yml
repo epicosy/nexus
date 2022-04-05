@@ -57,7 +57,7 @@ nexus:
       setup:
         - "apt-get install -y git curl 2>&1"
         - "cd /tmp; git clone https://github.com/epicosy/synapser 2>&1"
-        - "cd /tmp/synapser; git checkout java-tools; ./install_py38.sh 2>&1; ./install.sh 2>&1"
+        - "cd /tmp/synapser; ./install_py38.sh 2>&1; ./install.sh 2>&1"
       serve:
         - "/etc/init.d/postgresql start"
         - "nohup synapser api -p 8080 2>&1 &"
