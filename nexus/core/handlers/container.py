@@ -48,7 +48,7 @@ class ContainerHandler(HandlersInterface, Handler):
     def create(self, image: str, container_configs: dict, name: str, volume: Volume) -> str:
         binds = {volume.name: {'bind': f"/{volume.name}", 'mode': 'rw'}}
         bind_port = container_configs['api']['port']
-        host_config = self.app.docker.api.create_host_config(binds=binds, port_bindings={bind_port: bind_port})
+        host_config = self.app.docker.api.create_host_config(binds=binds)
         output = self.app.docker.api.create_container(image, name=name, volumes=[f"/{volume.name}"],
                                                       host_config=host_config, tty=True, detach=True,
                                                       ports=[bind_port])
