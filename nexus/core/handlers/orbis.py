@@ -1,3 +1,5 @@
+from typing import AnyStr
+
 import requests
 
 from binascii import b2a_hex
@@ -23,10 +25,11 @@ class OrbisHandler(APIHandler):
             'checkout': f"{self.url_format}/checkout",
             'make': f"{self.url_format}/make",
             'test': f"{self.url_format}/test",
-            'program': f"{self.url_format}/program" + "/{pid}",
-            'programs': f"{self.url_format}/programs",
+            'project': f"{self.url_format}/project" + "/{pid}",
+            'projects': f"{self.url_format}/projects",
             'vuln': f"{self.url_format}/vuln" + "/{vid}",
             'vulns': f"{self.url_format}/vulns",
+            'classpath': f"{self.url_format}/classpath" + "/{iid}",
         }
 
     def is_running(self, instance: Instance) -> bool:
@@ -48,7 +51,7 @@ class OrbisHandler(APIHandler):
         return Path(working_dir)
 
     def get_program(self, instance: Instance, pid: str, args: dict = None) -> Program:
-        response = self.get(endpoint_url=self.endpoints['program'].format(ip=instance.ip, port=instance.port, pid=pid),
+        response = self.get(endpoint_url=self.endpoints['project'].format(ip=instance.ip, port=instance.port, pid=pid),
                             json_data=args)
 
         pid, program = next(iter(response.json().items()))
@@ -56,8 +59,15 @@ class OrbisHandler(APIHandler):
         return Program(id=pid, **program)
 
     def get_programs(self, instance: Instance, **kwargs):
-        return self.get(endpoint_url=self.endpoints['programs'].format(ip=instance.ip, port=instance.port),
+        return self.get(endpoint_url=self.endpoints['projects'].format(ip=instance.ip, port=instance.port),
                         json_data=kwargs).json()
+
+    def get_classpath(self, instance: Instance, program_instance: ProgramInstance, args: dict = None) -> AnyStr:
+        response = self.get(endpoint_url=self.endpoints['classpath'].format(ip=instance.ip, port=instance.port,
+                                                                            iid=program_instance.iid), json_data=args)
+
+        cp_res = response.json()['classpath']
+        return cp_res
 
     def get_vuln(self, instance: Instance, vid: str, args: dict = None) -> Vulnerability:
         response = self.get(endpoint_url=self.endpoints['vuln'].format(ip=instance.ip, port=instance.port, vid=vid),
