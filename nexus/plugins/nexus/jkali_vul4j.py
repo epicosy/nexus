@@ -31,12 +31,16 @@ class JKaliVul4JRepairTask(NexusHandler):
             'project_name': program.name
         }
 
-        test_command = Command(iid=program_instance.iid,
-                               url=self.orbis.url(action='test', instance=context.benchmark.instance))
-        test_command.add_placeholder(name='tests', value='__TEST_NAME__')
-        test_signal = Signal(arg='--test-command', command=test_command)
+        orbis_test_url = self.orbis.url(action='test', instance=context.benchmark.instance)
+        # orbis_test_url = "http://172.17.0.3:8080/test"  # for only testing on my machine
 
-        response = self.synapser.repair(signals=[test_signal], args=repair_args,
+        test_all_cmd = Command(iid=program_instance.iid,
+                               url=orbis_test_url)
+        test_all_cmd.add_placeholder(name='tests', value='p1')
+        test_all_signal = Signal(arg='-testallcmd', command=test_all_cmd)
+        test_failing_signal = Signal(arg='-testfailingcmd', command=test_all_cmd)
+
+        response = self.synapser.repair(signals=[test_all_signal, test_failing_signal], args=repair_args,
                                         program_instance=program_instance,
                                         manifest=vulnerability_manifest.locs,
                                         instance=context.tool.instance)
