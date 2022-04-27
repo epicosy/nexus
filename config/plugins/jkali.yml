@@ -6,5 +6,5 @@ jkali:
   container:
     name: jkali
     api:
-      port: 8080
+      port: 8081
     setup: []

@@ -28,17 +28,22 @@ class JKaliVul4JRepairTask(NexusHandler):
             'test_class': program_modules.get('test_classes'),
             'jvm_version': program.build.get('version'),
             'classpath': cp_res,
-            'project_name': program.name
+            'project_name': program.name,
+            'perfect_data': 'VUL4J/' + vulnerability.id
         }
 
-        orbis_test_url = self.orbis.url(action='test', instance=context.benchmark.instance)
-        # orbis_test_url = "http://172.17.0.3:8080/test"  # for only testing on my machine
+        # orbis_test_url = self.orbis.url(action='test', instance=context.benchmark.instance)
+        orbis_testbatch_url = "http://172.17.0.2:8080/testbatch"  # for only testing on my machine
 
         test_all_cmd = Command(iid=program_instance.iid,
-                               url=orbis_test_url)
-        test_all_cmd.add_placeholder(name='tests', value='p1')
+                               url=orbis_testbatch_url)
+        test_all_cmd.add_placeholder(name='batch', value='all')
         test_all_signal = Signal(arg='-testallcmd', command=test_all_cmd)
-        test_failing_signal = Signal(arg='-testfailingcmd', command=test_all_cmd)
+
+        test_povs_cmd = Command(iid=program_instance.iid,
+                                url=orbis_testbatch_url)
+        test_povs_cmd.add_placeholder(name='batch', value='povs')
+        test_failing_signal = Signal(arg='-testfailingcmd', command=test_povs_cmd)
 
         response = self.synapser.repair(signals=[test_all_signal, test_failing_signal], args=repair_args,
                                         program_instance=program_instance,

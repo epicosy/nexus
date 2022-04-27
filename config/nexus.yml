@@ -60,7 +60,7 @@ nexus:
         - "cd /tmp/synapser; git checkout java-tools 2>&1;./install_py38.sh 2>&1; ./install.sh 2>&1"
       serve:
         - "/etc/init.d/postgresql start"
-        - "nohup synapser api -p 8081 2>&1 &"
+        - "nohup synapser api -p 8080 2>&1 &"
 
 log.colorlog:
 
@@ -94,5 +94,5 @@ plugin.nexus.genprog_cgcrepair:
 plugin.nexus.mutapr_cgcrepair:
   enabled: false
 
-plugin.nexus.jkali_vul4j:
+plugin.nexus.jgenprog_vul4j:
   enabled: true
