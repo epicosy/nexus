@@ -65,7 +65,7 @@ class JKaliVul4JRepairTask(NexusHandler):
 
         print(repair_args)
 
-        orbis_testbatch_url = self.orbis.url(action='test', instance=context.benchmark.instance)
+        orbis_testbatch_url = self.orbis.url(action='testbatch', instance=context.benchmark.instance)
         # orbis_testbatch_url = "http://172.17.0.2:8080/testbatch"  # for only testing on my machine
 
         test_all_cmd = Command(iid=program_instance.iid,
