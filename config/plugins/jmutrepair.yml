@@ -6,5 +6,5 @@ jmutrepair:
   container:
     name: jmutrepair
     api:
-      port: 8083
+      port: 8080
     setup: []

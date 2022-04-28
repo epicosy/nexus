@@ -6,5 +6,5 @@ jgenprog:
   container:
     name: jgenprog
     api:
-      port: 8082
+      port: 8080
     setup: []
