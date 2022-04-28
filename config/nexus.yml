@@ -96,3 +96,9 @@ plugin.nexus.mutapr_cgcrepair:
 
 plugin.nexus.jgenprog_vul4j:
   enabled: true
+
+plugin.nexus.jkali_vul4j:
+  enabled: true
+
+plugin.nexus.jmutrepair_vul4j:
+  enabled: true
