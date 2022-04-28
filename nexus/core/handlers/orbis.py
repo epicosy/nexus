@@ -25,6 +25,7 @@ class OrbisHandler(APIHandler):
             'checkout': f"{self.url_format}/checkout",
             'make': f"{self.url_format}/make",
             'test': f"{self.url_format}/test",
+            'testbatch': f"{self.url_format}/testbatch",
             'project': f"{self.url_format}/project" + "/{pid}",
             'projects': f"{self.url_format}/projects",
             'vuln': f"{self.url_format}/vuln" + "/{vid}",
