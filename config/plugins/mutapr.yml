@@ -1,7 +1,10 @@
 mutapr:
   type: tool
-  image: d31a89c0e810
+  image:
+    tag: mutapr
+    repo: epicosy/mut-apr
   container:
+    name: mutapr
     api:
       port: 8080
     setup: []

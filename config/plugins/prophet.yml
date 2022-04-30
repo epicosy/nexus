@@ -1,10 +1,10 @@
-genprog:
+prophet:
   type: tool
   image:
-    tag: genprog
-    repo: epicosy/genprog-code
+    tag: prophet
+    repo: epicosy/prophet
   container:
-    name: genprog
+    name: prophet
     api:
       port: 8080
     setup: []
