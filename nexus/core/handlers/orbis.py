@@ -23,8 +23,8 @@ class OrbisHandler(APIHandler):
             'checkout': f"{self.url_format}/checkout",
             'make': f"{self.url_format}/make",
             'test': f"{self.url_format}/test",
-            'program': f"{self.url_format}/program" + "/{pid}",
-            'programs': f"{self.url_format}/programs",
+            'program': f"{self.url_format}/project" + "/{pid}",
+            'programs': f"{self.url_format}/projects",
             'vuln': f"{self.url_format}/vuln" + "/{vid}",
             'vulns': f"{self.url_format}/vulns",
         }
@@ -71,8 +71,12 @@ class OrbisHandler(APIHandler):
         response = self.get(endpoint_url=self.endpoints['vulns'].format(ip=instance.ip, port=instance.port), json=args)
         return [Vulnerability(**vuln) for vuln in response.json().values()]
 
-    def checkout(self, instance: Instance, vuln: Vulnerability, args: dict = None) -> ProgramInstance:
+    def checkout(self, instance: Instance, vuln: Vulnerability, working_dir: Path = None,
+                 args: dict = None) -> ProgramInstance:
         json_data = {'vid': vuln.id, 'root_dir': f"/{instance.volume}"}
+
+        if working_dir:
+            json_data['working_dir'] = str(working_dir)
 
         if args:
             json_data['args'] = args
@@ -99,6 +103,7 @@ class OrbisHandler(APIHandler):
                              json_data=json_data).json()
         print(response)
         program_instance.build_dir = Path(response['returns']['build'])
+        program_instance.build_args = response['returns'].get('build_args', {})
 
         return program_instance
 
