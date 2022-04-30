@@ -1,7 +1,0 @@
-cgcrepair:
-  type: benchmark
-  image: 5ee0e7887a39
-  container:
-    api:
-      port: 8080
-    setup: []

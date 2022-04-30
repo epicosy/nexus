@@ -1,0 +1,10 @@
+genprog:
+  type: tool
+  image:
+    tag: genprog
+    repo: epicosy/genprog-code
+  container:
+    name: genprog
+    api:
+      port: 8080
+    setup: []
