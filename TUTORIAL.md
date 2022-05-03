@@ -25,5 +25,6 @@ mkidr -p ~/.nexus/plugins/nexus
 Change the docker volume bind locaition in the nexus.yml
 ```
 cp config/nexus.yml ~/.nexus/config
+cp config/plugins/* ~/.nexus/config/plugins.d
 cp nexus/plugins/nexus/* ~/.nexus/plugins/nexus
 ```
