@@ -25,6 +25,8 @@ class OrbisHandler(APIHandler):
             'test': f"{self.url_format}/test",
             'program': f"{self.url_format}/project" + "/{pid}",
             'programs': f"{self.url_format}/projects",
+            'instance': f"{self.url_format}/instance" + "/{iid}",
+            'instances': f"{self.url_format}/instances",
             'vuln': f"{self.url_format}/vuln" + "/{vid}",
             'vulns': f"{self.url_format}/vulns",
         }
@@ -46,6 +48,15 @@ class OrbisHandler(APIHandler):
             working_dir = working_dir.parent / (working_dir.name + "_" + b2a_hex(urandom(2)).decode())
 
         return Path(working_dir)
+
+    def get_instance(self, instance: Instance, iid: str) -> Program:
+        response = self.get(endpoint_url=self.endpoints['instance'].format(ip=instance.ip, port=instance.port, iid=iid))
+
+        return response.json()
+
+    def get_instances(self, instance: Instance, **kwargs):
+        return self.get(endpoint_url=self.endpoints['instances'].format(ip=instance.ip, port=instance.port),
+                        json_data=kwargs).json()
 
     def get_program(self, instance: Instance, pid: str, args: dict = None) -> Program:
         response = self.get(endpoint_url=self.endpoints['program'].format(ip=instance.ip, port=instance.port, pid=pid),
