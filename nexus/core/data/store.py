@@ -126,6 +126,7 @@ class ProgramInstance:
     working_dir: Path
     build_args: dict = field(default_factory=lambda: {})
     build_dir: Path = None
+    link_cmd: str = None
 
     def to_dict(self):
         return {'iid': self.iid, 'working_dir': self.working_dir, 'build_dir': self.build_dir,
