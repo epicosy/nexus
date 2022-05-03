@@ -132,7 +132,8 @@ class ContainerManager(ManagersInterface, Handler):
             container_handler.build(path=repo.working_dir, tag=configs['image']['tag'])
 
         try:
-            container_id = container_handler.create(image=configs['image']['tag'], name=name, volume=self.volume(),
+            container_id = container_handler.create(image=configs['image']['tag'], name=configs['container']['name'],
+                                                    volume=self.volume(),
                                                     container_configs=configs['container'])
             container_data_id = self.register(image=configs['image']['tag'], container_id=container_id, name=name,
                                               kind=kind, ip="", port=configs['container']['api']['port'],
