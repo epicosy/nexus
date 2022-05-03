@@ -48,7 +48,7 @@ class GenprogCGCRepairTask(NexusHandler):
             '--pos-tests': len(program.oracle['cases']),
             '--neg-tests': len(vulnerability.oracle['cases'])
         }
-        response = self.synapser.repair(signals=[test_signal, compile_signal], args=args,
+        response = self.synapser.repair(signals=[test_signal, compile_signal], args=args, iid=program_instance.iid,
                                         program_instance=program_instance, manifest=manifest.locs,
                                         instance=context.tool.instance)
         response_json = response.json()
