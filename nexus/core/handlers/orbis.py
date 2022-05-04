@@ -115,6 +115,7 @@ class OrbisHandler(APIHandler):
         print(response)
         program_instance.build_dir = Path(response['returns']['build'])
         program_instance.build_args = response['returns'].get('build_args', {})
+        program_instance.link_cmd = response['returns'].get('link_cmd', None)
 
         return program_instance
 
