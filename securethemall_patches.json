@@ -1,0 +1,305 @@
+{
+  "GenProg": {
+    "BitBlaster": {
+      "repair_begin": "2022-05-01 21:55:57.762910",
+      "repair_end": "2022-05-01 22:00:05.369077",
+      "patches": [
+        {
+          "target_file": "src/main.i",
+          "fix": "346c346\n<   (*((int (*)())0))();\n---\n> \n",
+          "edits": [
+            "165a166\n>   {\n166a168,169\n>   gBoard[31] &= 4294967292U;\n>   }\n",
+            "293a294\n>   {\n294a296,297\n> \n>   }\n",
+            "312a313\n>   {\n313a315,316\n> \n>   }\n",
+            "346c346\n<   (*((int (*)())0))();\n---\n> \n"
+          ]
+        }
+      ],
+      "compilations": 6,
+      "failed_compilations": 0,
+      "passed_neg_tests": 2,
+      "passed_pos_tests": 124,
+      "failed_neg_tests": 5,
+      "failed_pos_tests": 16,
+      "duration": 247.606167
+    },
+    "WordCompletion": {
+      "repair_begin": "2022-05-01 23:21:15.588597",
+      "repair_end": "2022-05-01 23:36:12.946203",
+      "patches": [
+        {
+          "target_file": "src/main.i",
+          "fix": "664c664\n<   cgc_scramble(buf, *(cgc_gWords + i), (cgc_size_t )64);\n---\n> \n",
+          "edits": [
+            "155c155\n<     total += rx_bytes;\n---\n> \n",
+            "570a571\n>   {\n571a573,574\n> \n>   }\n",
+            "663a664\n>   {\n664a666,667\n>   cgc_transmit_str(buf);\n>   }\n",
+            "664c664\n<   cgc_scramble(buf, *(cgc_gWords + i), (cgc_size_t )64);\n---\n> \n",
+            "546c546\n<   buf[11] = (char)0;\n---\n> \n",
+            "345a346\n>   {\n346a348,349\n>   return (-1);\n>   }\n",
+            "229c229\n<   rx_bytes = (cgc_size_t )0;\n---\n> \n",
+            "559a560\n>   {\n560a562,563\n> \n>   }\n",
+            "310a311\n>   {\n311a313,314\n> \n>   }\n",
+            "378,392c378\n<       if ((int )c2 >= 48) {\n<         if ((int )c2 <= 57) {\n<           ret *= 10;\n<           ret += (int )c2 - 48;\n<           return (ret);\n<         } else {\n<           goto _L;\n<         }\n<       } else\n<       _L: /* CIL Label */ \n<       if ((int )c2 != 0) {\n<         return (ret);\n<       } else {\n<         return (0);\n<       }\n---\n>       _L: ;\n",
+            "306c306\n<   ret = (cgc_size_t )0;\n---\n> \n"
+          ]
+        }
+      ],
+      "compilations": 13,
+      "failed_compilations": 0,
+      "passed_neg_tests": 4,
+      "passed_pos_tests": 221,
+      "failed_neg_tests": 10,
+      "failed_pos_tests": 59,
+      "duration": 897.357606
+    },
+    "expression_database": {
+      "repair_begin": "2022-05-01 22:17:26.140253",
+      "repair_end": "2022-05-01 22:37:10.406685",
+      "patches": [
+        {
+          "target_file": "src/expression_parser.i",
+          "fix": "880a881\n>           {\n881a883,898\n>           _L__0: /* CIL Label */ \n>           if ((unsigned int )item_peek_top___0.type == 0U) {\n>             tmp___10 = cgc_is_symbol_result_operator(item_peek_top___0.data.symbol);\n>             if (tmp___10) {\n> \n>             } else {\n>               tmp___9 = cgc_get_current_exception_frame();\n>               longjmp(tmp___9->jmpBuffer, 2);\n>               return;\n>             }\n>           } else {\n>             tmp___9 = cgc_get_current_exception_frame();\n>             longjmp(tmp___9->jmpBuffer, 2);\n>             return;\n>           }\n>           }\n",
+          "edits": [
+            "935c935\n<           cgc_push_parser_stack(item_top);\n---\n> \n",
+            "343a344\n>     {\n344a346,347\n>     return (0);\n>     }\n",
+            "796a797\n>       {\n797a799,800\n>       return (1);\n>       }\n",
+            "913,917d912\n<           if ((unsigned int )item_top.type != 1U) {\n<             tmp___12 = cgc_get_current_exception_frame();\n<             longjmp(tmp___12->jmpBuffer, 2);\n<             return;\n<           } else {\n919d913\n<           }\n",
+            "934a935\n>           {\n935a937,938\n>           cur_symbol = cgc_parse_get_symbol(pszCur, & symbol_offset);\n>           }\n",
+            "284c284\n<     i ++;\n---\n> \n",
+            "923d922\n<             if ((unsigned int )item_next.data.symbol == 0U) {\n925,929d923\n<             } else {\n<               tmp___14 = cgc_get_current_exception_frame();\n<               longjmp(tmp___14->jmpBuffer, 2);\n<               return;\n<             }\n",
+            "812a813\n>       {\n873a875,876\n>       }\n>       return ((eParserSymbol )12);\n",
+            "880a881\n>           {\n881a883,898\n>           _L__0: /* CIL Label */ \n>           if ((unsigned int )item_peek_top___0.type == 0U) {\n>             tmp___10 = cgc_is_symbol_result_operator(item_peek_top___0.data.symbol);\n>             if (tmp___10) {\n> \n>             } else {\n>               tmp___9 = cgc_get_current_exception_frame();\n>               longjmp(tmp___9->jmpBuffer, 2);\n>               return;\n>             }\n>           } else {\n>             tmp___9 = cgc_get_current_exception_frame();\n>             longjmp(tmp___9->jmpBuffer, 2);\n>             return;\n>           }\n>           }\n",
+            "231c231\n<   cgc_g_parseStackSize = (uint8_t )((int )cgc_g_parseStackSize + 1);\n---\n> \n"
+          ]
+        }
+      ],
+      "compilations": 10,
+      "failed_compilations": 2,
+      "passed_neg_tests": 3,
+      "passed_pos_tests": 199,
+      "failed_neg_tests": 8,
+      "failed_pos_tests": 21,
+      "duration": 1184.266432
+    },
+    "Scrum_Database": {
+      "repair_begin": "2022-05-01 23:12:49.878992",
+      "repair_end": "2022-05-01 23:21:00.449548",
+      "patches": [
+        {
+          "target_file": "src/backlogitems.i",
+          "fix": "592,601c592\n<   while (1) {\n<     if ((unsigned long )sprintPtr != (unsigned long )((sprintEntryType *)0)) {\n<       if ((int )sprintPtr->ID != (int )message->sprintID) {\n< \n<       } else {\n<         break;\n<       }\n<     } else {\n<       break;\n<     }\n---\n>   while ((unsigned long )sprintPtr != (unsigned long )((sprintEntryType *)0)) {\n",
+          "edits": [
+            "592,601c592\n<   while (1) {\n<     if ((unsigned long )sprintPtr != (unsigned long )((sprintEntryType *)0)) {\n<       if ((int )sprintPtr->ID != (int )message->sprintID) {\n< \n<       } else {\n<         break;\n<       }\n<     } else {\n<       break;\n<     }\n---\n>   while ((unsigned long )sprintPtr != (unsigned long )((sprintEntryType *)0)) {\n",
+            "590a591\n>   {\n591a593,594\n> \n>   }\n",
+            "624a625\n>     {\n625a627,628\n> \n>     }\n",
+            "284c284,285\n<   while ((unsigned long )PBIPtr->next != (unsigned long )((struct backlogItem *)0)) {\n---\n>   while (1) {\n> \n",
+            "593a594\n>       {\n597a599,611\n>       }\n>       while (1) {\n>         if ((unsigned long )database != (unsigned long )((productDefType *)0)) {\n>           if ((int )database->ID != (int )message->productID) {\n> \n>           } else {\n>             break;\n>           }\n>         } else {\n>           break;\n>         }\n>         database = database->next;\n>       }\n",
+            "592a593\n>     {\n600a602,611\n>     }\n>     if ((unsigned long )database != (unsigned long )((productDefType *)0)) {\n>       if ((int )database->ID != (int )message->productID) {\n> \n>       } else {\n>         break;\n>       }\n>     } else {\n>       break;\n>     }\n",
+            "592,594d591\n<   while (1) {\n<     if ((unsigned long )sprintPtr != (unsigned long )((sprintEntryType *)0)) {\n<       if ((int )sprintPtr->ID != (int )message->sprintID) {\n596,603d592\n<       } else {\n<         break;\n<       }\n<     } else {\n<       break;\n<     }\n<     sprintPtr = sprintPtr->next;\n<   }\n"
+          ]
+        }
+      ],
+      "compilations": 9,
+      "failed_compilations": 0,
+      "passed_neg_tests": 1,
+      "passed_pos_tests": 196,
+      "failed_neg_tests": 9,
+      "failed_pos_tests": 4,
+      "duration": 490.570556
+    },
+    "yolodex": {
+      "repair_begin": "2022-05-01 23:36:30.367933",
+      "repair_end": "2022-05-01 23:44:27.624737",
+      "patches": [
+        {
+          "target_file": "src/yolodex.i",
+          "fix": "841c841\n<       ptr = ptr->prev;\n---\n> \n",
+          "edits": [
+            "267c267\n<     tmp___2 = cgc_strlen(last);\n---\n> \n",
+            "610a611\n>       {\n615a617,618\n>       }\n>       return;\n",
+            "841c841\n<       ptr = ptr->prev;\n---\n> \n",
+            "840a841\n>       {\n841a843,844\n> \n>       }\n",
+            "696a697\n>     {\n697a699,700\n>     cgc_memcpy((void *)(number), (void *)(data), 5U);\n>     }\n",
+            "679a680\n>       {\n684a686,693\n>       }\n>       if ((int )data[0] != 0) {\n>         cgc_memset((void *)(ptr->last), (char)0, 32U);\n>         tmp___2 = cgc_strlen(data);\n>         cgc_memcpy((void *)(ptr->last), (void *)(data), (unsigned int )tmp___2);\n>       } else {\n> \n>       }\n"
+          ]
+        }
+      ],
+      "compilations": 7,
+      "failed_compilations": 1,
+      "passed_neg_tests": 2,
+      "passed_pos_tests": 149,
+      "failed_neg_tests": 6,
+      "failed_pos_tests": 11,
+      "duration": 477.256804
+    }
+  },
+  "MUT-APR": {
+    "BitBlaster": {
+      "repair_begin": "2022-05-02 00:02:26.279697",
+      "repair_end": "2022-05-02 00:08:59.604506",
+      "patches": [
+        {
+          "target_file": "src/main.i",
+          "fix": "287c287\n<     if (gBoard[i] != 0U) {\n---\n>     if (gBoard[i] == 0U) {\n",
+          "edits": [
+            "150c150\n<   if (row >= 32) {\n---\n>   if (row == 32) {\n",
+            "309c309\n<     if (tmp != 1UL) {\n---\n>     if (tmp < 1UL) {\n",
+            "270c270\n<   if ((int )move & 32) {\n---\n>   if ((int )move | 32) {\n",
+            "309c309\n<     if (tmp != 1UL) {\n---\n>     if (tmp <= 1UL) {\n",
+            "134c134\n<     if (! (total < size)) {\n---\n>     if (! (total <= size)) {\n",
+            "134c134\n<     if (! (total < size)) {\n---\n>     if (! (total != size)) {\n",
+            "147c147\n<   if (row < 0) {\n---\n>   if (row == 0) {\n",
+            "130c130\n<     if (rx_bytes == 0UL) {\n---\n>     if (rx_bytes > 0UL) {\n",
+            "254c254\n<   if ((gBoard[31] & 3U) == 3U) {\n---\n>   if ((gBoard[31] & 3U) != 3U) {\n",
+            "270c270\n<   if ((int )move & 32) {\n---\n>   if ((int )move ^ 32) {\n",
+            "313c313\n<     if ((int )temp == 255) {\n---\n>     if ((int )temp >= 255) {\n",
+            "122c122\n<   if ((unsigned long )buf == (unsigned long )((char *)0)) {\n---\n>   if ((unsigned long )buf >= (unsigned long )((char *)0)) {\n",
+            "127c127\n<     if (ret != 0) {\n---\n>     if (ret >= 0) {\n",
+            "130c130\n<     if (rx_bytes == 0UL) {\n---\n>     if (rx_bytes >= 0UL) {\n",
+            "313c313\n<     if ((int )temp == 255) {\n---\n>     if ((int )temp != 255) {\n",
+            "287c287\n<     if (gBoard[i] != 0U) {\n---\n>     if (gBoard[i] == 0U) {\n",
+            "130c130\n<     if (rx_bytes == 0UL) {\n---\n>     if (rx_bytes <= 0UL) {\n",
+            "255c255\n<     if ((gBoard[30] & 3U) == 3U) {\n---\n>     if ((gBoard[30] & 3U) <= 3U) {\n",
+            "122c122\n<   if ((unsigned long )buf == (unsigned long )((char *)0)) {\n---\n>   if ((unsigned long )buf < (unsigned long )((char *)0)) {\n",
+            "133c133\n<     total += rx_bytes;\n---\n>     total *= rx_bytes;\n",
+            "134c134\n<     if (! (total < size)) {\n---\n>     if (! (total > size)) {\n",
+            "122c122\n<   if ((unsigned long )buf == (unsigned long )((char *)0)) {\n---\n>   if ((unsigned long )buf != (unsigned long )((char *)0)) {\n",
+            "147c147\n<   if (row < 0) {\n---\n>   if (row >= 0) {\n",
+            "255c255\n<     if ((gBoard[30] & 3U) == 3U) {\n---\n>     if ((gBoard[30] & 3U) != 3U) {\n",
+            "147c147\n<   if (row < 0) {\n---\n>   if (row != 0) {\n",
+            "254c254\n<   if ((gBoard[31] & 3U) == 3U) {\n---\n>   if ((gBoard[31] & 3U) >= 3U) {\n",
+            "147c147\n<   if (row < 0) {\n---\n>   if (row <= 0) {\n",
+            "254c254\n<   if ((gBoard[31] & 3U) == 3U) {\n---\n>   if ((gBoard[31] & 3U) > 3U) {\n",
+            "150c150\n<   if (row >= 32) {\n---\n>   if (row != 32) {\n",
+            "147c147\n<   if (row < 0) {\n---\n>   if (row > 0) {\n",
+            "313c313\n<     if ((int )temp == 255) {\n---\n>     if ((int )temp > 255) {\n",
+            "127c127\n<     if (ret != 0) {\n---\n>     if (ret == 0) {\n",
+            "127c127\n<     if (ret != 0) {\n---\n>     if (ret > 0) {\n",
+            "130c130\n<     if (rx_bytes == 0UL) {\n---\n>     if (rx_bytes < 0UL) {\n",
+            "150c150\n<   if (row >= 32) {\n---\n>   if (row < 32) {\n",
+            "133c133\n<     total += rx_bytes;\n---\n>     total %= rx_bytes;\n",
+            "122c122\n<   if ((unsigned long )buf == (unsigned long )((char *)0)) {\n---\n>   if ((unsigned long )buf > (unsigned long )((char *)0)) {\n",
+            "255c255\n<     if ((gBoard[30] & 3U) == 3U) {\n---\n>     if ((gBoard[30] & 3U) < 3U) {\n",
+            "254c254\n<   if ((gBoard[31] & 3U) == 3U) {\n---\n>   if ((gBoard[31] & 3U) <= 3U) {\n",
+            "254c254\n<   if ((gBoard[31] & 3U) == 3U) {\n---\n>   if ((gBoard[31] & 3U) < 3U) {\n",
+            "133c133\n<     total += rx_bytes;\n---\n>     total -= rx_bytes;\n",
+            "134c134\n<     if (! (total < size)) {\n---\n>     if (! (total == size)) {\n",
+            "133c133\n<     total += rx_bytes;\n---\n>     total /= rx_bytes;\n",
+            "127c127\n<     if (ret != 0) {\n---\n>     if (ret < 0) {\n",
+            "313c313\n<     if ((int )temp == 255) {\n---\n>     if ((int )temp < 255) {\n",
+            "255c255\n<     if ((gBoard[30] & 3U) == 3U) {\n---\n>     if ((gBoard[30] & 3U) >= 3U) {\n",
+            "127c127\n<     if (ret != 0) {\n---\n>     if (ret <= 0) {\n",
+            "255c255\n<     if ((gBoard[30] & 3U) == 3U) {\n---\n>     if ((gBoard[30] & 3U) > 3U) {\n",
+            "130c130\n<     if (rx_bytes == 0UL) {\n---\n>     if (rx_bytes != 0UL) {\n",
+            "309c309\n<     if (tmp != 1UL) {\n---\n>     if (tmp == 1UL) {\n",
+            "150c150\n<   if (row >= 32) {\n---\n>   if (row > 32) {\n",
+            "134c134\n<     if (! (total < size)) {\n---\n>     if (! (total >= size)) {\n",
+            "309c309\n<     if (tmp != 1UL) {\n---\n>     if (tmp >= 1UL) {\n",
+            "309c309\n<     if (tmp != 1UL) {\n---\n>     if (tmp > 1UL) {\n",
+            "150c150\n<   if (row >= 32) {\n---\n>   if (row <= 32) {\n",
+            "122c122\n<   if ((unsigned long )buf == (unsigned long )((char *)0)) {\n---\n>   if ((unsigned long )buf <= (unsigned long )((char *)0)) {\n",
+            "313c313\n<     if ((int )temp == 255) {\n---\n>     if ((int )temp <= 255) {\n"
+          ]
+        }
+      ],
+      "compilations": 58,
+      "failed_compilations": 0,
+      "passed_neg_tests": 1,
+      "passed_pos_tests": 363,
+      "failed_neg_tests": 17,
+      "failed_pos_tests": 40,
+      "duration": 393.324809
+    },
+    "WordCompletion": {
+      "repair_begin": "2022-05-02 00:23:56.388143",
+      "repair_end": "2022-05-02 00:24:42.756705",
+      "patches": [
+        {
+          "target_file": "src/main.i",
+          "fix": "607c607\n<     if (sret == 0UL) {\n---\n>     if (sret != 0UL) {\n",
+          "edits": [
+            "607c607\n<     if (sret == 0UL) {\n---\n>     if (sret != 0UL) {\n"
+          ]
+        }
+      ],
+      "compilations": 2,
+      "failed_compilations": 0,
+      "passed_neg_tests": 1,
+      "passed_pos_tests": 40,
+      "failed_neg_tests": 1,
+      "failed_pos_tests": 0,
+      "duration": 46.368562
+    },
+    "expression_database": {
+      "repair_begin": "2022-05-02 00:09:17.849607",
+      "repair_end": "2022-05-02 00:11:03.658874",
+      "patches": [
+        {
+          "target_file": "src/expression_parser.i",
+          "fix": "811c811\n<             if (! ((unsigned int )item_peek_top___0.data.symbol == 0U)) {\n---\n>             if (! ((unsigned int )item_peek_top___0.data.symbol != 0U)) {\n",
+          "edits": [
+            "811c811\n<             if (! ((unsigned int )item_peek_top___0.data.symbol == 0U)) {\n---\n>             if (! ((unsigned int )item_peek_top___0.data.symbol != 0U)) {\n"
+          ]
+        }
+      ],
+      "compilations": 2,
+      "failed_compilations": 0,
+      "passed_neg_tests": 1,
+      "passed_pos_tests": 28,
+      "failed_neg_tests": 0,
+      "failed_pos_tests": 0,
+      "duration": 105.809267
+    },
+    "Scrum_Database": {
+      "repair_begin": "2022-05-02 00:21:47.280117",
+      "repair_end": "2022-05-02 00:23:41.817180",
+      "patches": [
+        {
+          "target_file": "src/backlogitems.i",
+          "fix": "506c506\n<       if (! ((int )database->ID != (int )message->productID)) {\n---\n>       if (! ((int )database->ID == (int )message->productID)) {\n",
+          "edits": [
+            "505c505\n<     if ((unsigned long )database != (unsigned long )((productDefType *)0)) {\n---\n>     if ((unsigned long )database > (unsigned long )((productDefType *)0)) {\n",
+            "505c505\n<     if ((unsigned long )database != (unsigned long )((productDefType *)0)) {\n---\n>     if ((unsigned long )database < (unsigned long )((productDefType *)0)) {\n",
+            "505c505\n<     if ((unsigned long )database != (unsigned long )((productDefType *)0)) {\n---\n>     if ((unsigned long )database == (unsigned long )((productDefType *)0)) {\n",
+            "506c506\n<       if (! ((int )database->ID != (int )message->productID)) {\n---\n>       if (! ((int )database->ID == (int )message->productID)) {\n",
+            "505c505\n<     if ((unsigned long )database != (unsigned long )((productDefType *)0)) {\n---\n>     if ((unsigned long )database >= (unsigned long )((productDefType *)0)) {\n",
+            "505c505\n<     if ((unsigned long )database != (unsigned long )((productDefType *)0)) {\n---\n>     if ((unsigned long )database <= (unsigned long )((productDefType *)0)) {\n"
+          ]
+        }
+      ],
+      "compilations": 7,
+      "failed_compilations": 0,
+      "passed_neg_tests": 1,
+      "passed_pos_tests": 140,
+      "failed_neg_tests": 6,
+      "failed_pos_tests": 0,
+      "duration": 114.537063
+    },
+    "yolodex": {
+      "repair_begin": "2022-05-02 00:24:58.708818",
+      "repair_end": "2022-05-02 00:27:36.228289",
+      "patches": [
+        {
+          "target_file": "src/yolodex.i",
+          "fix": "785c785\n<   cgc_cookie |= 270549120U;\n---\n>   cgc_cookie &= 270549120U;\n",
+          "edits": [
+            "781c781\n<   if (bytes != 4UL) {\n---\n>   if (bytes > 4UL) {\n",
+            "781c781\n<   if (bytes != 4UL) {\n---\n>   if (bytes < 4UL) {\n",
+            "781c781\n<   if (bytes != 4UL) {\n---\n>   if (bytes == 4UL) {\n",
+            "785c785\n<   cgc_cookie |= 270549120U;\n---\n>   cgc_cookie &= 270549120U;\n",
+            "781c781\n<   if (bytes != 4UL) {\n---\n>   if (bytes >= 4UL) {\n",
+            "781c781\n<   if (bytes != 4UL) {\n---\n>   if (bytes <= 4UL) {\n"
+          ]
+        }
+      ],
+      "compilations": 7,
+      "failed_compilations": 0,
+      "passed_neg_tests": 1,
+      "passed_pos_tests": 80,
+      "failed_neg_tests": 3,
+      "failed_pos_tests": 3,
+      "duration": 157.519471
+    }
+  }
+}
