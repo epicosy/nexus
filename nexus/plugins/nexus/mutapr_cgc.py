@@ -16,7 +16,7 @@ class MUTAPRCGCTask(NexusHandler):
         label = 'mutapr_cgc'
 
     def __init__(self, **kw):
-        super().__init__(tool='mutapr', benchmark='cgc2', **kw)
+        super().__init__(tool='mutapr', benchmark='cgc', **kw)
 
     def run(self, program: Program, vulnerability: Vulnerability, context: Context):
         manifest = vulnerability.get_manifest()
