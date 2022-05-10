@@ -1,0 +1,10 @@
+prophet:
+  type: tool
+  image:
+    tag: prophet32
+    repo: epicosy/prophet
+  container:
+    name: prophet32
+    api:
+      port: 8080
+    setup: []
