@@ -38,7 +38,7 @@ CGC benchmark. The file should have the following structures/attributes:
   - `type` - benchmark;
   - `image`
     - `tag` - docker image tag;
-    - `repo` - GitHub/DockerHub repository;
+    - `repo` - GitHub/DockerHub repository (e.g. [CGC](https://github.com/epicosy/cgc));
   - `container`
     - `name` - of the Docker container
     - `api`: 
@@ -49,12 +49,25 @@ After having the benchmark defined, you should create the benchmark instance by 
 $ nexus benchmark create -N __name_of_the_benchmark__
 ```
 
-Then, you should install Orbis API for the benchmark instance you just created, by running:
+Then, you should install the Orbis API for the benchmark instance by running:
 ```shell
 $ nexus benchmark setup -N __name_of_the_benchmark__
 ```
 
-At last, you should serve the Orbis API for the benchmark instance, by running:
+At last, you should serve the Orbis API for the benchmark instance with:
 ```shell
 $ nexus benchmark serve -N __name_of_the_benchmark__
+```
+
+## Setup Tool
+Adding a tool to Nexus is similar to adding a benchmark. 
+You should also create a schema file that follows the structure and attributes introduced above for the benchmark.
+The only different attribute is the `type`, it must be set to **tool**. 
+The following [schema file](https://github.com/epicosy/nexus/blob/main/config/plugins/genprog.yml) defines the
+[GenProg tool](https://github.com/epicosy/genprog-code).
+Providing, setting up, and serving the tool is similar to the steps above:
+```shell
+$ nexus tool create -N __name_of_the_tool__
+$ nexus tool setup -N __name_of_the_tool__
+$ nexus tool serve -N __name_of_the_tool__
 ```
