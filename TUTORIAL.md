@@ -1,4 +1,17 @@
+# Maestro Platform
+Maestro is platform that provides an accessible
+means of performing automated repair of software vulnerabilities isolated environments and in an out-of-the-box manner. 
+Maestro has a decentralized and microservice-based architecture based on Docker containers. 
+Maestro is composed of an orchestration component, Nexus, and two components Orbis and Synapser, that respectively 
+convert tools and benchmarks into microservices. To integrate a tool or benchmark in Maestro, a developer only needs to 
+develop a plugin for its respective component, Synapser or Orbis. For Nexus, the plugin connects with Synapser and 
+Orbis, and it is necessary for each tool/benchmark pair.
+
+![Maestro architecture](maestro_arch.png)
+
 ## Install Nexus
+To install Nexus, perform the following steps:
+
 ### Download repo
 ```shell
 git clone https://github.com/epicosy/nexus
@@ -31,6 +44,8 @@ cp nexus/plugins/nexus/* ~/.nexus/plugins/nexus
 
 ## Setup Benchmark
 To add a benchmark to Nexus, a schema file is necessary. 
+Also, the benchmark should provide the necessary bindings for Orbis, 
+for that please follow [this tutorial](https://github.com/epicosy/orbis/blob/main/TUTORIAL.md).
 The file name must have the **name** of the benchmark and should be written in **YAML**. 
 For instance, the following [schema file](https://github.com/epicosy/nexus/blob/main/config/plugins/cgc.yml) defines the
 CGC benchmark. The file should have the following structures/attributes:
