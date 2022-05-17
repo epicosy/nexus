@@ -1,11 +1,10 @@
 # Maestro Platform
-Maestro is platform that provides an accessible
-means of performing automated repair of software vulnerabilities isolated environments and in an out-of-the-box manner. 
-Maestro has a decentralized and microservice-based architecture based on Docker containers. 
-Maestro is composed of an orchestration component, Nexus, and two components Orbis and Synapser, that respectively 
-convert tools and benchmarks into microservices. To integrate a tool or benchmark in Maestro, a developer only needs to 
-develop a plugin for its respective component, Synapser or Orbis. For Nexus, the plugin connects with Synapser and 
-Orbis, and it is necessary for each tool/benchmark pair.
+Maestro is a platform that provides an accessible means of performing automated repair of software vulnerabilities 
+in isolated environments and in an out-of-the-box manner. Maestro has a decentralized and microservice-based architecture 
+based on Docker containers. Maestro is composed of an orchestration component, Nexus, and two components Orbis and 
+Synapser, that respectively convert tools and benchmarks into microservices. To integrate a tool or benchmark in 
+Maestro, a developer only needs to develop a plugin for its respective component, Synapser or Orbis. For Nexus, the 
+plugin connects with Synapser and Orbis, and it is necessary for each tool/benchmark pair.
 
 ![Maestro architecture](maestro_arch.png)
 
@@ -85,4 +84,123 @@ Providing, setting up, and serving the tool is similar to the steps above:
 $ nexus tool create -N __name_of_the_tool__
 $ nexus tool setup -N __name_of_the_tool__
 $ nexus tool serve -N __name_of_the_tool__
+```
+
+## Setup Nexus plugin
+
+With the tool/benchmark pair defined and instantiated, you should define a plugin file in Python that implements 
+the repair workflow. We will use the 
+[GenProg/CGC plugin](https://github.com/epicosy/nexus/blob/main/nexus/plugins/nexus/genprog_cgc.py) as example.
+
+The file must include a class that extends the 
+[NexusHandler](https://github.com/epicosy/nexus/blob/main/nexus/core/handlers/nexus.py). 
+
+```python
+from nexus.core.handlers.nexus import NexusHandler
+
+class GenprogCGCRepairTask(NexusHandler):
+```
+
+The class should also define the inner class `Meta` with a unique label that will be used as an identifier for 
+the commands:
+
+
+```python
+    class Meta:
+        label = 'genprog_cgc'
+```
+
+The class should implement the `run` method that defines the repair workflow. This method receives as arguments 
+a [program](https://github.com/epicosy/nexus/blob/main/nexus/core/data/store.py#L90), 
+a [vulnerability](https://github.com/epicosy/nexus/blob/main/nexus/core/data/store.py#L73), 
+and the [context](https://github.com/epicosy/nexus/blob/main/nexus/core/data/context.py) which gives access to the 
+tool/benchmark instances. 
+
+```python
+    def run(self, program, vulnerability, context):
+```
+
+A default workflow should start by checking out the target vulnerability to the working directory. 
+That returns a [program instance](https://github.com/epicosy/nexus/blob/main/nexus/core/data/store.py#L124):
+```python
+        program_instance = self.orbis.checkout(context.benchmark.instance, vuln=vulnerability)
+```
+
+Then, a pre-build of the program instance is necessary to obtain the relevant build information (directory, args, etc.).
+These are automatically passed to the **program instance**:
+```python
+        self.orbis.build(context.benchmark.instance, program_instance=program_instance, args={'save_temps': True})
+```
+
+For the tool to interact with the benchmark, 
+[signals](https://github.com/epicosy/nexus/blob/main/nexus/core/data/store.py#L67) need to be created. These mimic the 
+commands the tool needs for running the repair on the target program instance. 
+A [command](https://github.com/epicosy/nexus/blob/main/nexus/core/data/store.py#L34) must receive the 
+`program instnace id`, `vulnerability id`, and the `endpoint url` that can be obtained by calling the Orbis API
+with the respective `action`. Depending on the tool, the commands can vary, the most common are:
+- The test command:
+```python
+        test_command = Command(iid=program_instance.iid, vid=vulnerability.id,
+                               url=self.orbis.url(action='test', instance=context.benchmark.instance))
+        test_command.add_arg('exit_fail')
+        test_command.add_arg('neg_pov')
+        test_command.add_arg('replace_neg_fmt', ['n', 'pov_'])
+        test_command.add_arg('replace_pos_fmt', ['p', 't'])
+        test_command.add_placeholder(name='tests', value='__TEST_NAME__')
+        test_signal = Signal(arg='--test-command', command=test_command)
+```
+- The build command: 
+```python
+        build_command = Command(iid=program_instance.iid, vid=vulnerability.id,
+                                url=self.orbis.url(action='build', instance=context.benchmark.instance))
+        build_command.add_arg('cpp_files')
+        build_command.add_arg('exit_err')
+        build_command.add_arg('save_temps')
+        build_command.add_arg('replace_ext', ['.c', '.i'])
+        build_command.add_arg(name='inst_files', value=manifest.format(delimiter=' '))
+        build_command.add_placeholder(name='fix_files', value='__SOURCE_NAME__')
+        compile_signal = Signal(arg='--compiler-command', command=build_command)
+```
+
+Arguments can be added to the commands with the `add_arg` method. Notice, these arguments are related to the benchmark 
+and can vary. The commands can also receive `placeholders` with the `add_placeholder` method. The placeholders are 
+special arguments that receive values inserted by the tool during the repair process. For instance, the GenProg tool 
+replaces the `__SOURCE_NAME__` with the patch file generated before calling the `compiler` command
+— i.e. the build command.
+
+The tool can also receive arguments, which should be specified in a dictionary, as the following: 
+
+```python
+        args = {
+            '--pos-tests': len(program.oracle['cases']),
+            '--neg-tests': len(vulnerability.oracle['cases'])
+        }
+```
+
+At the end of the workflow the `repair` should be executed by the tool through the Synapser API.
+The `repair` method receives the `signals`, the arguments `args`, the program instance id `iid`, 
+the `program instance`, the `manifest`, and the tool instance `instnace`: 
+
+```python
+        response = self.synapser.repair(signals=[test_signal, compile_signal], args=args, iid=program_instance.iid,
+                                        program_instance=program_instance, manifest=manifest.locs,
+                                        instance=context.tool.instance)
+```
+
+The `repair request` returns a `response` with the `id` for the `repair instance` created by the Synapser API.
+```python
+        response_json = response.json()
+        self.app.log.info("RID: " + str(response_json['rid']))
+```
+You should expose it in order to follow later the status of the `repair instance`:
+```shell
+nexus tool status --id __repair_instance_id__ --name __name_of_the_tool__ --bench __name_of_the_benchmark__ 
+```
+
+
+At last, is **crucial** to register the created plugin through the `load` function:
+
+```python
+def load(app):
+    app.handler.register(GenprogCGCRepairTask)
 ```
