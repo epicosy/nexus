@@ -1,0 +1,195 @@
+{
+  "GenProg": {
+    "BitBlaster": {
+        "start": "Sun, 08 May 2022 19:16:09 GMT",
+        "end": "Sun, 08 May 2022 19:20:39 GMT",
+        "target": "src/main.i",
+        "patches": {
+          "000000": "312a313\n>   {\n313a315,316\n> \n>   }\n",
+          "000001": "165a166\n>   {\n166a168,169\n>   gBoard[31] &= 4294967292U;\n>   }\n",
+          "000002": "293a294\n>   {\n294a296,297\n> \n>   }\n",
+          "000003": "346c346\n<   (*((int (*)())0))();\n---\n> \n",
+          "repair": "346c346\n<   (*((int (*)())0))();\n---\n> \n"
+        }
+    },
+    "WordCompletion": {
+      "start": "Sun, 08 May 2022 19:21:37 GMT",
+      "end": "Sun, 08 May 2022 19:37:30 GMT",
+      "target": "src/main.i",
+      "patches": {
+        "000000": "310a311\n>   {\n311a313,314\n> \n>   }\n",
+        "000001": "663a664\n>   {\n664a666,667\n>   cgc_transmit_str(buf);\n>   }\n",
+        "000002": "345a346\n>   {\n346a348,349\n>   return (-1);\n>   }\n",
+        "000003": "306c306\n<   ret = (cgc_size_t )0;\n---\n> \n",
+        "000004": "570a571\n>   {\n571a573,574\n> \n>   }\n",
+        "000005": "546c546\n<   buf[11] = (char)0;\n---\n> \n",
+        "000006": "155c155\n<     total += rx_bytes;\n---\n> \n",
+        "000007": "229c229\n<   rx_bytes = (cgc_size_t )0;\n---\n> \n",
+        "000008": "559a560\n>   {\n560a562,563\n> \n>   }\n",
+        "000009": "378,392c378\n<       if ((int )c2 >= 48) {\n<         if ((int )c2 <= 57) {\n<           ret *= 10;\n<           ret += (int )c2 - 48;\n<           return (ret);\n<         } else {\n<           goto _L;\n<         }\n<       } else\n<       _L: /* CIL Label */ \n<       if ((int )c2 != 0) {\n<         return (ret);\n<       } else {\n<         return (0);\n<       }\n---\n>       _L: ;\n",
+        "000010": "664c664\n<   cgc_scramble(buf, *(cgc_gWords + i), (cgc_size_t )64);\n---\n> \n",
+        "repair": "664c664\n<   cgc_scramble(buf, *(cgc_gWords + i), (cgc_size_t )64);\n---\n> \n"
+      }
+    },
+    "Scrum_Database": {
+      "start": "Sun, 08 May 2022 19:41:33 GMT",
+      "end": "Sun, 08 May 2022 19:49:41 GMT",
+      "target": "src/backlogitems.i",
+      "patches": {
+        "000000": "592a593\n>     {\n600a602,611\n>     }\n>     if ((unsigned long )database != (unsigned long )((productDefType *)0)) {\n>       if ((int )database->ID != (int )message->productID) {\n> \n>       } else {\n>         break;\n>       }\n>     } else {\n>       break;\n>     }\n",
+        "000001": "624a625\n>     {\n625a627,628\n> \n>     }\n",
+        "000002": "593a594\n>       {\n597a599,611\n>       }\n>       while (1) {\n>         if ((unsigned long )database != (unsigned long )((productDefType *)0)) {\n>           if ((int )database->ID != (int )message->productID) {\n> \n>           } else {\n>             break;\n>           }\n>         } else {\n>           break;\n>         }\n>         database = database->next;\n>       }\n",
+        "000003": "592,594d591\n<   while (1) {\n<     if ((unsigned long )sprintPtr != (unsigned long )((sprintEntryType *)0)) {\n<       if ((int )sprintPtr->ID != (int )message->sprintID) {\n596,603d592\n<       } else {\n<         break;\n<       }\n<     } else {\n<       break;\n<     }\n<     sprintPtr = sprintPtr->next;\n<   }\n",
+        "000004": "590a591\n>   {\n591a593,594\n> \n>   }\n",
+        "000005": "284c284,285\n<   while ((unsigned long )PBIPtr->next != (unsigned long )((struct backlogItem *)0)) {\n---\n>   while (1) {\n> \n",
+        "000006": "592,601c592\n<   while (1) {\n<     if ((unsigned long )sprintPtr != (unsigned long )((sprintEntryType *)0)) {\n<       if ((int )sprintPtr->ID != (int )message->sprintID) {\n< \n<       } else {\n<         break;\n<       }\n<     } else {\n<       break;\n<     }\n---\n>   while ((unsigned long )sprintPtr != (unsigned long )((sprintEntryType *)0)) {\n",
+        "repair": "592,601c592\n<   while (1) {\n<     if ((unsigned long )sprintPtr != (unsigned long )((sprintEntryType *)0)) {\n<       if ((int )sprintPtr->ID != (int )message->sprintID) {\n< \n<       } else {\n<         break;\n<       }\n<     } else {\n<       break;\n<     }\n---\n>   while ((unsigned long )sprintPtr != (unsigned long )((sprintEntryType *)0)) {\n"
+      }
+    },
+    "yolodex": {
+      "start": "Sun, 08 May 2022 19:51:41 GMT",
+      "end": "Sun, 08 May 2022 19:59:28 GMT",
+      "target": "src/yolodex.i",
+      "patches": {
+        "000000": "696a697\n>     {\n697a699,700\n>     cgc_memcpy((void *)(number), (void *)(data), 5U);\n>     }\n",
+        "000001": "610a611\n>       {\n615a617,618\n>       }\n>       return;\n",
+        "000002": "840a841\n>       {\n841a843,844\n> \n>       }\n",
+        "000003": "679a680\n>       {\n684a686,693\n>       }\n>       if ((int )data[0] != 0) {\n>         cgc_memset((void *)(ptr->last), (char)0, 32U);\n>         tmp___2 = cgc_strlen(data);\n>         cgc_memcpy((void *)(ptr->last), (void *)(data), (unsigned int )tmp___2);\n>       } else {\n> \n>       }\n",
+        "000004": "267c267\n<     tmp___2 = cgc_strlen(last);\n---\n> \n",
+        "000005": "841c841\n<       ptr = ptr->prev;\n---\n> \n",
+        "repair": "841c841\n<       ptr = ptr->prev;\n---\n> \n"
+      }
+    },
+    "expression_database": {
+      "start": "Sun, 08 May 2022 20:01:49 GMT",
+      "end": "Sun, 08 May 2022 20:23:08 GMT",
+      "target": "src/expression_parser.i",
+      "patches": {
+        "000000": "812a813\n>       {\n873a875,876\n>       }\n>       return ((eParserSymbol )12);\n",
+        "000001": "796a797\n>       {\n797a799,800\n>       return (1);\n>       }\n",
+        "000002": "934a935\n>           {\n935a937,938\n>           cur_symbol = cgc_parse_get_symbol(pszCur, & symbol_offset);\n>           }\n",
+        "000003": "231c231\n<   cgc_g_parseStackSize = (uint8_t )((int )cgc_g_parseStackSize + 1);\n---\n> \n",
+        "000004": "343a344\n>     {\n344a346,347\n>     return (0);\n>     }\n",
+        "000005": "913,917d912\n<           if ((unsigned int )item_top.type != 1U) {\n<             tmp___12 = cgc_get_current_exception_frame();\n<             longjmp(tmp___12->jmpBuffer, 2);\n<             return;\n<           } else {\n919d913\n<           }\n",
+        "000006": "935c935\n<           cgc_push_parser_stack(item_top);\n---\n> \n",
+        "000007": "284c284\n<     i ++;\n---\n> \n",
+        "000008": "923d922\n<             if ((unsigned int )item_next.data.symbol == 0U) {\n925,929d923\n<             } else {\n<               tmp___14 = cgc_get_current_exception_frame();\n<               longjmp(tmp___14->jmpBuffer, 2);\n<               return;\n<             }\n",
+        "000009": "880a881\n>           {\n881a883,898\n>           _L__0: /* CIL Label */ \n>           if ((unsigned int )item_peek_top___0.type == 0U) {\n>             tmp___10 = cgc_is_symbol_result_operator(item_peek_top___0.data.symbol);\n>             if (tmp___10) {\n> \n>             } else {\n>               tmp___9 = cgc_get_current_exception_frame();\n>               longjmp(tmp___9->jmpBuffer, 2);\n>               return;\n>             }\n>           } else {\n>             tmp___9 = cgc_get_current_exception_frame();\n>             longjmp(tmp___9->jmpBuffer, 2);\n>             return;\n>           }\n>           }\n",
+        "repair": "880a881\n>           {\n881a883,898\n>           _L__0: /* CIL Label */ \n>           if ((unsigned int )item_peek_top___0.type == 0U) {\n>             tmp___10 = cgc_is_symbol_result_operator(item_peek_top___0.data.symbol);\n>             if (tmp___10) {\n> \n>             } else {\n>               tmp___9 = cgc_get_current_exception_frame();\n>               longjmp(tmp___9->jmpBuffer, 2);\n>               return;\n>             }\n>           } else {\n>             tmp___9 = cgc_get_current_exception_frame();\n>             longjmp(tmp___9->jmpBuffer, 2);\n>             return;\n>           }\n>           }\n"
+      }
+    }
+  },
+  "MUT-APR": {
+    "BitBlaster": {
+      "start": "Tue, 10 May 2022 22:32:46 GMT",
+      "end": "Tue, 10 May 2022 22:39:45 GMT",
+      "target": "src/main.i",
+      "patches": {
+        "00000-file": "122c122\n<   if ((unsigned long )buf == (unsigned long )((char *)0)) {\n---\n>   if ((unsigned long )buf != (unsigned long )((char *)0)) {\n",
+        "00001-file": "122c122\n<   if ((unsigned long )buf == (unsigned long )((char *)0)) {\n---\n>   if ((unsigned long )buf <= (unsigned long )((char *)0)) {\n",
+        "00002-file": "122c122\n<   if ((unsigned long )buf == (unsigned long )((char *)0)) {\n---\n>   if ((unsigned long )buf < (unsigned long )((char *)0)) {\n",
+        "00003-file": "122c122\n<   if ((unsigned long )buf == (unsigned long )((char *)0)) {\n---\n>   if ((unsigned long )buf >= (unsigned long )((char *)0)) {\n",
+        "00004-file": "122c122\n<   if ((unsigned long )buf == (unsigned long )((char *)0)) {\n---\n>   if ((unsigned long )buf > (unsigned long )((char *)0)) {\n",
+        "00005-file": "127c127\n<     if (ret != 0) {\n---\n>     if (ret == 0) {\n",
+        "00006-file": "127c127\n<     if (ret != 0) {\n---\n>     if (ret <= 0) {\n",
+        "00007-file": "127c127\n<     if (ret != 0) {\n---\n>     if (ret < 0) {\n",
+        "00008-file": "127c127\n<     if (ret != 0) {\n---\n>     if (ret > 0) {\n",
+        "00009-file": "127c127\n<     if (ret != 0) {\n---\n>     if (ret >= 0) {\n",
+        "00010-file": "130c130\n<     if (rx_bytes == 0UL) {\n---\n>     if (rx_bytes != 0UL) {\n",
+        "00011-file": "130c130\n<     if (rx_bytes == 0UL) {\n---\n>     if (rx_bytes <= 0UL) {\n",
+        "00012-file": "130c130\n<     if (rx_bytes == 0UL) {\n---\n>     if (rx_bytes < 0UL) {\n",
+        "00013-file": "130c130\n<     if (rx_bytes == 0UL) {\n---\n>     if (rx_bytes >= 0UL) {\n",
+        "00014-file": "130c130\n<     if (rx_bytes == 0UL) {\n---\n>     if (rx_bytes > 0UL) {\n",
+        "00015-file": "133c133\n<     total += rx_bytes;\n---\n>     total -= rx_bytes;\n",
+        "00016-file": "133c133\n<     total += rx_bytes;\n---\n>     total *= rx_bytes;\n",
+        "00017-file": "133c133\n<     total += rx_bytes;\n---\n>     total /= rx_bytes;\n",
+        "00018-file": "133c133\n<     total += rx_bytes;\n---\n>     total %= rx_bytes;\n",
+        "00019-file": "134c134\n<     if (! (total < size)) {\n---\n>     if (! (total == size)) {\n",
+        "00020-file": "134c134\n<     if (! (total < size)) {\n---\n>     if (! (total != size)) {\n",
+        "00021-file": "134c134\n<     if (! (total < size)) {\n---\n>     if (! (total <= size)) {\n",
+        "00022-file": "134c134\n<     if (! (total < size)) {\n---\n>     if (! (total > size)) {\n",
+        "00023-file": "134c134\n<     if (! (total < size)) {\n---\n>     if (! (total >= size)) {\n",
+        "00024-file": "309c309\n<     if (tmp != 1UL) {\n---\n>     if (tmp == 1UL) {\n",
+        "00025-file": "309c309\n<     if (tmp != 1UL) {\n---\n>     if (tmp <= 1UL) {\n",
+        "00026-file": "309c309\n<     if (tmp != 1UL) {\n---\n>     if (tmp < 1UL) {\n",
+        "00027-file": "309c309\n<     if (tmp != 1UL) {\n---\n>     if (tmp > 1UL) {\n",
+        "00028-file": "309c309\n<     if (tmp != 1UL) {\n---\n>     if (tmp >= 1UL) {\n",
+        "00029-file": "313c313\n<     if ((int )temp == 255) {\n---\n>     if ((int )temp != 255) {\n",
+        "00030-file": "313c313\n<     if ((int )temp == 255) {\n---\n>     if ((int )temp <= 255) {\n",
+        "00031-file": "313c313\n<     if ((int )temp == 255) {\n---\n>     if ((int )temp < 255) {\n",
+        "00032-file": "313c313\n<     if ((int )temp == 255) {\n---\n>     if ((int )temp >= 255) {\n",
+        "00033-file": "313c313\n<     if ((int )temp == 255) {\n---\n>     if ((int )temp > 255) {\n",
+        "00034-file": "270c270\n<   if ((int )move & 32) {\n---\n>   if ((int )move ^ 32) {\n",
+        "00035-file": "270c270\n<   if ((int )move & 32) {\n---\n>   if ((int )move | 32) {\n",
+        "00036-file": "147c147\n<   if (row < 0) {\n---\n>   if (row == 0) {\n",
+        "00037-file": "147c147\n<   if (row < 0) {\n---\n>   if (row != 0) {\n",
+        "00038-file": "147c147\n<   if (row < 0) {\n---\n>   if (row <= 0) {\n",
+        "00039-file": "147c147\n<   if (row < 0) {\n---\n>   if (row > 0) {\n",
+        "00040-file": "147c147\n<   if (row < 0) {\n---\n>   if (row >= 0) {\n",
+        "00041-file": "150c150\n<   if (row >= 32) {\n---\n>   if (row == 32) {\n",
+        "00042-file": "150c150\n<   if (row >= 32) {\n---\n>   if (row != 32) {\n",
+        "00043-file": "150c150\n<   if (row >= 32) {\n---\n>   if (row < 32) {\n",
+        "00044-file": "150c150\n<   if (row >= 32) {\n---\n>   if (row <= 32) {\n",
+        "00045-file": "150c150\n<   if (row >= 32) {\n---\n>   if (row > 32) {\n",
+        "00046-file": "254c254\n<   if ((gBoard[31] & 3U) == 3U) {\n---\n>   if ((gBoard[31] & 3U) != 3U) {\n",
+        "00047-file": "254c254\n<   if ((gBoard[31] & 3U) == 3U) {\n---\n>   if ((gBoard[31] & 3U) <= 3U) {\n",
+        "00048-file": "254c254\n<   if ((gBoard[31] & 3U) == 3U) {\n---\n>   if ((gBoard[31] & 3U) < 3U) {\n",
+        "00049-file": "254c254\n<   if ((gBoard[31] & 3U) == 3U) {\n---\n>   if ((gBoard[31] & 3U) >= 3U) {\n",
+        "00050-file": "254c254\n<   if ((gBoard[31] & 3U) == 3U) {\n---\n>   if ((gBoard[31] & 3U) > 3U) {\n",
+        "00051-file": "255c255\n<     if ((gBoard[30] & 3U) == 3U) {\n---\n>     if ((gBoard[30] & 3U) != 3U) {\n",
+        "00052-file": "255c255\n<     if ((gBoard[30] & 3U) == 3U) {\n---\n>     if ((gBoard[30] & 3U) <= 3U) {\n",
+        "00053-file": "255c255\n<     if ((gBoard[30] & 3U) == 3U) {\n---\n>     if ((gBoard[30] & 3U) < 3U) {\n",
+        "00054-file": "255c255\n<     if ((gBoard[30] & 3U) == 3U) {\n---\n>     if ((gBoard[30] & 3U) >= 3U) {\n",
+        "00055-file": "255c255\n<     if ((gBoard[30] & 3U) == 3U) {\n---\n>     if ((gBoard[30] & 3U) > 3U) {\n",
+        "00056-file": "287c287\n<     if (gBoard[i] != 0U) {\n---\n>     if (gBoard[i] == 0U) {\n",
+        "main.i--best.c": "287c287\n<     if (gBoard[i] != 0U) {\n---\n>     if (gBoard[i] == 0U) {\n"
+      }
+    },
+    "yolodex": {
+      "start": "Tue, 10 May 2022 22:47:14 GMT",
+      "end": "Tue, 10 May 2022 22:49:49 GMT",
+      "target": "src/yolodex.i",
+      "patches": {
+        "00000-file": "781c781\n<   if (bytes != 4UL) {\n---\n>   if (bytes == 4UL) {\n",
+        "00001-file": "781c781\n<   if (bytes != 4UL) {\n---\n>   if (bytes <= 4UL) {\n",
+        "00002-file": "781c781\n<   if (bytes != 4UL) {\n---\n>   if (bytes < 4UL) {\n",
+        "00003-file": "781c781\n<   if (bytes != 4UL) {\n---\n>   if (bytes > 4UL) {\n",
+        "00004-file": "781c781\n<   if (bytes != 4UL) {\n---\n>   if (bytes >= 4UL) {\n",
+        "00005-file": "785c785\n<   cgc_cookie |= 270549120U;\n---\n>   cgc_cookie &= 270549120U;\n",
+        "yolodex.i--best.c": "785c785\n<   cgc_cookie |= 270549120U;\n---\n>   cgc_cookie &= 270549120U;\n"
+      }
+    },
+    "WordCompletion": {
+      "start": "Tue, 10 May 2022 22:56:46 GMT",
+      "end": "Tue, 10 May 2022 22:57:34 GMT",
+      "target": "src/main.i",
+      "patches": {
+        "00000-file": "607c607\n<     if (sret == 0UL) {\n---\n>     if (sret != 0UL) {\n",
+        "main.i--best.c": "607c607\n<     if (sret == 0UL) {\n---\n>     if (sret != 0UL) {\n"
+      }
+    },
+    "expression_database": {
+        "start": "Tue, 10 May 2022 22:43:22 GMT",
+        "end": "Tue, 10 May 2022 22:45:46 GMT",
+        "target": "src/expression_parser.i",
+        "patches": {
+          "00000-file": "811c811\n<             if (! ((unsigned int )item_peek_top___0.data.symbol == 0U)) {\n---\n>             if (! ((unsigned int )item_peek_top___0.data.symbol != 0U)) {\n",
+          "expression_parser.i--best.c": "811c811\n<             if (! ((unsigned int )item_peek_top___0.data.symbol == 0U)) {\n---\n>             if (! ((unsigned int )item_peek_top___0.data.symbol != 0U)) {\n"
+        }
+    },
+    "Scrum_Database": {
+      "start": "Tue, 10 May 2022 22:52:23 GMT",
+      "end": "Tue, 10 May 2022 22:54:25 GMT",
+      "target": "src/backlogitems.i",
+      "patches": {
+        "00000-file": "505c505\n<     if ((unsigned long )database != (unsigned long )((productDefType *)0)) {\n---\n>     if ((unsigned long )database == (unsigned long )((productDefType *)0)) {\n",
+        "00001-file": "505c505\n<     if ((unsigned long )database != (unsigned long )((productDefType *)0)) {\n---\n>     if ((unsigned long )database <= (unsigned long )((productDefType *)0)) {\n",
+        "00002-file": "505c505\n<     if ((unsigned long )database != (unsigned long )((productDefType *)0)) {\n---\n>     if ((unsigned long )database < (unsigned long )((productDefType *)0)) {\n",
+        "00003-file": "505c505\n<     if ((unsigned long )database != (unsigned long )((productDefType *)0)) {\n---\n>     if ((unsigned long )database > (unsigned long )((productDefType *)0)) {\n",
+        "00004-file": "505c505\n<     if ((unsigned long )database != (unsigned long )((productDefType *)0)) {\n---\n>     if ((unsigned long )database >= (unsigned long )((productDefType *)0)) {\n",
+        "00005-file": "506c506\n<       if (! ((int )database->ID != (int )message->productID)) {\n---\n>       if (! ((int )database->ID == (int )message->productID)) {\n",
+        "backlogitems.i--best.c": "506c506\n<       if (! ((int )database->ID != (int )message->productID)) {\n---\n>       if (! ((int )database->ID == (int )message->productID)) {\n"
+      }
+    }
+  }
+}
