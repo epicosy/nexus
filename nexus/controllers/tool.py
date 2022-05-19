@@ -78,12 +78,13 @@ class Tool(Controller):
         help='Deletes the benchmarks records',
         arguments=[
             (['-rm', '--remove'],
-             {'help': 'Removes the associated containers', 'action': 'store_true', 'required': False})
+             {'help': 'Removes the associated containers', 'action': 'store_true', 'required': False}),
+            (['--name'], {'help': 'Name of the repair tool.', 'type': str, 'required': False})
         ]
     )
     def delete(self):
         container_manager = self.app.handler.get('managers', 'container', setup=True)
-        container_manager.delete(self.Meta.label, remove=self.app.pargs.remove)
+        container_manager.delete(self.Meta.label, remove=self.app.pargs.remove, name=self.app.pargs.name)
 
     @ex(
         help='Lists the repair instance\'s execution status',

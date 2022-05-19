@@ -47,17 +47,20 @@ class ContainerManager(ManagersInterface, Handler):
         if instance.volume:
             if container:
                 container.remove(v=instance.volume)
-        
-        self.app.log.warning(f"Removed container with id {container.id}.")
 
-    def delete(self, kind: str, remove: bool = False) -> List[Instance]:
-        instances = self.find_all(kind)
+        if container:
+            self.app.log.warning(f"Removed container with id {container.id}.")
+
+    def delete(self, kind: str, remove: bool = False, name: str = None) -> List[Instance]:
+        instances = [self.find(kind, name)] if name else self.find_all(kind)
 
         for instance in instances:
+            self.app.log.warning(f"Deleting record for {instance.name} {instance.name}")
             self.app.db.delete(Instance, instance.id)
 
             if remove:
                 try:
+                    self.app.log.warning(f"Removing container {instance.id[:10]} for {instance.name}")
                     self.remove(instance)
                 except APIError as ae:
                     self.app.log.error(str(ae))
