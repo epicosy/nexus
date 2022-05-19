@@ -1,0 +1,10 @@
+jmutrepair:
+  type: tool
+  image:
+    tag: astor-synapser
+    repo: bqcuong/astor-synapser
+  container:
+    name: jmutrepair
+    api:
+      port: 8080
+    setup: []

@@ -1,0 +1,10 @@
+jkali:
+  type: tool
+  image:
+    tag: astor-synapser
+    repo: bqcuong/astor-synapser
+  container:
+    name: jkali
+    api:
+      port: 8080
+    setup: []

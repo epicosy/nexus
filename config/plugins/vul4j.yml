@@ -1,0 +1,10 @@
+vul4j:
+  type: benchmark
+  image:
+    tag: vul4j-orbis
+    repo: bqcuong/vul4j-orbis
+  container:
+    name: vul4j
+    api:
+      port: 8080
+    setup: []

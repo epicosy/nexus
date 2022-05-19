@@ -1,3 +1,5 @@
+from typing import AnyStr
+
 import requests
 
 from binascii import b2a_hex
@@ -23,12 +25,14 @@ class OrbisHandler(APIHandler):
             'checkout': f"{self.url_format}/checkout",
             'make': f"{self.url_format}/make",
             'test': f"{self.url_format}/test",
+            'testbatch': f"{self.url_format}/testbatch",
             'program': f"{self.url_format}/project" + "/{pid}",
             'programs': f"{self.url_format}/projects",
             'instance': f"{self.url_format}/instance" + "/{iid}",
             'instances': f"{self.url_format}/instances",
             'vuln': f"{self.url_format}/vuln" + "/{vid}",
             'vulns': f"{self.url_format}/vulns",
+            'classpath': f"{self.url_format}/classpath" + "/{iid}",
         }
 
     def is_running(self, instance: Instance) -> bool:
@@ -69,6 +73,13 @@ class OrbisHandler(APIHandler):
     def get_programs(self, instance: Instance, **kwargs):
         return self.get(endpoint_url=self.endpoints['programs'].format(ip=instance.ip, port=instance.port),
                         json_data=kwargs).json()
+
+    def get_classpath(self, instance: Instance, program_instance: ProgramInstance, args: dict = None) -> AnyStr:
+        response = self.get(endpoint_url=self.endpoints['classpath'].format(ip=instance.ip, port=instance.port,
+                                                                            iid=program_instance.iid), json_data=args)
+
+        cp_res = response.json()['classpath']
+        return cp_res
 
     def get_vuln(self, instance: Instance, vid: str, args: dict = None) -> Vulnerability:
         response = self.get(endpoint_url=self.endpoints['vuln'].format(ip=instance.ip, port=instance.port, vid=vid),

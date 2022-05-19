@@ -96,3 +96,12 @@ plugin.nexus.genprog_cgc:
 
 plugin.nexus.mutapr_cgc:
   enabled: true
+
+plugin.nexus.jgenprog_vul4j:
+  enabled: true
+
+plugin.nexus.jkali_vul4j:
+  enabled: true
+
+plugin.nexus.jmutrepair_vul4j:
+  enabled: true

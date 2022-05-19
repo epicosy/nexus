@@ -1,0 +1,300 @@
+{
+  "jGenProg": {
+    "VUL4J-36": {
+      "repair_end": "2022-05-10 08:37:48",
+      "repair_begin": "2022-05-10 08:25:06",
+      "patches": [
+        {
+          "FOLDER_SOLUTION_CODE": "\\/nexus\\/vul4j-orbis_d4c0\\/vul4j-orbis\\/.\\/output_astor\\/AstorMain-vul4j-orbis\\/\\/src\\/\\/variant-88",
+          "GENERATION": "44",
+          "PATCH_DIFF_ORIG": "--- \\/tika-parsers\\/src\\/main\\/java\\/org\\/apache\\/tika\\/parser\\/iptc\\/IptcAnpaParser.java\\n+++ \\/tika-parsers\\/src\\/main\\/java\\/org\\/apache\\/tika\\/parser\\/iptc\\/IptcAnpaParser.java\\n@@ -511,2 +510,0 @@\\n-\\t\\t\\t\\t\\t\\tif (read > value.length) { \\t\\t\\t\\t\\t\\t\\tbreak;}\\n-\\t\\t\\t\\t\\t} \\n@@ -514,3 +511,0 @@\\n-\\t\\t\\t\\t\\tif (val_next == org.apache.tika.parser.iptc.IptcAnpaParser.CT) {\\n-\\t\\t\\t\\t\\t\\t--read;\\n-\\t\\t\\t\\t\\t}\\n@@ -518 +512,0 @@\\n-\\t\\t\\t\\t\\tif (val_next == org.apache.tika.parser.iptc.IptcAnpaParser.LT) {\\n@@ -520,2 +513,0 @@\\n-\\t\\t\\t\\t\\t\\tval_next = (read < value.length) ? value[read++] : 0x0;\\n-\\t\\t\\t\\t\\t}\\n@@ -523,8 +514,0 @@\\n-\\t\\t\\t\\t\\twhile ((bdy_title.length() > 0) && ((val_next == org.apache.tika.parser.iptc.IptcAnpaParser.CR) || (val_next == org.apache.tika.parser.iptc.IptcAnpaParser.LF))) {\\n-\\t\\t\\t\\t\\t\\tval_next = (read < value.length) ? value[read++] : 0x0;\\n-\\t\\t\\t\\t\\t\\tif ((val_next != org.apache.tika.parser.iptc.IptcAnpaParser.CR) && (val_next != org.apache.tika.parser.iptc.IptcAnpaParser.LF)) {\\n-\\t\\t\\t\\t\\t\\t\\t--read;\\n-\\t\\t\\t\\t\\t\\t}\\n-\\t\\t\\t\\t\\t} \\n-\\t\\t\\t\\t} else \\n-\\t\\t\\t\\t{\\n@@ -534,6 +517,0 @@\\n-\\t\\t\\t\\t\\tif (FORMAT == this.FMT_IPTC_BLM) {\\n-\\t\\t\\t\\t\\t\\tif (val_next == org.apache.tika.parser.iptc.IptcAnpaParser.TB) {\\n-\\t\\t\\t\\t\\t\\t\\tvalue[--read] = org.apache.tika.parser.iptc.IptcAnpaParser.CT;\\n-\\t\\t\\t\\t\\t\\t\\tcontinue;\\n-\\t\\t\\t\\t\\t\\t}\\n-\\t\\t\\t\\t\\t}\\n@@ -542 +520,23 @@\\n-\\t\\t\\t\\t\\tif (FORMAT == this.FMT_IPTC_RTR) {\\n+\\n+\\n+\\n+\\n+\\n+\\n+\\n+\\n+\\n+\\n+\\n+\\n+\\n+\\n+\\n+\\n+\\n+\\n+\\n+\\n+\\n+\\n+\\n@@ -550 +550 @@\\n-\\t\\t\\t\\t\\t\\t}\\n+\\t\\t\\t\\t\\t\\t}} \\t\\t\\t\\t\\tif (val_next == org.apache.tika.parser.iptc.IptcAnpaParser.CT) { \\t\\t\\t\\t\\t\\t--read;} \\t\\t\\t\\t\\tif (val_next == org.apache.tika.parser.iptc.IptcAnpaParser.LT) { \\t\\t\\t\\t\\t\\tval_next = (read < value.length) ? value[read++] : 0x0;} \\t\\t\\t\\t\\twhile ((bdy_title.length() > 0) && ((val_next == org.apache.tika.parser.iptc.IptcAnpaParser.CR) || (val_next == org.apache.tika.parser.iptc.IptcAnpaParser.LF))) { \\t\\t\\t\\t\\t\\tval_next = (read < value.length) ? value[read++] : 0x0; \\t\\t\\t\\t\\t\\tif ((val_next != org.apache.tika.parser.iptc.IptcAnpaParser.CR) && (val_next != org.apache.tika.parser.iptc.IptcAnpaParser.LF)) { \\t\\t\\t\\t\\t\\t\\t--read;}} } else { \\t\\t\\t\\t\\tif (FORMAT == this.FMT_IPTC_BLM) { \\t\\t\\t\\t\\t\\tif (val_next == org.apache.tika.parser.iptc.IptcAnpaParser.TB) { \\t\\t\\t\\t\\t\\t\\tvalue[--read] = org.apache.tika.parser.iptc.IptcAnpaParser.CT; \\t\\t\\t\\t\\t\\t\\tcontinue;}} \\t\\t\\t\\t\\tif (FORMAT == this.FMT_IPTC_RTR) { \\t\\t\\t\\t\\t\\tif (val_next != org.apache.tika.parser.iptc.IptcAnpaParser.CT) { \\t\\t\\t\\t\\t\\t\\tif ((((val_next != org.apache.tika.parser.iptc.IptcAnpaParser.SP) && (val_next != org.apache.tika.parser.iptc.IptcAnpaParser.TB)) && (val_next != org.apache.tika.parser.iptc.IptcAnpaParser.CR)) && (val_next != org.apache.tika.parser.iptc.IptcAnpaParser.LF)) { \\t\\t\\t\\t\\t\\t\\t\\t--read;} \\t\\t\\t\\t\\t\\t\\tvalue[--read] = org.apache.tika.parser.iptc.IptcAnpaParser.CT; \\t\\t\\t\\t\\t\\t\\tcontinue;}\\n\\n",
+          "TIME": "695",
+          "VALIDATION": "|true|0|0|[]|",
+          "VARIANT_ID": "88",
+          "patchhunks": [
+            {
+              "BUGGY_CODE_TYPE": "CtIfImpl|CtBlockImpl",
+              "INGREDIENT_PARENT": "if (val_next != org.apache.tika.parser.iptc.IptcAnpaParser.CT) {\\n\\n\\tif ((((val_next != org.apache.tika.parser.iptc.IptcAnpaParser.SP) && (val_next != org.apache.tika.parser.iptc.IptcAnpaParser.TB)) && (val_next != org.apache.tika.parser.iptc.IptcAnpaParser.CR)) && (val_next != org.apache.tika.parser.iptc.IptcAnpaParser.LF)) {\\n\\t\\t--read;\\n\\t}\\n\\tvalue[--read] = org.apache.tika.parser.iptc.IptcAnpaParser.CT;\\n\\tcontinue;\\n}",
+              "INGREDIENT_SCOPE": "LOCAL",
+              "LINE": "511",
+              "LOCATION": "org.apache.tika.parser.iptc.IptcAnpaParser",
+              "MODIFIED_FILE_PATH": "\\/nexus\\/vul4j-orbis_d4c0\\/vul4j-orbis\\/.\\/output_astor\\/AstorMain-vul4j-orbis\\/\\/src\\/\\/variant-88\\/org\\/apache\\/tika\\/parser\\/iptc\\/IptcAnpaParser.java",
+              "MP_RANKING": "3",
+              "OPERATOR": "ReplaceOp",
+              "ORIGINAL_CODE": "if (read > value.length) { \\tbreak;}",
+              "PATCH_HUNK_CODE": "if (val_next != org.apache.tika.parser.iptc.IptcAnpaParser.CT) {\\n\\n\\tif ((((val_next != org.apache.tika.parser.iptc.IptcAnpaParser.SP) && (val_next != org.apache.tika.parser.iptc.IptcAnpaParser.TB)) && (val_next != org.apache.tika.parser.iptc.IptcAnpaParser.CR)) && (val_next != org.apache.tika.parser.iptc.IptcAnpaParser.LF)) {\\n\\t\\t--read;\\n\\t}\\n\\tvalue[--read] = org.apache.tika.parser.iptc.IptcAnpaParser.CT;\\n\\tcontinue;\\n}",
+              "PATCH_HUNK_TYPE": "CtIfImpl|CtBlockImpl",
+              "PATH": "\\/nexus\\/vul4j-orbis_d4c0\\/vul4j-orbis\\/tika-parsers\\/src\\/main\\/java\\/org\\/apache\\/tika\\/parser\\/iptc\\/IptcAnpaParser.java",
+              "SUSPICIOUNESS": "1"
+            }
+          ]
+        }
+      ]
+    },
+    "VUL4J-39": {
+      "repair_end": "2022-05-09 21:27:54",
+      "repair_begin": "2022-05-09 21:22:06",
+      "patches": [
+        {
+          "FOLDER_SOLUTION_CODE": "\\/nexus\\/vul4j-orbis_733c\\/vul4j-orbis\\/.\\/output_astor\\/AstorMain-vul4j-orbis\\/\\/src\\/\\/variant-54",
+          "GENERATION": "27",
+          "PATCH_DIFF_ORIG": "--- \\/server\\/src\\/main\\/java\\/org\\/cloudfoundry\\/identity\\/uaa\\/authentication\\/UaaAuthenticationDetails.java\\n+++ \\/server\\/src\\/main\\/java\\/org\\/cloudfoundry\\/identity\\/uaa\\/authentication\\/UaaAuthenticationDetails.java\\n@@ -115,7 +115,7 @@\\n-\\t\\t}\\n-\\t\\tif (sessionId != null) {\\n-\\t\\t\\tif (sb.length() > 0) {\\n-\\t\\t\\t\\tsb.append(\\\", \\\");\\n-\\t\\t\\t}\\n-\\t\\t\\tsb.append(\\\"sessionId=\\\").append(sessionId);\\n-\\t\\t}\\n+\\t\\t} \\t\\tif (sb.length() > 0) { \\t\\t\\tsb.append(\\\", \\\");}\\n+\\n+\\n+\\n+\\n+\\n+\\n\\n",
+          "TIME": "320",
+          "VALIDATION": "|true|0|0|[]|",
+          "VARIANT_ID": "54",
+          "patchhunks": [
+            {
+              "BUGGY_CODE_TYPE": "CtIfImpl|CtBlockImpl",
+              "INGREDIENT_PARENT": "if (sb.length() > 0) {\\n\\tsb.append(\\\", \\\");\\n}",
+              "INGREDIENT_SCOPE": "LOCAL",
+              "LINE": "116",
+              "LOCATION": "org.cloudfoundry.identity.uaa.authentication.UaaAuthenticationDetails",
+              "MODIFIED_FILE_PATH": "\\/nexus\\/vul4j-orbis_733c\\/vul4j-orbis\\/.\\/output_astor\\/AstorMain-vul4j-orbis\\/\\/src\\/\\/variant-54\\/org\\/cloudfoundry\\/identity\\/uaa\\/authentication\\/UaaAuthenticationDetails.java",
+              "MP_RANKING": "0",
+              "OPERATOR": "ReplaceOp",
+              "ORIGINAL_CODE": "if (sessionId != null) {\\n\\tif (sb.length() > 0) {\\n\\t\\tsb.append(\\\", \\\");\\n\\t}\\n\\tsb.append(\\\"sessionId=\\\").append(sessionId);\\n}",
+              "PATCH_HUNK_CODE": "if (sb.length() > 0) {\\n\\tsb.append(\\\", \\\");\\n}",
+              "PATCH_HUNK_TYPE": "CtIfImpl|CtBlockImpl",
+              "PATH": "\\/nexus\\/vul4j-orbis_733c\\/vul4j-orbis\\/server\\/src\\/main\\/java\\/org\\/cloudfoundry\\/identity\\/uaa\\/authentication\\/UaaAuthenticationDetails.java",
+              "SUSPICIOUNESS": "1"
+            }
+          ]
+        }
+      ]
+    },
+    "VUL4J-55": {
+      "repair_end": "2022-05-09 21:38:29",
+      "repair_begin": "2022-05-09 21:29:46",
+      "patches": [
+        {
+          "FOLDER_SOLUTION_CODE": "\\/nexus\\/vul4j-orbis_f76f\\/vul4j-orbis\\/.\\/output_astor\\/AstorMain-vul4j-orbis\\/\\/src\\/\\/variant-44",
+          "GENERATION": "22",
+          "PATCH_DIFF_ORIG": "--- \\/core\\/src\\/main\\/java\\/hudson\\/scheduler\\/CronTab.java\\n+++ \\/core\\/src\\/main\\/java\\/hudson\\/scheduler\\/CronTab.java\\n@@ -357 +357 @@\\n-\\t\\t\\t\\t} else {\\n+\\t\\t\\t\\t} else\\n@@ -359,3 +359,3 @@\\n-\\t\\t\\t\\t\\tif (f.redoAdjustmentIfModified)\\n-\\t\\t\\t\\t\\t\\tcontinue OUTER;\\n-\\t\\t\\t\\t}\\n+\\n+\\n+\\n\\n",
+          "TIME": "450",
+          "VALIDATION": "|true|0|0|[]|",
+          "VARIANT_ID": "44",
+          "patchhunks": [
+            {
+              "BUGGY_CODE_TYPE": "CtIfImpl|CtBlockImpl",
+              "INGREDIENT_SCOPE": "-",
+              "LINE": "359",
+              "LOCATION": "hudson.scheduler.CronTab",
+              "MODIFIED_FILE_PATH": "\\/nexus\\/vul4j-orbis_f76f\\/vul4j-orbis\\/.\\/output_astor\\/AstorMain-vul4j-orbis\\/\\/src\\/\\/variant-44\\/hudson\\/scheduler\\/CronTab.java",
+              "MP_RANKING": "1",
+              "OPERATOR": "RemoveOp",
+              "ORIGINAL_CODE": "if (f.redoAdjustmentIfModified) \\n{ \\tcontinue OUTER;}",
+              "PATH": "\\/nexus\\/vul4j-orbis_f76f\\/vul4j-orbis\\/core\\/src\\/main\\/java\\/hudson\\/scheduler\\/CronTab.java",
+              "SUSPICIOUNESS": "1"
+            }
+          ]
+        }
+      ]
+    },
+    "VUL4J-69": {
+      "repair_end": "2022-05-09 21:16:42",
+      "repair_begin": "2022-05-09 21:14:31",
+      "patches": [
+        {
+          "FOLDER_SOLUTION_CODE": "\\/nexus\\/vul4j-orbis_69ed\\/vul4j-orbis\\/.\\/output_astor\\/AstorMain-vul4j-orbis\\/\\/src\\/\\/variant-2",
+          "GENERATION": "1",
+          "PATCH_DIFF_ORIG": "--- \\/spring-webmvc\\/src\\/main\\/java\\/org\\/springframework\\/web\\/servlet\\/ResourceServlet.java\\n+++ \\/spring-webmvc\\/src\\/main\\/java\\/org\\/springframework\\/web\\/servlet\\/ResourceServlet.java\\n@@ -287 +287 @@\\n-\\t\\t\\tjavax.servlet.RequestDispatcher rd = request.getRequestDispatcher(url);\\n+\\t\\t\\tjavax.servlet.RequestDispatcher rd = request.getRequestDispatcher(url); \\t\\t\\tif (!includeDefaultUrl(request, response)) { \\t\\t\\t\\tthrow new javax.servlet.ServletException(\\\"No target resource URL found for request\\\");}\\n\\n",
+          "TIME": "101",
+          "VALIDATION": "|true|0|0|[]|",
+          "VARIANT_ID": "2",
+          "patchhunks": [
+            {
+              "BUGGY_CODE_TYPE": "CtLocalVariableImpl|CtBlockImpl",
+              "INGREDIENT_PARENT": "if (!includeDefaultUrl(request, response)) {\\n\\tthrow new javax.servlet.ServletException(\\\"No target resource URL found for request\\\");\\n}",
+              "INGREDIENT_SCOPE": "LOCAL",
+              "LINE": "287",
+              "LOCATION": "org.springframework.web.servlet.ResourceServlet",
+              "MODIFIED_FILE_PATH": "\\/nexus\\/vul4j-orbis_69ed\\/vul4j-orbis\\/.\\/output_astor\\/AstorMain-vul4j-orbis\\/\\/src\\/\\/variant-2\\/org\\/springframework\\/web\\/servlet\\/ResourceServlet.java",
+              "MP_RANKING": "1",
+              "OPERATOR": "InsertAfterOp",
+              "ORIGINAL_CODE": "javax.servlet.RequestDispatcher rd = request.getRequestDispatcher(url)",
+              "PATCH_HUNK_CODE": "if (!includeDefaultUrl(request, response)) {\\n\\tthrow new javax.servlet.ServletException(\\\"No target resource URL found for request\\\");\\n}",
+              "PATCH_HUNK_TYPE": "CtIfImpl|CtBlockImpl",
+              "PATH": "\\/nexus\\/vul4j-orbis_69ed\\/vul4j-orbis\\/spring-webmvc\\/src\\/main\\/java\\/org\\/springframework\\/web\\/servlet\\/ResourceServlet.java",
+              "SUSPICIOUNESS": "1"
+            }
+          ]
+        }
+      ]
+    },
+    "VUL4J-78": {
+      "repair_end": "2022-05-09 21:21:16",
+      "repair_begin": "2022-05-09 21:17:49",
+      "patches": [
+        {
+          "FOLDER_SOLUTION_CODE": "\\/nexus\\/vul4j-orbis_c426\\/vul4j-orbis\\/.\\/output_astor\\/AstorMain-vul4j-orbis\\/\\/src\\/\\/variant-32",
+          "GENERATION": "16",
+          "PATCH_DIFF_ORIG": "--- \\/xstream\\/src\\/java\\/com\\/thoughtworks\\/xstream\\/XStream.java\\n+++ \\/xstream\\/src\\/java\\/com\\/thoughtworks\\/xstream\\/XStream.java\\n@@ -1482,2 +1482,2 @@\\n-\\t\\t\\tif (insecureWarning) {\\n-\\t\\t\\t\\tinsecureWarning = false;\\n+\\t\\t\\tif (insecureWarning)\\n+\\n@@ -1485 +1485 @@\\n-\\t\\t\\t}\\n+\\n\\n",
+          "TIME": "136",
+          "VALIDATION": "|true|0|0|[]|",
+          "VARIANT_ID": "32",
+          "patchhunks": [
+            {
+              "BUGGY_CODE_TYPE": "CtAssignmentImpl|CtBlockImpl",
+              "INGREDIENT_SCOPE": "-",
+              "LINE": "1483",
+              "LOCATION": "com.thoughtworks.xstream.XStream",
+              "MODIFIED_FILE_PATH": "\\/nexus\\/vul4j-orbis_c426\\/vul4j-orbis\\/.\\/output_astor\\/AstorMain-vul4j-orbis\\/\\/src\\/\\/variant-32\\/com\\/thoughtworks\\/xstream\\/XStream.java",
+              "MP_RANKING": "3",
+              "OPERATOR": "RemoveOp",
+              "ORIGINAL_CODE": "insecureWarning = false",
+              "PATH": "\\/nexus\\/vul4j-orbis_c426\\/vul4j-orbis\\/xstream\\/src\\/java\\/com\\/thoughtworks\\/xstream\\/XStream.java",
+              "SUSPICIOUNESS": "1"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "jMutRepair": {
+    "VUL4J-36": {
+      "repair_end": "2022-05-09 20:48:23",
+      "repair_begin": "2022-05-09 20:43:47",
+      "patches": [
+        {
+          "FOLDER_SOLUTION_CODE": "\\/nexus\\/vul4j-orbis_4898\\/vul4j-orbis\\/.\\/output_astor\\/AstorMain-vul4j-orbis\\/\\/src\\/\\/variant-8",
+          "GENERATION": "1",
+          "PATCH_DIFF_ORIG": "--- \\/tika-parsers\\/src\\/main\\/java\\/org\\/apache\\/tika\\/parser\\/iptc\\/IptcAnpaParser.java\\n+++ \\/tika-parsers\\/src\\/main\\/java\\/org\\/apache\\/tika\\/parser\\/iptc\\/IptcAnpaParser.java\\n@@ -511 +511 @@\\n-\\t\\t\\t\\t\\t\\tif (read > value.length) { \\t\\t\\t\\t\\t\\t\\tbreak;}\\n+\\t\\t\\t\\t\\t\\tif (read == value.length) { \\t\\t\\t\\t\\t\\t\\tbreak;}\\n\\n",
+          "TIME": "99",
+          "VALIDATION": "|true|0|0|[]|",
+          "VARIANT_ID": "8",
+          "patchhunks": [
+            {
+              "BUGGY_CODE_TYPE": "CtBinaryOperatorImpl|CtIfImpl",
+              "LINE": "511",
+              "LOCATION": "org.apache.tika.parser.iptc.IptcAnpaParser",
+              "MODIFIED_FILE_PATH": "\\/nexus\\/vul4j-orbis_4898\\/vul4j-orbis\\/.\\/output_astor\\/AstorMain-vul4j-orbis\\/\\/src\\/\\/variant-8\\/org\\/apache\\/tika\\/parser\\/iptc\\/IptcAnpaParser.java",
+              "MP_RANKING": "1",
+              "OPERATOR": "IfExpresionMutOp",
+              "ORIGINAL_CODE": "read > value.length",
+              "PATCH_HUNK_CODE": "read == value.length",
+              "PATCH_HUNK_TYPE": "CtBinaryOperatorImpl|CtIfImpl",
+              "PATH": "\\/nexus\\/vul4j-orbis_4898\\/vul4j-orbis\\/tika-parsers\\/src\\/main\\/java\\/org\\/apache\\/tika\\/parser\\/iptc\\/IptcAnpaParser.java",
+              "SUSPICIOUNESS": "1"
+            }
+          ]
+        }
+      ]
+    },
+    "VUL4J-39": {
+      "repair_end": "2022-05-09 21:03:13",
+      "repair_begin": "2022-05-09 20:59:01",
+      "patches": [
+        {
+          "FOLDER_SOLUTION_CODE": "\\/nexus\\/vul4j-orbis_e99c\\/vul4j-orbis\\/.\\/output_astor\\/AstorMain-vul4j-orbis\\/\\/src\\/\\/variant-2",
+          "GENERATION": "1",
+          "PATCH_DIFF_ORIG": "--- \\/server\\/src\\/main\\/java\\/org\\/cloudfoundry\\/identity\\/uaa\\/authentication\\/UaaAuthenticationDetails.java\\n+++ \\/server\\/src\\/main\\/java\\/org\\/cloudfoundry\\/identity\\/uaa\\/authentication\\/UaaAuthenticationDetails.java\\n@@ -116 +116 @@\\n-\\t\\tif (sessionId != null) {\\n+\\t\\tif (sessionId == null) {\\n\\n",
+          "TIME": "0",
+          "VALIDATION": "|true|0|0|[]|",
+          "VARIANT_ID": "2",
+          "patchhunks": [
+            {
+              "BUGGY_CODE_TYPE": "CtBinaryOperatorImpl|CtIfImpl",
+              "LINE": "116",
+              "LOCATION": "org.cloudfoundry.identity.uaa.authentication.UaaAuthenticationDetails",
+              "MODIFIED_FILE_PATH": "\\/nexus\\/vul4j-orbis_e99c\\/vul4j-orbis\\/.\\/output_astor\\/AstorMain-vul4j-orbis\\/\\/src\\/\\/variant-2\\/org\\/cloudfoundry\\/identity\\/uaa\\/authentication\\/UaaAuthenticationDetails.java",
+              "MP_RANKING": "0",
+              "OPERATOR": "IfExpresionMutOp",
+              "ORIGINAL_CODE": "sessionId != null",
+              "PATCH_HUNK_CODE": "sessionId == null",
+              "PATCH_HUNK_TYPE": "CtBinaryOperatorImpl|CtIfImpl",
+              "PATH": "\\/nexus\\/vul4j-orbis_e99c\\/vul4j-orbis\\/server\\/src\\/main\\/java\\/org\\/cloudfoundry\\/identity\\/uaa\\/authentication\\/UaaAuthenticationDetails.java",
+              "SUSPICIOUNESS": "1"
+            }
+          ]
+        }
+      ]
+    },
+    "VUL4J-55": {
+      "repair_end": "2022-05-09 20:55:00",
+      "repair_begin": "2022-05-09 20:51:48",
+      "patches": [
+        {
+          "FOLDER_SOLUTION_CODE": "\\/nexus\\/vul4j-orbis_676f\\/vul4j-orbis\\/.\\/output_astor\\/AstorMain-vul4j-orbis\\/\\/src\\/\\/variant-2",
+          "GENERATION": "1",
+          "PATCH_DIFF_ORIG": "--- \\/core\\/src\\/main\\/java\\/hudson\\/scheduler\\/CronTab.java\\n+++ \\/core\\/src\\/main\\/java\\/hudson\\/scheduler\\/CronTab.java\\n@@ -359 +359 @@\\n-\\t\\t\\t\\t\\tif (f.redoAdjustmentIfModified)\\n+\\t\\t\\t\\t\\tif (!f.redoAdjustmentIfModified)\\n\\n",
+          "TIME": "0",
+          "VALIDATION": "|true|0|0|[]|",
+          "VARIANT_ID": "2",
+          "patchhunks": [
+            {
+              "BUGGY_CODE_TYPE": "CtFieldReadImpl|CtIfImpl",
+              "LINE": "359",
+              "LOCATION": "hudson.scheduler.CronTab",
+              "MODIFIED_FILE_PATH": "\\/nexus\\/vul4j-orbis_676f\\/vul4j-orbis\\/.\\/output_astor\\/AstorMain-vul4j-orbis\\/\\/src\\/\\/variant-2\\/hudson\\/scheduler\\/CronTab.java",
+              "MP_RANKING": "0",
+              "OPERATOR": "IfExpresionMutOp",
+              "ORIGINAL_CODE": "f.redoAdjustmentIfModified",
+              "PATCH_HUNK_CODE": "!\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\nf.redoAdjustmentIfModified",
+              "PATCH_HUNK_TYPE": "CtUnaryOperatorImpl|CtIfImpl",
+              "PATH": "\\/nexus\\/vul4j-orbis_676f\\/vul4j-orbis\\/core\\/src\\/main\\/java\\/hudson\\/scheduler\\/CronTab.java",
+              "SUSPICIOUNESS": "1"
+            }
+          ]
+        }
+      ]
+    },
+    "VUL4J-69": {
+      "repair_end": "2022-05-09 21:08:24",
+      "repair_begin": "2022-05-09 21:05:28",
+      "patches": [
+        {
+          "FOLDER_SOLUTION_CODE": "\\/nexus\\/vul4j-orbis_5190\\/vul4j-orbis\\/.\\/output_astor\\/AstorMain-vul4j-orbis\\/\\/src\\/\\/variant-8",
+          "GENERATION": "1",
+          "PATCH_DIFF_ORIG": "--- \\/spring-webmvc\\/src\\/main\\/java\\/org\\/springframework\\/web\\/servlet\\/ResourceServlet.java\\n+++ \\/spring-webmvc\\/src\\/main\\/java\\/org\\/springframework\\/web\\/servlet\\/ResourceServlet.java\\n@@ -280 +280 @@\\n-\\t\\t\\tif ((this.allowedResources != null) && (!this.pathMatcher.match(this.allowedResources, url))) {\\n+\\t\\t\\tif ((this.allowedResources != null) && this.pathMatcher.match(this.allowedResources, url)) {\\n\\n",
+          "TIME": "48",
+          "VALIDATION": "|true|0|0|[]|",
+          "VARIANT_ID": "8",
+          "patchhunks": [
+            {
+              "BUGGY_CODE_TYPE": "CtBinaryOperatorImpl|CtIfImpl",
+              "LINE": "280",
+              "LOCATION": "org.springframework.web.servlet.ResourceServlet",
+              "MODIFIED_FILE_PATH": "\\/nexus\\/vul4j-orbis_5190\\/vul4j-orbis\\/.\\/output_astor\\/AstorMain-vul4j-orbis\\/\\/src\\/\\/variant-8\\/org\\/springframework\\/web\\/servlet\\/ResourceServlet.java",
+              "MP_RANKING": "0",
+              "OPERATOR": "IfExpresionMutOp",
+              "ORIGINAL_CODE": "(this.allowedResources != null) && (!this.pathMatcher.match(this.allowedResources, url))",
+              "PATCH_HUNK_CODE": "(this.allowedResources != null) && this.pathMatcher.match(this.allowedResources, url)",
+              "PATCH_HUNK_TYPE": "CtBinaryOperatorImpl|CtIfImpl",
+              "PATH": "\\/nexus\\/vul4j-orbis_5190\\/vul4j-orbis\\/spring-webmvc\\/src\\/main\\/java\\/org\\/springframework\\/web\\/servlet\\/ResourceServlet.java",
+              "SUSPICIOUNESS": "1"
+            }
+          ]
+        }
+      ]
+    },
+    "VUL4J-78": {
+      "repair_end": "2022-05-09 20:58:18",
+      "repair_begin": "2022-05-09 20:57:17",
+      "patches": [
+        {
+          "FOLDER_SOLUTION_CODE": "\\/nexus\\/vul4j-orbis_9887\\/vul4j-orbis\\/.\\/output_astor\\/AstorMain-vul4j-orbis\\/\\/src\\/\\/variant-3",
+          "GENERATION": "1",
+          "PATCH_DIFF_ORIG": "--- \\/xstream\\/src\\/java\\/com\\/thoughtworks\\/xstream\\/XStream.java\\n+++ \\/xstream\\/src\\/java\\/com\\/thoughtworks\\/xstream\\/XStream.java\\n@@ -1482 +1482 @@\\n-\\t\\t\\tif (insecureWarning) {\\n+\\t\\t\\tif (!insecureWarning) {\\n\\n",
+          "TIME": "10",
+          "VALIDATION": "|true|0|0|[]|",
+          "VARIANT_ID": "3",
+          "patchhunks": [
+            {
+              "BUGGY_CODE_TYPE": "CtFieldReadImpl|CtIfImpl",
+              "LINE": "1482",
+              "LOCATION": "com.thoughtworks.xstream.XStream",
+              "MODIFIED_FILE_PATH": "\\/nexus\\/vul4j-orbis_9887\\/vul4j-orbis\\/.\\/output_astor\\/AstorMain-vul4j-orbis\\/\\/src\\/\\/variant-3\\/com\\/thoughtworks\\/xstream\\/XStream.java",
+              "MP_RANKING": "1",
+              "OPERATOR": "IfExpresionMutOp",
+              "ORIGINAL_CODE": "insecureWarning",
+              "PATCH_HUNK_CODE": "!\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\ninsecureWarning",
+              "PATCH_HUNK_TYPE": "CtUnaryOperatorImpl|CtIfImpl",
+              "PATH": "\\/nexus\\/vul4j-orbis_9887\\/vul4j-orbis\\/xstream\\/src\\/java\\/com\\/thoughtworks\\/xstream\\/XStream.java",
+              "SUSPICIOUNESS": "1"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

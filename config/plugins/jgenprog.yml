@@ -1,0 +1,10 @@
+jgenprog:
+  type: tool
+  image:
+    tag: astor-synapser
+    repo: bqcuong/astor-synapser
+  container:
+    name: jgenprog
+    api:
+      port: 8080
+    setup: []

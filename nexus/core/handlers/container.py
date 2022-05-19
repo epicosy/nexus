@@ -36,19 +36,22 @@ class ContainerHandler(HandlersInterface, Handler):
     
     def build(self, path: Path, tag: str):
         for line in self.app.docker.api.build(path=str(path), rm=True, tag=tag):
-            decoded = ast.literal_eval(line.decode('utf-8'))
-            
-            if 'stream' in decoded:
-                self.app.log.info(decoded['stream'])
-            else:
-                self.app.log.info(decoded)
+            # decoded = ast.literal_eval(line.decode('utf-8'))
+            # if 'stream' in decoded:
+            #    self.app.log.info(decoded['stream'])
+            # else:
+            #    self.app.log.info(decoded)
+
+            decoded = line.decode('utf-8')
+            self.app.log.info(decoded)
 
     def create(self, image: str, container_configs: dict, name: str, volume: Volume) -> str:
         binds = {volume.name: {'bind': f"/{volume.name}", 'mode': 'rw'}}
+        bind_port = container_configs['api']['port']
         host_config = self.app.docker.api.create_host_config(binds=binds)
         output = self.app.docker.api.create_container(image, name=name, volumes=[f"/{volume.name}"],
                                                       host_config=host_config, tty=True, detach=True,
-                                                      ports=[container_configs['api']['port']])
+                                                      ports=[bind_port])
 
         self.app.log.info(f"Created container for {name} with id {output['Id'][:10]}")
 
