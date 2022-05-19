@@ -1,4 +1,4 @@
-prophet:
+prophet32:
   type: tool
   image:
     tag: prophet32

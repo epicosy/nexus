@@ -20,7 +20,7 @@ class ProphetCGC(NexusHandler):
         label = 'prophet_cgc'
 
     def __init__(self, **kw):
-        super().__init__(tool='prophet', benchmark='cgc', **kw)
+        super().__init__(tool='prophet32', benchmark='cgc', **kw)
 
     def run(self, program: Program, vulnerability: Vulnerability, context: Context):
         manifest = vulnerability.get_manifest()
@@ -33,25 +33,29 @@ class ProphetCGC(NexusHandler):
                                                        working_dir=working_dir_profile)
 
         self.orbis.build(context.benchmark.instance, program_instance=program_instance_src,
-                         args={'env': {'CC': 'gcc', 'CXX': 'gcc'}})
+                         args={'env': {'CC': 'gcc', 'CXX': 'gcc'}, 'set': {'m64': True}})
 
         self.orbis.build(context.benchmark.instance, program_instance=program_instance_profile,
-                         args={'env': {'CC': 'gcc', 'CXX': 'gcc'}})
+                         args={'env': {'CC': 'gcc', 'CXX': 'gcc'}, 'set': {'m64': True}})
 
         test_command = Command(iid=program_instance_profile.iid,
-                               url=self.orbis.url(action='test', instance=context.benchmark.instance))
+                               url=self.orbis.url(action='test', instance=context.benchmark.instance),
+                               vid=vulnerability.id)
         test_command.add_arg('exit_fail')
         test_command.add_arg('neg_pov')
         test_command.add_placeholder(name='tests', value='cases')
         test_signal = Signal(arg='test_cmd', command=test_command)
 
         build_command = Command(iid=program_instance_profile.iid,
-                                url=self.orbis.url(action='build', instance=context.benchmark.instance))
+                                url=self.orbis.url(action='build', instance=context.benchmark.instance),
+                                vid=vulnerability.id)
         build_command.add_arg('exit_err')
         build_command.add_arg('link')
+        build_command.add_arg('set', {'m64': True})
         build_command.add_placeholder(name='working_dir', value='out_dir')
 
         build_command.add_param('build_args', {k: v + ' -fPIE' for k, v in program_instance_profile.build_args.items()})
+        build_command.add_param('link_cmd', program_instance_profile.link_cmd)
         build_command.add_param('build_dir', str(program_instance_profile.build_dir.parent.parent))
         #        build_command.add_placeholder(name='write_build_args', value='dryrun_src')
         compile_signal = Signal(arg='build_cmd', command=build_command)
@@ -63,23 +67,28 @@ class ProphetCGC(NexusHandler):
 
         response = self.synapser.repair(signals=[test_signal, compile_signal], args=args,
                                         program_instance=program_instance_profile, manifest=manifest.locs,
-                                        instance=context.tool.instance)
+                                        instance=context.tool.instance, iid=program_instance_profile.iid)
         response_json = response.json()
-        self.app.log.info("CID: " + str(response_json['cid']))
-
+        self.app.log.info("CID: " + str(response_json['rid']))
+        '''
         if response.ok:
             test_command = Command(iid=program_instance_src.iid,
-                                   url=self.orbis.url(action='test', instance=context.benchmark.instance))
+                                   url=self.orbis.url(action='test', instance=context.benchmark.instance),
+                                   vid=vulnerability.id)
             test_command.add_arg('exit_fail')
             test_command.add_arg('neg_pov')
             test_command.add_placeholder(name='tests', value='cases')
             test_signal = Signal(arg='test_cmd', command=test_command)
 
             build_command = Command(iid=program_instance_src.iid,
-                                    url=self.orbis.url(action='build', instance=context.benchmark.instance))
+                                    url=self.orbis.url(action='build', instance=context.benchmark.instance),
+                                    vid=vulnerability.id)
             build_command.add_arg('exit_err')
+            build_command.add_arg('set', {'m64': True})
             build_command.add_placeholder(name='working_dir', value='out_dir')
             build_command.add_param('build_args', program_instance_src.build_args)
+            build_command.add_param('link_cmd', program_instance_src.link_cmd)
+
             #        build_command.add_param('build_dir', str(program_instance.build_dir.parent.parent))
             #        build_command.add_placeholder(name='write_build_args', value='dryrun_src')
             compile_signal = Signal(arg='build_cmd', command=build_command)
@@ -90,9 +99,10 @@ class ProphetCGC(NexusHandler):
             }
             response = self.synapser.repair(signals=[test_signal, compile_signal], args=args,
                                             program_instance=program_instance_src, manifest=manifest.locs,
-                                            instance=context.tool.instance)
+                                            instance=context.tool.instance, iid=program_instance_src.iid)
             response_json = response.json()
             self.app.log.info("RID: " + str(response_json['rid']))
+    '''
 
 
 def load(app):
