@@ -86,6 +86,28 @@ class Tool(Controller):
         container_manager.delete(self.Meta.label, remove=self.app.pargs.remove)
 
     @ex(
+        help='Lists the repair instance\'s execution status',
+        arguments=[
+            (['--id'], {'help': 'Repair instance id.', 'type': int, 'required': True}),
+            (['--name'], {'help': 'Name of the repair tool.', 'type': str, 'required': True}),
+            (['--bench'], {'help': 'Name of the benchmark.', 'type': str, 'required': True})
+        ]
+    )
+    def status(self):
+        container_manager = self.app.handler.get('managers', 'container', setup=True)
+        tool = container_manager.find('tool', self.app.pargs.name)
+        bench = container_manager.find('benchmark', self.app.pargs.bench)
+
+        synapser = self.app.handler.get('handlers', 'synapser', setup=True)
+        orbis = self.app.handler.get('handlers', 'orbis', setup=True)
+        response = synapser.stream(tool, rid=self.app.pargs.id)
+        response_json = response.json()
+        response_instance = orbis.get_instance(bench, iid=response_json['iid'])
+
+        self.app.log.info(response_json)
+        self.app.log.info(response_instance)
+
+    @ex(
         help='Stream repair instance\'s execution output',
         arguments=[
             (['--id'], {'help': 'The repair instance id.', 'type': int, 'required': True}),

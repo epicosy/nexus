@@ -31,19 +31,19 @@ class SynapserHandler(APIHandler, ContainerHandler):
             return False
 
     def repair(self, instance: Instance, signals: List[Signal], program_instance: ProgramInstance, manifest: dict,
-               args: dict):
+               args: dict, iid: int):
         return self.post(endpoint_url=self.endpoints['repair'].format(ip=instance.ip, port=instance.port),
                          json_data={'signals': {signal.arg: signal.command.to_json() for signal in signals},
-                                    'args': args,
+                                    'args': args, 'iid': iid,
                                     'manifest': manifest, 'working_dir': str(program_instance.working_dir),
                                     'build_dir': str(
                                         program_instance.build_dir) if program_instance.build_dir else None,
-                                    'timeout': self.get_timeout(), })
+                                    'timeout': self.get_timeout()})
 
     def coverage(self, instance: Instance, signals: List[Signal], program_instance: ProgramInstance,
-                 manifest: Manifest):
+                 manifest: Manifest, iid: int):
         return self.post(endpoint_url=self.endpoints['coverage'].format(ip=instance.ip, port=instance.port),
-                         json_data={'signals': {signal.arg: signal.command.to_json() for signal in signals},
+                         json_data={'signals': {signal.arg: signal.command.to_json() for signal in signals}, 'iid': iid,
                                     'manifest': manifest.to_str(), 'working_dir': str(program_instance.working_dir),
                                     'build_dir': str(
                                         program_instance.build_dir) if program_instance.build_dir else None,

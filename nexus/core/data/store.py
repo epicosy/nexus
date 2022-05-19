@@ -33,12 +33,19 @@ class Store:
 @dataclass
 class Command:
     iid: int
+    vid: str
     url: str
     args: dict = field(default_factory=lambda: {})
     placeholders: dict = field(default_factory=lambda: {})
+    params: dict = field(default_factory=lambda: {})
 
     def add_arg(self, name: str, value: Any = True):
         self.args[name] = value
+
+        return self
+
+    def add_param(self, name: str, value: Any = True):
+        self.params[name] = value
 
         return self
 
@@ -48,10 +55,12 @@ class Command:
         return self
 
     def to_dict(self):
-        return {'data': {'iid': self.iid, 'args': self.args}, 'placeholders': self.placeholders, 'url': self.url}
+        return {'data': {'iid': self.iid, 'vid': self.vid, 'args': self.args}, 'placeholders': self.placeholders,
+                'url': self.url, 'params': self.params}
 
     def to_json(self):
-        return {'data': {'iid': self.iid, 'args': self.args}, 'placeholders': self.placeholders, 'url': self.url}
+        return {'data': {'iid': self.iid, 'vid': self.vid, 'args': self.args}, 'placeholders': self.placeholders,
+                'url': self.url, 'params': self.params}
 
 
 @dataclass
@@ -115,13 +124,17 @@ class Patch:
 class ProgramInstance:
     iid: int
     working_dir: Path
+    build_args: dict = field(default_factory=lambda: {})
     build_dir: Path = None
+    link_cmd: str = None
 
     def to_dict(self):
-        return {'iid': self.iid, 'working_dir': self.working_dir, 'build_dir': self.build_dir}
+        return {'iid': self.iid, 'working_dir': self.working_dir, 'build_dir': self.build_dir,
+                'build_args': self.build_args}
 
     def to_json(self):
-        return {'iid': self.iid, 'working_dir': str(self.working_dir), 'build_dir': str(self.build_dir) if self.build_dir else None}
+        return {'iid': self.iid, 'working_dir': str(self.working_dir), 'build_args': self.build_args,
+                'build_dir': str(self.build_dir) if self.build_dir else None}
 
 
 @dataclass

@@ -1,5 +1,7 @@
 # Framework for benchmarking Automatic Program Repair tools
 
+Nexus connects APR tools with benchmarks and orchestrates the repair workflow through a scripted interaction.
+
 ## Installation
 
 ```

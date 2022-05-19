@@ -26,8 +26,10 @@ class OrbisHandler(APIHandler):
             'make': f"{self.url_format}/make",
             'test': f"{self.url_format}/test",
             'testbatch': f"{self.url_format}/testbatch",
-            'project': f"{self.url_format}/project" + "/{pid}",
-            'projects': f"{self.url_format}/projects",
+            'program': f"{self.url_format}/project" + "/{pid}",
+            'programs': f"{self.url_format}/projects",
+            'instance': f"{self.url_format}/instance" + "/{iid}",
+            'instances': f"{self.url_format}/instances",
             'vuln': f"{self.url_format}/vuln" + "/{vid}",
             'vulns': f"{self.url_format}/vulns",
             'classpath': f"{self.url_format}/classpath" + "/{iid}",
@@ -51,8 +53,17 @@ class OrbisHandler(APIHandler):
 
         return Path(working_dir)
 
+    def get_instance(self, instance: Instance, iid: str) -> Program:
+        response = self.get(endpoint_url=self.endpoints['instance'].format(ip=instance.ip, port=instance.port, iid=iid))
+
+        return response.json()
+
+    def get_instances(self, instance: Instance, **kwargs):
+        return self.get(endpoint_url=self.endpoints['instances'].format(ip=instance.ip, port=instance.port),
+                        json_data=kwargs).json()
+
     def get_program(self, instance: Instance, pid: str, args: dict = None) -> Program:
-        response = self.get(endpoint_url=self.endpoints['project'].format(ip=instance.ip, port=instance.port, pid=pid),
+        response = self.get(endpoint_url=self.endpoints['program'].format(ip=instance.ip, port=instance.port, pid=pid),
                             json_data=args)
 
         pid, program = next(iter(response.json().items()))
@@ -60,7 +71,7 @@ class OrbisHandler(APIHandler):
         return Program(id=pid, **program)
 
     def get_programs(self, instance: Instance, **kwargs):
-        return self.get(endpoint_url=self.endpoints['projects'].format(ip=instance.ip, port=instance.port),
+        return self.get(endpoint_url=self.endpoints['programs'].format(ip=instance.ip, port=instance.port),
                         json_data=kwargs).json()
 
     def get_classpath(self, instance: Instance, program_instance: ProgramInstance, args: dict = None) -> AnyStr:
@@ -82,8 +93,12 @@ class OrbisHandler(APIHandler):
         response = self.get(endpoint_url=self.endpoints['vulns'].format(ip=instance.ip, port=instance.port), json=args)
         return [Vulnerability(**vuln) for vuln in response.json().values()]
 
-    def checkout(self, instance: Instance, vuln: Vulnerability, args: dict = None) -> ProgramInstance:
+    def checkout(self, instance: Instance, vuln: Vulnerability, working_dir: Path = None,
+                 args: dict = None) -> ProgramInstance:
         json_data = {'vid': vuln.id, 'root_dir': f"/{instance.volume}"}
+
+        if working_dir:
+            json_data['working_dir'] = str(working_dir)
 
         if args:
             json_data['args'] = args
@@ -110,6 +125,8 @@ class OrbisHandler(APIHandler):
                              json_data=json_data).json()
         print(response)
         program_instance.build_dir = Path(response['returns']['build'])
+        program_instance.build_args = response['returns'].get('build_args', {})
+        program_instance.link_cmd = response['returns'].get('link_cmd', None)
 
         return program_instance
 

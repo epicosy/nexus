@@ -1,10 +1,10 @@
-mutapr:
+prophet:
   type: tool
   image:
-    tag: mutapr
-    repo: epicosy/mut-apr
+    tag: prophet32
+    repo: epicosy/prophet
   container:
-    name: mutapr
+    name: prophet32
     api:
       port: 8080
     setup: []

@@ -12,3 +12,4 @@ psycopg2~=2.9.1
 requests~=2.25.1
 websockets==10.1
 GitPython~=3.1.24
+SQLAlchemy-Utils==0.37.9

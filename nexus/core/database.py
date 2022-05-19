@@ -4,6 +4,7 @@ from typing import Union, Dict, Callable, Any
 from sqlalchemy import Column, Integer, String, ForeignKey, inspect
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, declarative_base, relationship
+from sqlalchemy_utils import create_database, database_exists
 
 
 Base = declarative_base()
@@ -39,7 +40,13 @@ class NexusData(Base):
 class Database:
     def __init__(self, dialect: str, username: str, password: str, host: str, port: int, database: str,
                  debug: bool = False):
-        self.engine = create_engine(f"{dialect}://{username}:{password}@{host}:{port}/{database}", echo=debug)
+
+        self.url = f"{dialect}://{username}:{password}@{host}:{port}/{database}"
+
+        if not database_exists(self.url):
+            create_database(self.url, encoding='utf8')
+
+        self.engine = create_engine(self.url, echo=debug)
         Base.metadata.create_all(bind=self.engine)
 
     def refresh(self, entity: Base):
