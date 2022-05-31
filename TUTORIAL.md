@@ -219,7 +219,7 @@ def load(app):
 ```
 
 Having defined the plugin for the workflow between the tool and benchmark, you can now execute a repair on a 
-target vulnerability with the following.
+target vulnerability with the `repair` command:
 
 ```
 usage: nexus repair [-h] [-V VULNS [VULNS ...]] [-t THREADS] [-T TIMEOUT] -N NAME
@@ -233,6 +233,11 @@ optional arguments:
   -T TIMEOUT, --timeout TIMEOUT
                         Timeout in seconds for each running task.
   -N NAME, --name NAME  The name of the target Nexus
+```
+
+The following command runs `GenProg` on the vulnerability with id `YAN01_00010_1` in the `cgc` benchmark.
+```shell
+$ nexus -vb repair -V YAN01_00010_1 -N genprog_cgc;
 ```
 
 You should expose the `id` for the `repair instance` in order to follow later the status of the `repair instance`:
