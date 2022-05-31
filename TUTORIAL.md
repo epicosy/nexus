@@ -73,6 +73,24 @@ At last, you should serve the Orbis API for the benchmark instance with:
 $ nexus benchmark serve -N __name_of_the_benchmark__
 ```
 
+After having the server up, you can query the available vulnerabilities in the benchmark with:
+```shell
+$ nexus -vb cwe list
+
+Id               CWE  CVE    Program      Benchmark
+-------------  -----  -----  -----------  -----------
+CROMU_00003_1    787         CROMU_00003  cgc
+CROMU_00008_1    119         CROMU_00008  cgc
+CROMU_00009_1    787         CROMU_00009  cgc
+CROMU_00009_2    476         CROMU_00009  cgc
+CROMU_00057_1    122         CROMU_00057  cgc
+KPRCA_00010_1    122         KPRCA_00010  cgc
+KPRCA_00020_1    125         KPRCA_00020  cgc
+YAN01_00010_1    824         YAN01_00010  cgc
+YAN01_00011_1    125         YAN01_00011  cgc
+```
+
+
 ## Setup Tool
 Adding a tool to Nexus is similar to adding a benchmark. 
 You should also create a schema file that follows the structure and attributes introduced above for the benchmark.
@@ -200,14 +218,31 @@ def load(app):
     app.handler.register(GenprogCGCRepairTask)
 ```
 
+Having defined the plugin for the workflow between the tool and benchmark, you can now execute a repair on a 
+target vulnerability with the following.
+
+```
+usage: nexus repair [-h] [-V VULNS [VULNS ...]] [-t THREADS] [-T TIMEOUT] -N NAME
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -V VULNS [VULNS ...], --vulns VULNS [VULNS ...]
+                        The target vulnerabilities' id
+  -t THREADS, --threads THREADS
+                        Number of threads for running in parallel multiple tasks.
+  -T TIMEOUT, --timeout TIMEOUT
+                        Timeout in seconds for each running task.
+  -N NAME, --name NAME  The name of the target Nexus
+```
+
 You should expose the `id` for the `repair instance` in order to follow later the status of the `repair instance`:
 ```shell
-nexus tool status --id __repair_instance_id__ --name __name_of_the_tool__ --bench __name_of_the_benchmark__ 
+$ nexus tool status --id __repair_instance_id__ --name __name_of_the_tool__ --bench __name_of_the_benchmark__ 
 ```
 
 To follow in real time the repair execution, use:
 ```shell
-nexus -vb tool stream --id __repair_instance_id__ --name __name_of_the_tool__
+$ nexus -vb tool stream --id __repair_instance_id__ --name __name_of_the_tool__
 ```
 
 To have access to the patches produced by the tool for a specific `repair instance`, access the `patches` endpoint of 
