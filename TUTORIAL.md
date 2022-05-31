@@ -192,11 +192,6 @@ The `repair request` returns a `response` with the `id` for the `repair instance
         response_json = response.json()
         self.app.log.info("RID: " + str(response_json['rid']))
 ```
-You should expose it in order to follow later the status of the `repair instance`:
-```shell
-nexus tool status --id __repair_instance_id__ --name __name_of_the_tool__ --bench __name_of_the_benchmark__ 
-```
-
 
 At last, is **crucial** to register the created plugin through the `load` function:
 
@@ -204,3 +199,21 @@ At last, is **crucial** to register the created plugin through the `load` functi
 def load(app):
     app.handler.register(GenprogCGCRepairTask)
 ```
+
+You should expose the `id` for the `repair instance` in order to follow later the status of the `repair instance`:
+```shell
+nexus tool status --id __repair_instance_id__ --name __name_of_the_tool__ --bench __name_of_the_benchmark__ 
+```
+
+To follow in real time the repair execution, use:
+```shell
+nexus -vb tool stream --id __repair_instance_id__ --name __name_of_the_tool__
+```
+
+To have access to the patches produced by the tool for a specific `repair instance`, access the `patches` endpoint of 
+the tool on the browser:
+```
+http://172.17.0.3:8080/patches/23
+```
+Where `172.17.0.3:8080` is the ip with the port number for the Synapser API for the tool instance. `23` is the 
+`repair instance id`. You should replace both accordingly.
