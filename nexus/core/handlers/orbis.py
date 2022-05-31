@@ -90,8 +90,18 @@ class OrbisHandler(APIHandler):
         return Vulnerability(id=vid, **vuln)
 
     def get_vulns(self, instance: Instance, args: dict = None):
-        response = self.get(endpoint_url=self.endpoints['vulns'].format(ip=instance.ip, port=instance.port), json=args)
-        return [Vulnerability(**vuln) for vuln in response.json().values()]
+        if not instance.ip:
+            self.app.log.warning(f"Make sure {instance.name} instance is initialized.")
+            return []
+        try:
+            response = self.get(endpoint_url=self.endpoints['vulns'].format(ip=instance.ip, port=instance.port),
+                                json_data=args)
+        except requests.exceptions.ConnectionError as ce:
+            self.app.log.error(str(ce))
+            self.app.log.warning(f"Could not connect to {instance.ip} {instance.name}")
+            return []
+
+        return [Vulnerability(id=vid, **vuln) for vid, vuln in response.json().items()]
 
     def checkout(self, instance: Instance, vuln: Vulnerability, working_dir: Path = None,
                  args: dict = None) -> ProgramInstance:

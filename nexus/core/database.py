@@ -6,7 +6,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, declarative_base, relationship
 from sqlalchemy_utils import create_database, database_exists
 
-
 Base = declarative_base()
 
 
@@ -21,6 +20,13 @@ class Instance(Base):
     kind = Column('kind', String, nullable=False)
     ip = Column('ip', String, nullable=False)
     port = Column('port', Integer, nullable=False)
+
+    def to_dict(self):
+        return {'id': self.id, 'name': self.name, 'image': self.image, 'volume': self.volume, 'status': self.status,
+                'kind': self.kind, 'ip': self.ip, 'port': self.port}
+
+    def __str__(self):
+        return str(self.to_dict())
 
 
 '''
