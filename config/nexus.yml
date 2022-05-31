@@ -40,7 +40,7 @@ nexus:
 ### Docker
   docker:
     volume: nexus
-    volume_bind: '/home/epicosy/nexus_data'
+    volume_bind: '~/nexus_data'
 
 ### APIs
   apis:
