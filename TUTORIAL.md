@@ -1,12 +1,14 @@
 # Maestro Platform
-Maestro is a platform that provides an accessible means of performing automated repair of software vulnerabilities 
-in isolated environments and in an out-of-the-box manner. Maestro has a decentralized and microservice-based architecture 
-based on Docker containers. Maestro is composed of an orchestration component, Nexus, and two components Orbis and 
-Synapser, that respectively convert tools and benchmarks into microservices. To integrate a tool or benchmark in 
-Maestro, a developer only needs to develop a plugin for its respective component, Synapser or Orbis. For Nexus, the 
-plugin connects with Synapser and Orbis, and it is necessary for each tool/benchmark pair.
+**Maestro** is a platform that provides an accessible means of performing automated repair of software vulnerabilities 
+in isolated environments and in an out-of-the-box manner. **Maestro** has a decentralized and microservice-based architecture 
+based on Docker containers. 
 
-![Maestro architecture](maestro_arch.png)
+**Maestro** is composed of an orchestration component, ***Nexus***, and two components ***Orbis*** and 
+***Synapser***, that respectively convert tools and benchmarks into microservices. To integrate a tool or benchmark in 
+**Maestro**, a developer only needs to develop a plugin for its respective component, ***Synapser*** or ***Orbis***. For ***Nexus***, the 
+plugin connects with ***Synapser*** and ***Orbis***, and it is necessary for each tool/benchmark pair.
+
+<img src="maestro_arch.png" width="500">
 
 ## Install Nexus
 To install Nexus, perform the following steps:
