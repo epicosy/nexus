@@ -33,7 +33,7 @@ If it fails, use ```sudo -i -u postgres```
 ```
 pip3 install . 
 mkdir -p ~/.nexus/config/plugins.d
-mkidr -p ~/.nexus/plugins/nexus
+mkdir -p ~/.nexus/plugins/nexus
 ```
 
 Change the docker volume bind location in the nexus.yml
@@ -54,7 +54,7 @@ CGC benchmark. The file should have the following structures/attributes:
   - `type` - benchmark;
   - `image`
     - `tag` - docker image tag;
-    - `repo` - GitHub/DockerHub repository (e.g. [CGC](https://github.com/epicosy/cgc));
+    - `repo` - GitHub/DockerHub repository (e.g., [CGC](https://github.com/epicosy/cgc));
   - `container`
     - `name` - of the Docker container
     - `api`: 
