@@ -1,7 +1,7 @@
 jkali:
   type: tool
   image:
-    tag: astor-synapser
+    tag: bqcuongas/astor-synapser
     repo: bqcuong/astor-synapser
   container:
     name: jkali

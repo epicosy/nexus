@@ -127,9 +127,15 @@ class ContainerManager(ManagersInterface, Handler):
 
         container_handler = self.app.handler.get('handlers', 'container', setup=True)
 
+        # check if image existed locally
         image = self.get_image(configs['image']['tag'])
 
         if not image:
+            # try to pull from Dockerhub
+            image = self.pull_image(configs['image']['tag'])
+
+        if not image:
+            # build image from tool/benchmark Github repository
             repo = get_repo(path=self.app.get_config('docker')['volume_bind'], repo_path=configs['image']['repo'],
                             logger=self.app.log)
             container_handler.build(path=repo.working_dir, tag=configs['image']['tag'])
@@ -149,6 +155,18 @@ class ContainerManager(ManagersInterface, Handler):
         try:
             return self.app.docker.images.get(tag)
         except NotFound as nf:
+            self.app.log.error(str(nf))
+
+            return None
+
+    def pull_image(self, tag: str) -> Union[Image, None]:
+        try:
+            self.app.log.info(f"Downloading {tag} from Dockerhub...")
+            image = self.app.docker.images.pull(tag)
+            self.app.log.info(f"Downloaded {tag}")
+            return image
+        except NotFound as nf:
+            self.app.log.info(f"Not found {tag} on Dockerhub!")
             self.app.log.error(str(nf))
 
             return None

@@ -1,3 +1,4 @@
+import os
 import tarfile
 import io
 
@@ -57,8 +58,7 @@ def str_to_tarfile(data: str, tar_info_name: str) -> Path:
 
 
 def get_repo(path: str, repo_path: str, logger) -> Repo:
-    project_path = Path(path, repo_path.split('/')[-1])
-
+    project_path = Path(os.path.expanduser(path), repo_path.split('/')[-1])
     if project_path.exists():
         logger.info(f"Repo {repo_path} found locally.")
         repo = Repo(project_path)
@@ -69,5 +69,5 @@ def get_repo(path: str, repo_path: str, logger) -> Repo:
         logger.info(f"Cloning {repo_path} to {project_path}")
         repo = Repo.clone_from(url=f"https://github.com/{repo_path}", to_path=project_path, progress=CloneProgress())
         logger.info(f"Cloned {repo_path}")
-    
+
     return repo
