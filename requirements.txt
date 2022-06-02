@@ -13,3 +13,4 @@ requests~=2.25.1
 websockets==10.1
 GitPython~=3.1.24
 SQLAlchemy-Utils==0.37.9
+tqdm~=4.64.0
