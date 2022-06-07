@@ -57,3 +57,20 @@ class Database(Controller):
             containers = container_handler.all()
             table = [[c.id[:10], c.name, c.image[:10], c.volume, c.status, c.kind, c.ip, c.port] for c in containers]
             print(tabulate(table, headers=['Id', 'Name', 'Image Id', 'Volume', 'Status', 'Type', 'IP', 'Port']))
+
+    @ex(
+        help='Deletes container records',
+        arguments=[
+            (['-N', '--name'], {'help': 'Name of the container', 'type': str, 'required': True}),
+            (['-K', '--kind'], {'help': 'Tool/benchmark', 'choices': ['tool', 'benchmark']})
+        ]
+    )
+    def delete(self):
+        container_manager = self.app.handler.get('managers', 'container', setup=True)
+        instance = container_manager.find(self.app.pargs.kind, name=self.app.pargs.name)
+
+        self.app.log.warning(f"Deleting {instance}")
+        res = input("Are you sure you want to continue this operation? (y/n) ")
+
+        if res in ["Yes", "Y", "y", "yes"]:
+            self.app.db.delete(Instance, instance.id)
