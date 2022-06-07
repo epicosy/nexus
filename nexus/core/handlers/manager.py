@@ -91,6 +91,8 @@ class ContainerManager(ManagersInterface, Handler):
                                f"To instantiate the {kind} use: nexus {kind} create -N {name}")
             exit(1)
 
+        self.app.log.info(f"{container_data}")
+
         if container_data.status == 'setup' and not force:
             self.app.log.info(f"container {container_data.id[:10]} already setup for {kind} {container_data.name}.")
         else:
@@ -103,10 +105,17 @@ class ContainerManager(ManagersInterface, Handler):
 
             container_handler = self.app.handler.get('handlers', 'container', setup=True)
             configs = self.app.get_section(name)
+            is_setup = container_handler.is_setup(container, container_data.kind)
 
-            if container_handler.setup(container, cmds=api_handler.setup_cmds() + configs['container']['setup'], env=env):
+            if not is_setup:
+                is_setup = container_handler.setup(container, env=env,
+                                                   cmds=api_handler.setup_cmds() + configs['container']['setup'])
+
+            if is_setup:
+                container_data = self.find(kind, name)
                 self.update(container_data, attr='status', value='setup')
                 self.update(container_data, attr='ip', value=self.get_ip(container_data.id))
+                self.app.log.info(f"Updated records: {container_data}")
 
     def create(self, name: str, kind: str):
         configs = self.app.get_section(name)
@@ -119,13 +128,30 @@ class ContainerManager(ManagersInterface, Handler):
             self.app.log.error(f"The {configs['type']} {name} is not of type {kind}.")
             return
 
-        container_data = self.find(kind, name)
-
-        if container_data:
-            self.app.log.warning(f"{kind} {name} exists")
-            return
-
         container_handler = self.app.handler.get('handlers', 'container', setup=True)
+
+        # find container
+        try:
+            self.app.log.info(f"Looking for container {name}")
+            container = self.get(name)
+
+            if container:
+                self.app.log.info(f"Found container {container.id[0:10]} {container.name}")
+                container_data = self.find(kind, name)
+
+                if not container_data:
+                    container_data_id = self.register(image=configs['image']['tag'], container_id=container.id,
+                                                      name=name, kind=kind, ip="",
+                                                      port=configs['container']['api']['port'],
+                                                      volume=self.app.get_config('docker')['volume'])
+                    self.app.log.info(f"Registered container {container_data_id} for {kind} {self.app.pargs.name}.")
+                else:
+                    self.app.log.info(f"Container registered as {container_data}")
+
+                return
+        except APIError as e:
+            self.app.log.error(str(e))
+            exit(1)
 
         # check if image existed locally
         image = self.get_image(configs['image']['tag'])

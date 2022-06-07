@@ -33,7 +33,17 @@ class ContainerHandler(HandlersInterface, Handler):
             self.app.log.info(cmd_data.output)
 
         return True
-    
+
+    def is_setup(self, container: Container, kind: str):
+        server_app = 'synapser' if kind == 'tool' else 'orbis'
+        cmd_data = self.__call__(container.id, cmd_str=f"which {server_app}", raise_err=True)
+
+        if cmd_data.output and server_app in cmd_data.output:
+            self.app.log.info(f"{container.name} {kind} container already setup")
+            return True
+
+        return False
+
     def build(self, path: Path, tag: str):
         for line in self.app.docker.api.build(path=str(path), rm=True, tag=tag):
             # decoded = ast.literal_eval(line.decode('utf-8'))
