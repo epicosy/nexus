@@ -69,19 +69,20 @@ class JMutRepairVul4JRepairTask(NexusHandler):
         # orbis_testbatch_url = "http://172.17.0.2:8080/testbatch"  # for only testing on my machine
 
         test_all_cmd = Command(iid=program_instance.iid,
-                               url=orbis_testbatch_url)
+                               url=orbis_testbatch_url, vid=vulnerability.id)
         test_all_cmd.add_placeholder(name='batch', value='all')
         test_all_signal = Signal(arg='-testallcmd', command=test_all_cmd)
 
         test_povs_cmd = Command(iid=program_instance.iid,
-                                url=orbis_testbatch_url)
+                                url=orbis_testbatch_url, vid=vulnerability.id)
         test_povs_cmd.add_placeholder(name='batch', value='povs')
         test_failing_signal = Signal(arg='-testfailingcmd', command=test_povs_cmd)
 
         response = self.synapser.repair(signals=[test_all_signal, test_failing_signal], args=repair_args,
                                         program_instance=program_instance,
                                         manifest=vulnerability_manifest.locs,
-                                        instance=context.tool.instance)
+                                        instance=context.tool.instance,
+                                        iid=program_instance.iid)
         response_json = response.json()
         self.app.log.info("RID: " + str(response_json['rid']))
 
