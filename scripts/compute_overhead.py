@@ -1,4 +1,3 @@
-import math
 import statistics
 from datetime import datetime
 
@@ -30,8 +29,8 @@ def read_execution_time(file_name):
         return results
 
 
-res_1 = read_execution_time("vul4j_repairthemall_patches.json")
-res_2 = read_execution_time("vul4j_maestro_patches.json")
+res_1 = read_execution_time("../data/vul4j_repairthemall_patches.json")
+res_2 = read_execution_time("../data/vul4j_maestro_patches.json")
 print(res_2)
 for vul_id in res_1:
     overhead = int(statistics.mean([res_2[vul_id]['jGenProg'] - res_1[vul_id]['jGenProg'],

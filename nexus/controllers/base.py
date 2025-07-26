@@ -2,15 +2,17 @@ from tabulate import tabulate
 
 from cement import Controller, ex
 from cement.utils.version import get_version_banner
+from cement.utils.version import get_version
 
 from ..core.data.store import Task
 from ..core.exc import NexusError, CommandError
-from ..core.version import get_version
 
+# TODO: should be dynamic
+VERSION = (0, 0, 1, 'alpha', 0)
 VERSION_BANNER = """
 Framework for benchmarking Automatic Program Repair tools %s
 %s
-""" % (get_version(), get_version_banner())
+""" % (get_version(VERSION), get_version_banner())
 
 
 class Base(Controller):

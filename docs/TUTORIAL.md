@@ -8,7 +8,7 @@ based on Docker containers.
 **Maestro**, a developer only needs to develop a plugin for its respective component, ***Synapser*** or ***Orbis***. For ***Nexus***, the 
 plugin connects with ***Synapser*** and ***Orbis***, and it is necessary for each tool/benchmark pair.
 
-<img src="maestro_arch.png" width="500">
+<img src="../figures/maestro_arch.png" width="500">
 
 ## Install Nexus
 To install Nexus, perform the following steps:
@@ -20,13 +20,13 @@ cd nexus
 ```
 ### Install dependencies
 ```shell
-./install_deps.sh
-pip3 install -r requirements.txt
+./scripts/install_deps.sh
+pip3 install .
 ```
 
 ### Init database
 ```shell
-./init_db.sh 
+./scripts/init_db.sh 
 ```
 If it fails, use ```sudo -i -u postgres```
 ### Install package and configs

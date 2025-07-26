@@ -1,6 +1,0 @@
-{% if header %}
-    {{ header }}
-{% endif %}
-{% for tool in tools %}
-    {{ tool.name }} {{ tool.enabled }} {{tool.loaded}} {{tool.container.id if tool.container else '-' }}
-{% endfor %}

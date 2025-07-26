@@ -1,8 +1,5 @@
-from docker.errors import APIError
 from tabulate import tabulate
 from cement import Controller, ex
-
-from nexus.core.database import Instance
 
 
 class Benchmark(Controller):
