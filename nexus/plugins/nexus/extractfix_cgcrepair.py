@@ -21,29 +21,58 @@ class ExtractFixCGCRepairTask(NexusHandler):
 
     def run(self, task: Task, context: Context):
         try:
-            tool_container = tool.get_container()
-            manifest = nexus.get_manifest(program)
-            nexus.mkdir(path=program.working_dir, container=tool_container)
-            nexus.mkdir(path=program.working_dir / 'project', container=tool_container)
+            task.program.manifest.transform(c_to_cpp)
+            iid, working_dir = self.orbis.checkout(context.benchmark,
+                                                      args={'pid': task.program.id,
+                                                            'root_dir': f"/{context.benchmark.volume}"})
+            container_manager = self.app.handler.get('managers', 'container', setup=True)
+            tool_container = container_manager.get(context.tool.id)
+            context.tool.mkdir(path=working_dir, container=tool_container)
+            context.tool.mkdir(path=working_dir / 'project', container=tool_container)
 
-            program['source_path'] = program.working_dir
-            program['tests'] = nexus.write_script(container=tool_container, cmd_str=self.test_script(program, nexus),
-                                                  path=program.working_dir, name='test')
-            program['run-command'] = nexus.write_script(container=tool_container, name='project_build',
-                                                        cmd_str=self.build_script(program, nexus),
-                                                        path=program.working_dir)
-            program['bug_type'] = self.get_bug_type(program)
-            program['binary_name'] = manifest.files[0].stem
-            program['config_script'] = nexus.write_script(container=tool_container,  name='project_config',
-                                                          cmd_str=self.config_script(program, nexus),
-                                                          path=program.working_dir)
-            program['compile_script'] = nexus.write_script(container=tool_container, name='project_compile',
-                                                           cmd_str=self.compile_script(program, nexus),
-                                                           path=program.working_dir)
-            task.add_command(tool.setup(program, nexus))
-            task.add_command(tool.run(program, raise_err=True))
-            task.patches = tool.get_patches(program, manifest)
-            task.fix = tool.get_fix(program, manifest)
+            signals = {
+                '--tests': {
+                    'url': self.orbis.url(endpoint='test', instance=context.benchmark),
+                    'data': {
+                        'iid': iid,
+                        'args': {
+                            '--exit_fail': '',
+                            '--neg_pov': ''
+                        }
+                    },
+                    'placeholders': {
+                        '--tests': '__TEST_NAME__'
+                    }
+                },
+                '--run-command': {
+                    'url': self.orbis.url(endpoint='compile', instance=context.benchmark),
+                    'data': {
+                        'iid': iid,
+                        'args': {
+                            '--cpp_files': '',
+                            '--exit_err': '',
+                            '--inst_files': task.program.manifest.format(delimiter=' '),
+                        }
+                    },
+                    'placeholders': {
+                        '--fix_files': '__SOURCE_NAME__'
+                    }
+                }
+            }
+            # TODO: get bug_type from program's vulnerability
+            args = {
+                '--source-path': working_dir / 'project',
+                '--bug-type': task.program.vuln.cwe,
+                '--binary-name': task.program.manifest.files[0].stem
+            }
+
+            response = self.synapser.repair(signals=signals, args=args, working_dir=working_dir,
+                                            target=task.program.manifest.files[0],
+                                            instance=context.tool)
+            response_json = response.json()
+
+            self.app.log.info("RID: " + str(response_json['rid']))
+
         except (CommandError, NexusError) as err:
             task.error(str(err))
             self.app.log.error(str(err))
