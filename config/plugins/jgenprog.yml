@@ -1,7 +1,7 @@
 jgenprog:
   type: tool
   image:
-    tag: bqcuongas/astor-synapser
+    tag: bqcuongas/jgenprog-synapser
     repo: bqcuong/astor-synapser
   container:
     name: jgenprog
